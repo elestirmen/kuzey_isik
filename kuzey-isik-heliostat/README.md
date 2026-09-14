@@ -28,17 +28,19 @@ Güneş gökyüzünde 15°/saat döner; ayna normali bunun yarısı kadar döner
 
 ## Simülasyon
 
-`docs/index.html` dosyasını tarayıcıda açın; başka hiçbir şeye gerek yok
-(tek dosya, bağımlılık yok). GitHub Pages'i `/docs` klasöründen yayınlarsanız
+`docs/index.html` dosyasını tarayıcıda açın; internet gerekmez
+(3B görünüm için `docs/three.min.js` yanında durur, WebGL yoksa 2B izometrik çizime düşer). GitHub Pages'i `/docs` klasöründen yayınlarsanız
 doğrudan web'de de çalışır.
 
 ![Görünümler](docs/img/gorunumler.png)
 
 Simülasyon şunları veriyor:
 
-- **İzometrik genel görünüm**, **kuş bakışı vaziyet planı**, **düşey kesit** ve
-  **kuzey cephesi** — dördü de aynı ana bağlı
-- Tarih ve saat kaydırıcıları, günü hızlandırılmış oynatma
+- **Döndürülebilir 3B genel görünüm** (three.js: sürükle, yakınlaş, kamera ön ayarları,
+  gerçek gölgeler, yansıyan ışık hüzmesi), **kuş bakışı vaziyet planı**, **düşey kesit**
+  ve **kuzey cephesi** — dördü de aynı ana bağlı
+- **Şimdi** düğmesi: Türkiye saatiyle canlı takip (sayfa bu modda açılır); tarih ve saat
+  kaydırıcıları, günü hızlandırılmış oynatma
 - Anlık servo açıları (PAN / TILT), geliş açısı, kosinüs verimi, pencereye giren güç
 - Evin ve duvarın aynayı ne zaman gölgelediği
 - Işık lekesinin cephede tam olarak nereye düştüğü ve pencereyi tutturup tutturmadığı
@@ -144,7 +146,7 @@ python float32_check.py   # AVR'de 32-bit float hatası ne kadar?
 ## Depo yapısı
 
 ```
-docs/index.html      interaktif simülasyon (tek dosya, bağımlılıksız)
+docs/index.html      interaktif simülasyon (yanındaki three.min.js dışında bağımlılıksız)
 docs/tasarim-kararlari.md   kararlar ve doğrulanmış sayılar
 firmware/            Arduino kodu (RTClib + Servo)
 tools/               Python referans hesapları

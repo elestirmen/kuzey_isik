@@ -154,8 +154,39 @@ ul.tight li{margin-bottom:5px}
 ul.tight li::marker{color:var(--ink-3)}
 .foot{margin-top:52px; padding-top:18px; border-top:1px solid var(--line); color:var(--ink-3); font-size:12px; display:flex; flex-wrap:wrap; gap:8px 20px; justify-content:space-between}
 /* ---- kahraman görünüm ---- */
+.stage{display:grid; grid-template-columns:minmax(0,1.6fr) minmax(300px,1fr); gap:14px; margin-top:18px; align-items:stretch}
+.stage .viewcard.hero{margin-top:0; display:flex; flex-direction:column}
+.stage .v3d{flex:1 1 auto; aspect-ratio:auto; min-height:380px}
+.deck{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px; display:flex; flex-direction:column; gap:15px; min-width:0}
+.deck .status{margin-top:0}
+.deck details.params{margin-top:auto}
+@media(max-width:880px){.stage{grid-template-columns:1fr} .stage .v3d{aspect-ratio:1.3; flex:none; min-height:0}}
+.live{display:inline-flex; align-items:center; gap:7px; font-family:"IBM Plex Sans",sans-serif; font-size:13px; font-weight:600; padding:8px 14px; border-radius:8px; border:1px solid var(--line-2); background:var(--panel-2); color:var(--ink-2); cursor:pointer; transition:.14s}
+.live i{width:8px; height:8px; border-radius:50%; background:var(--ink-3); flex:none}
+.live[aria-pressed="true"], .seg button.live[aria-pressed="true"]{border-color:var(--ok); color:var(--ok); background:color-mix(in srgb,var(--ok) 9%,transparent)}
+.live[aria-pressed="true"] i, .seg button.live[aria-pressed="true"] i{background:var(--ok); box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 50%,transparent); animation:pulse 1.6s ease-out infinite}
+.live.small{padding:0 10px; height:34px; border-radius:17px}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 45%,transparent)} 100%{box-shadow:0 0 0 9px transparent}}
+.lab .tag{font-size:9.5px; letter-spacing:.1em; color:var(--ok); margin-left:8px; font-weight:600}
 .hero{margin-top:18px}
 .hero canvas{background:var(--sky)}
+.v3d{position:relative; aspect-ratio:2.05; max-width:100%; background:var(--sky); overflow:hidden; touch-action:none; cursor:grab; user-select:none; -webkit-user-select:none}
+.v3d.grab{cursor:grabbing}
+.v3d.flat{aspect-ratio:auto; cursor:default}
+.v3d.flat canvas#iso{display:block}
+.v3d canvas.gl{position:absolute; inset:0; width:100%!important; height:100%!important; display:block}
+.v3d .labels{position:absolute; inset:0; pointer-events:none; overflow:hidden}
+.l3{position:absolute; left:0; top:0; font-family:"IBM Plex Mono",monospace; font-size:10px; font-weight:600; letter-spacing:.08em; padding:2px 7px; border-radius:4px; background:color-mix(in srgb,var(--panel) 74%,transparent); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); white-space:nowrap; transition:opacity .15s; will-change:transform}
+.viewbar{position:absolute; left:12px; bottom:12px; display:flex; gap:5px; flex-wrap:wrap; padding:5px; border-radius:11px; background:color-mix(in srgb,var(--panel) 80%,transparent); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid color-mix(in srgb,var(--line-2) 70%,transparent); box-shadow:0 4px 18px var(--shadow)}
+.viewbar button{font-family:"IBM Plex Sans",sans-serif; font-size:12px; font-weight:500; padding:6px 10px; border-radius:7px; border:1px solid transparent; background:transparent; color:var(--ink-2); cursor:pointer; transition:.14s}
+.viewbar button:hover{background:color-mix(in srgb,var(--ink) 8%,transparent); color:var(--ink)}
+.viewbar button[data-auto]{font-size:15px; padding:3px 9px; line-height:1.3}
+.viewbar button[aria-pressed="true"]{background:var(--sun); color:#fff; border-color:var(--sun)}
+.hint{position:absolute; right:12px; bottom:14px; font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.03em; color:var(--ink-3); background:color-mix(in srgb,var(--panel) 70%,transparent); backdrop-filter:blur(6px); padding:4px 9px; border-radius:6px; pointer-events:none}
+.compass{position:absolute; right:12px; top:12px; width:46px; height:46px; border-radius:50%; background:color-mix(in srgb,var(--panel) 80%,transparent); backdrop-filter:blur(8px); border:1px solid color-mix(in srgb,var(--line-2) 70%,transparent); display:grid; place-items:center; pointer-events:none}
+.compass svg{grid-area:1/1; transform:rotate(var(--rot,0deg))}
+.compass span{grid-area:1/1; font-family:"IBM Plex Mono",monospace; font-size:8px; font-weight:600; color:var(--ink-2); transform:translateY(-15px) rotate(0deg)}
+@media(max-width:620px){.v3d{aspect-ratio:1.3} .hint{display:none} .viewbar{left:8px; bottom:8px; right:8px}}
 /* ---- kaydırıcılar: bilgi taşıyan bant ---- */
 .rng{position:relative; height:28px}
 .rng .band{position:absolute; left:9px; right:9px; top:11px; height:6px; border-radius:3px; background:var(--inset); border:1px solid var(--line)}
@@ -204,11 +235,72 @@ ul.tight li::marker{color:var(--ink-3)}
 
 <section id="sim">
   <div class="sechead"><span class="n">01</span><h2>Simülasyon</h2></div>
-  <p class="sub">Tarihi ve saati değiştirin: ayna kendini yeniden yöneltir, ışık lekesi cephede yerini korur. <b>Yöntem</b> düğmeleriyle aynayı başka mantıklarla sürüp lekenin nereye kaçtığını izleyebilirsiniz.</p>
+  <p class="sub">Sayfa açıldığında Ürgüp'teki şu anki durumu gösterir. Tarihi ve saati değiştirin: ayna kendini yeniden yöneltir, ışık lekesi cephede yerini korur. <b>Yöntem</b> düğmeleriyle aynayı başka mantıklarla sürüp lekenin nereye kaçtığını izleyebilirsiniz.</p>
 
+  <div class="stage">
   <div class="viewcard hero">
-    <header><span class="t">Genel görünüm · kuzeydoğudan bakış</span><span class="h">bahçe duvarı saydam çizildi — ayna arkasında</span></header>
-    <canvas id="iso" width="1180" height="560"></canvas>
+    <header><span class="t">Genel görünüm · 3B</span><span class="h" id="isoHint">sürükleyerek döndürün · tekerlekle yakınlaşın</span></header>
+    <div id="iso3d" class="v3d">
+      <div class="labels" aria-hidden="true"></div>
+      <div class="compass" aria-hidden="true"><svg viewBox="0 0 40 40" width="30" height="30"><polygon points="20,4 25,22 20,19 15,22" fill="var(--bad)"/><polygon points="20,36 25,18 20,21 15,18" fill="var(--ink-3)"/><circle cx="20" cy="20" r="2" fill="var(--ink)"/><text x="20" y="3" font-size="0"></text></svg><span>K</span></div>
+      <div class="viewbar" role="group" aria-label="Kamera">
+        <button type="button" data-view="ne">Kuzeydoğu</button>
+        <button type="button" data-view="bati">Batı</button>
+        <button type="button" data-view="kus">Kuş bakışı</button>
+        <button type="button" data-view="pencere">Pencereden</button>
+        <button type="button" data-view="ayna">Aynanın ardından</button>
+        <button type="button" data-auto aria-pressed="false" title="Kendiliğinden döndür">⟳</button>
+      </div>
+      <div class="hint">sürükle: döndür · tekerlek: yakınlaş · sağ tuş: kaydır · çift tık: sıfırla</div>
+      <canvas id="iso" width="1180" height="560" hidden></canvas>
+    </div>
+  </div>
+    <div class="deck" id="deck">
+      <div class="ctl">
+        <div class="lab"><span>Tarih</span><b id="lDate">—</b></div>
+        <div class="rng"><div class="band" id="bandDay"></div><input type="range" id="iDay" min="1" max="365" value="355" step="1" aria-label="Yılın günü"></div>
+        <div class="ticks"><span>Oca</span><span>Şub</span><span>Mar</span><span>Nis</span><span>May</span><span>Haz</span><span>Tem</span><span>Ağu</span><span>Eyl</span><span>Eki</span><span>Kas</span><span>Ara</span></div>
+        <div class="seg" id="dayPresets">
+          <button type="button" data-doy="355">21 Ara</button>
+          <button type="button" data-doy="80">21 Mar</button>
+          <button type="button" data-doy="172">21 Haz</button>
+          <button type="button" data-doy="266">23 Eyl</button>
+        </div>
+      </div>
+      <div class="ctl">
+        <div class="lab"><span>Saat</span><b id="lTime">—</b></div>
+        <div class="rng"><div class="band" id="bandMin"></div><input type="range" id="iMin" min="0" max="1439" value="780" step="1" aria-label="Günün saati"></div>
+        <div class="ticks"><span>00</span><span>03</span><span>06</span><span>09</span><span>12</span><span>15</span><span>18</span><span>21</span></div>
+        <div class="seg">
+          <button type="button" class="live" id="btnNow" aria-pressed="false"><i></i>Şimdi</button>
+          <button type="button" class="play" id="btnPlay" data-on="0">▶ Günü oynat</button>
+          <button type="button" id="btnNoon">Öğlen</button>
+        </div>
+        <div class="bandkey"><span><i style="background:var(--sun)"></i>ayna çalışır</span><span><i style="background:var(--beam-soft)"></i>güneş var, ayna göremiyor</span><span><i style="background:var(--inset);border:1px solid var(--line)"></i>gece</span></div>
+      </div>
+      <div class="ctl">
+        <div class="lab"><span>Yönlendirme yöntemi</span><b id="lMode">—</b></div>
+        <div class="seg sunlit" id="modeSeg"></div>
+      </div>
+      <div class="status">
+        <span class="pill ok" id="stPill">HESAPLANIYOR</span>
+        <span class="note" id="stNote"></span>
+      </div>
+      <details class="params">
+        <summary>Geometri ve donanım parametreleri</summary>
+        <div class="row">
+          <div class="ctl"><div class="lab"><span>Duvar mesafesi</span><b id="lD">10.0 m</b></div><input type="range" id="iD" min="4" max="20" step="0.5" value="10"></div>
+          <div class="ctl"><div class="lab"><span>Ayna yüksekliği</span><b id="lMZ">2.20 m</b></div><input type="range" id="iMZ" min="0.5" max="5" step="0.05" value="2.2"></div>
+          <div class="ctl"><div class="lab"><span>Pencere merkezi yüks.</span><b id="lWZ">1.80 m</b></div><input type="range" id="iWZ" min="0.5" max="4" step="0.05" value="1.8"></div>
+          <div class="ctl"><div class="lab"><span>Ev yüksekliği (saçak)</span><b id="lHH">6.0 m</b></div><input type="range" id="iHH" min="2.5" max="12" step="0.1" value="6"></div>
+          <div class="ctl"><div class="lab"><span>Ev genişliği</span><b id="lHW">10.0 m</b></div><input type="range" id="iHW" min="4" max="20" step="0.5" value="10"></div>
+          <div class="ctl"><div class="lab"><span>Ayna kenarı (kare)</span><b id="lMS">1.00 m</b></div><input type="range" id="iMS" min="0.2" max="1.5" step="0.05" value="1"></div>
+          <div class="ctl"><div class="lab"><span>Duvar yüksekliği</span><b id="lWH">1.50 m</b></div><input type="range" id="iWH" min="0.8" max="3" step="0.1" value="1.5"></div>
+          <div class="ctl"><div class="lab"><span>Ayna doğu–batı kayıklığı</span><b id="lMX">0.00 m</b></div><input type="range" id="iMX" min="-6" max="6" step="0.1" value="0"></div>
+          <div class="ctl"><div class="lab"><span>Servo açı hatası (RMS)</span><b id="lNS">0.20°</b></div><input type="range" id="iNS" min="0" max="2" step="0.05" value="0.2"></div>
+        </div>
+      </details>
+    </div>
   </div>
 
   <div class="console">
@@ -239,58 +331,7 @@ ul.tight li::marker{color:var(--ink-3)}
     <div class="g"><div class="k">Hedeften sapma</div><div class="v blue" id="gErr">—</div></div>
   </div>
 
-  <div class="status">
-    <span class="pill ok" id="stPill">HESAPLANIYOR</span>
-    <span class="note" id="stNote"></span>
-  </div>
 
-  <div class="controls">
-    <div class="row">
-      <div class="ctl">
-        <div class="lab"><span>Tarih</span><b id="lDate">—</b></div>
-        <div class="rng"><div class="band" id="bandDay"></div><input type="range" id="iDay" min="1" max="365" value="355" step="1" aria-label="Yılın günü"></div>
-        <div class="ticks"><span>Oca</span><span>Şub</span><span>Mar</span><span>Nis</span><span>May</span><span>Haz</span><span>Tem</span><span>Ağu</span><span>Eyl</span><span>Eki</span><span>Kas</span><span>Ara</span></div>
-        <div class="bandkey"><span><i style="background:var(--sun)"></i>koyu = o gün ayna daha uzun süre güneş görür</span></div>
-        <div class="seg" id="dayPresets">
-          <button type="button" data-doy="355">21 Aralık</button>
-          <button type="button" data-doy="80">21 Mart</button>
-          <button type="button" data-doy="172">21 Haziran</button>
-          <button type="button" data-doy="256">13 Eylül</button>
-        </div>
-      </div>
-      <div class="ctl">
-        <div class="lab"><span>Saat</span><b id="lTime">—</b></div>
-        <div class="rng"><div class="band" id="bandMin"></div><input type="range" id="iMin" min="240" max="1260" value="780" step="1" aria-label="Günün saati"></div>
-        <div class="ticks"><span>04</span><span>06</span><span>08</span><span>10</span><span>12</span><span>14</span><span>16</span><span>18</span><span>20</span></div>
-        <div class="bandkey"><span><i style="background:var(--sun)"></i>ayna çalışır</span><span><i style="background:var(--beam-soft)"></i>güneş var, ayna göremiyor</span><span><i style="background:var(--inset);border:1px solid var(--line)"></i>gece</span></div>
-        <div class="seg">
-          <button type="button" class="play" id="btnPlay" data-on="0">▶ Günü oynat</button>
-          <button type="button" id="btnNoon">Öğlen</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="row" style="margin-top:16px">
-      <div class="ctl" style="grid-column:1/-1">
-        <div class="lab"><span>Aynayı yönlendirme yöntemi</span><b id="lMode">—</b></div>
-        <div class="seg sunlit" id="modeSeg"></div>
-      </div>
-    </div>
-
-    <details class="params">
-      <summary>Geometri ve donanım parametreleri</summary>
-      <div class="row">
-        <div class="ctl"><div class="lab"><span>Duvar mesafesi</span><b id="lD">10.0 m</b></div><input type="range" id="iD" min="4" max="20" step="0.5" value="10"></div>
-        <div class="ctl"><div class="lab"><span>Ayna yüksekliği</span><b id="lMZ">2.20 m</b></div><input type="range" id="iMZ" min="0.5" max="5" step="0.05" value="2.2"></div>
-        <div class="ctl"><div class="lab"><span>Pencere merkezi yüks.</span><b id="lWZ">1.80 m</b></div><input type="range" id="iWZ" min="0.5" max="4" step="0.05" value="1.8"></div>
-        <div class="ctl"><div class="lab"><span>Ev yüksekliği (saçak)</span><b id="lHH">6.0 m</b></div><input type="range" id="iHH" min="2.5" max="12" step="0.1" value="6"></div>
-        <div class="ctl"><div class="lab"><span>Ev genişliği</span><b id="lHW">10.0 m</b></div><input type="range" id="iHW" min="4" max="20" step="0.5" value="10"></div>
-        <div class="ctl"><div class="lab"><span>Ayna kenarı (kare)</span><b id="lMS">1.00 m</b></div><input type="range" id="iMS" min="0.2" max="1.5" step="0.05" value="1"></div>
-        <div class="ctl"><div class="lab"><span>Ayna doğu–batı kayıklığı</span><b id="lMX">0.00 m</b></div><input type="range" id="iMX" min="-6" max="6" step="0.1" value="0"></div>
-        <div class="ctl"><div class="lab"><span>Servo açı hatası (RMS)</span><b id="lNS">0.20°</b></div><input type="range" id="iNS" min="0" max="2" step="0.05" value="0.2"></div>
-      </div>
-    </details>
-  </div>
 </section>
 
 <section id="yontemler">
@@ -656,8 +697,9 @@ void handleSerial(){
 
 <div class="transport" id="transport" data-off="1" aria-label="Zaman kontrolü">
   <button type="button" class="tb" id="tPlay" data-on="0" aria-label="Oynat">▶</button>
+  <button type="button" class="live small" id="tNow" aria-pressed="false" aria-label="Şimdi"><i></i><span class="hidemob">Şimdi</span></button>
   <span class="mono hidemob" id="tDate">—</span>
-  <div class="rng"><div class="band" id="bandT"></div><input type="range" id="tMin" min="240" max="1260" value="780" step="1" aria-label="Günün saati"></div>
+  <div class="rng"><div class="band" id="bandT"></div><input type="range" id="tMin" min="0" max="1439" value="780" step="1" aria-label="Günün saati"></div>
   <span class="mono" id="tTime">—</span>
 </div>
 
@@ -667,6 +709,7 @@ void handleSerial(){
 </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function(){
 "use strict";
@@ -714,8 +757,8 @@ function rotAxis(v,axis,ang){ const a=V.unit(axis),c=Math.cos(ang),s=Math.sin(an
 function noise(i,k){ const x=Math.sin(i*127.1+k*311.7)*43758.5453; return (x-Math.floor(x))*2-1; }
 
 /* ===================== PARAMETRELER ===================== */
-const P={ doy:355, min:780, mode:'bisektor', D:10, mz:2.2, wz:1.8, hh:6, hw:10, ms:1.0, mx:0, ns:0.20,
-          hd:7, winW:1.2, winH:1.4, wallH:2.9, refl:0.90 };
+const P={ year:2026, doy:355, min:780, mode:'bisektor', D:10, mz:2.2, wz:1.8, hh:6, hw:10, ms:1.0, mx:0, ns:0.20,
+          hd:7, winW:1.2, winH:1.4, wallH:1.5, refl:0.90 };
 const MODES=[
  {id:'bisektor', name:'Bisektör — n = normalize(s + t)', short:'BİSEKTÖR', c:'--s1', mot:'2 servo'},
  {id:'tekeksen', name:'Tek eksen, sabit hız', short:'TEK EKSEN', c:'--s6', mot:'1 motor'},
@@ -731,7 +774,7 @@ function Tv(){ return V.unit(V.sub(Wp(),M())); }
 
 /* ===================== TEMEL HESAP ===================== */
 function sunState(hour){
-  const dd=doyToDate(P.doy,2026), sp=sunPos(2026,dd.m,dd.d,hour);
+  const dd=doyToDate(P.doy,P.year), sp=sunPos(P.year,dd.m,dd.d,hour);
   const s=fromAltAz(sp.alt,sp.az);
   let status='ok';
   if(sp.alt<=0.5) status='gece';
@@ -757,7 +800,7 @@ function daySamples(step){
 }
 let cache={key:'',samples:[],fit:null,ref:null};
 function dayCache(){
-  const key=[P.doy,P.D,P.mz,P.wz,P.hh,P.hw,P.mx].join('|');
+  const key=[P.year,P.doy,P.D,P.mz,P.wz,P.hh,P.hw,P.mx].join('|');
   if(cache.key===key) return cache;
   const S=daySamples(10); cache.key=key; cache.samples=S;
   if(S.length>2){
@@ -876,7 +919,7 @@ function drawIso(){
   const cv=document.getElementById('iso'); if(!cv) return;
   const F=fit(cv,(cv.clientWidth||900)<620?1.35:2.05), ctx=F.ctx, W=F.w, H=F.h;
   const ev=evalAt(P.mode,P.min), st=ev.st;
-  const wl=Math.min(Math.max(P.hw/2+2.5, Math.abs(P.mx)+2.5),12), wallH=Math.max(P.wallH,P.mz+P.ms*0.6+0.2);
+  const wl=Math.min(Math.max(P.hw/2+2.5, Math.abs(P.mx)+2.5),12), wallH=P.wallH;
   const c30=Math.cos(Math.PI/6), s30=0.5;
   const pr=p=>[c30*(p[0]-p[1]), s30*(p[0]+p[1])-p[2]];
   const box=[[-wl-1,-P.hd-1,0],[wl+1,-P.hd-1,0],[wl+1,P.D+1.5,0],[-wl-1,P.D+1.5,0],[-P.hw/2,-P.hd,P.hh+1],[P.hw/2,0,P.hh+1],[wl,P.D,wallH]];
@@ -936,7 +979,7 @@ function drawIso(){
   seg([0,0,wz0],[0,0,wz1],TH.ink,.8); seg([-ww,0,P.wz],[ww,0,P.wz],TH.ink,.8);
 
   // ışık lekesi (cephe düzleminde elips)
-  const Mv=[P.mx,P.D-0.42,P.mz];
+  const Mv=[P.mx,P.D,P.mz];
   if(ev.ok&&ev.hit){
     const d=ev.hit.d, spread=ev.hit.k*Math.tan(0.53*D2R), dia=P.ms+spread, minor=dia/2, major=minor/Math.max(Math.abs(d[1]),0.15);
     let e1=[d[0],0,d[2]]; const eL=Math.hypot(e1[0],e1[2]); e1=eL>1e-6?[e1[0]/eL,0,e1[2]/eL]:[1,0,0];
@@ -953,9 +996,7 @@ function drawIso(){
     beam(ctx,A[0],A[1],B[0],B[1],TH.beam,'rgba(233,168,60,.26)',3.2);
   }
   // ayna: destek + düzlem
-  const mBase=Pj([P.mx,P.D,0]), mC=Pj(Mv);
-  dash(ctx,[mBase[0],mBase[1],mC[0],mC[1]],TH['ink-3'],1,[2,3]);
-  seg([P.mx,P.D,P.mz],Mv,TH.ink,3);
+  seg([P.mx,P.D,Math.min(wallH,P.mz)],Mv,TH.ink,3);
   if(ev.ok){
     const n=ev.n, up=[0,0,1]; let u=V.cross(up,n); if(V.len(u)<1e-6)u=[1,0,0]; u=V.unit(u); const v=V.unit(V.cross(n,u));
     const h=P.ms/2, q=[V.add(Mv,V.add(V.mul(u,h),V.mul(v,h))),V.add(Mv,V.add(V.mul(u,-h),V.mul(v,h))),V.add(Mv,V.add(V.mul(u,-h),V.mul(v,-h))),V.add(Mv,V.add(V.mul(u,h),V.mul(v,-h)))];
@@ -1155,11 +1196,12 @@ function drawSec(){
   lbl(ctx,'PENCERE',X(0)-8,Y(P.wz),TH.shade,9,'right');
 
   // duvar
-  const wallTop=Math.max(P.wallH,P.mz+P.ms*0.6+0.2);
+  const wallTop=P.wallH;
   ctx.fillStyle=TH.stone; ctx.strokeStyle=TH['line-2']; ctx.lineWidth=1.2;
   ctx.fillRect(X(P.D)-0.18*k,Y(wallTop),0.36*k,wallTop*k); ctx.strokeRect(X(P.D)-0.18*k,Y(wallTop),0.36*k,wallTop*k);
 
   const mx=X(P.D), my=Y(P.mz);
+  ctx.strokeStyle=TH.ink; ctx.lineWidth=2.2; ctx.beginPath(); ctx.moveTo(mx,Y(Math.min(P.wallH,P.mz))); ctx.lineTo(mx,my); ctx.stroke();
   if(ev.ok){
     const n2=[ev.n[1],ev.n[2]], nL=Math.hypot(n2[0],n2[1])||1;
     const px=-n2[1]/nL, py=n2[0]/nL, hl=P.ms/2;
@@ -1292,7 +1334,7 @@ function buildSeries(){
   }
   P.ns=saveNs; seriesKey=key; series={pts:A,dark:B}; return series;
 }
-function cacheKey(){ return [P.doy,P.D,P.mz,P.wz,P.hh,P.hw,P.mx,P.ms].join('|'); }
+function cacheKey(){ return [P.year,P.doy,P.D,P.mz,P.wz,P.hh,P.hw,P.mx,P.ms].join('|'); }
 const HMIN=240, HMAX=1260;
 function nice(lo,hi,n){ const span=hi-lo||1, raw=span/(n||4);
   const mag=Math.pow(10,Math.floor(Math.log10(raw))), norm=raw/mag;
@@ -1471,12 +1513,214 @@ function renderGauges(){
     note.textContent='Leke merkezi pencere ortasından '+(ev.err*100).toFixed(0)+' cm sapmış — açıklık içinde. Odaya giren güç '+Math.round(ev.pw)+' W.'; }
   else { pill.className='pill bad'; pill.textContent='PENCEREYİ ISKALIYOR';
     note.textContent=ev.hit? 'Leke cepheye düşüyor ama pencereden '+(ev.err*100).toFixed(0)+' cm uzakta.' : 'Yansıyan ışın cepheye hiç ulaşmıyor.'; }
-  const dd=doyToDate(P.doy,2026);
-  document.getElementById('lDate').textContent=dd.d+' '+AYLAR[dd.m-1];
-  document.getElementById('lTime').textContent=fmtTime(P.min);
+  const dd=doyToDate(P.doy,P.year);
+  document.getElementById('lDate').textContent=dd.d+' '+AYLAR[dd.m-1]+(P.year!==2026?' '+P.year:'');
+  document.getElementById('lTime').innerHTML=fmtTime(P.min)+(live?'<span class="tag">CANLI</span>':'');
   const md=MODES.filter(m=>m.id===P.mode)[0];
   document.getElementById('lMode').textContent=md?md.short:'';
 }
+
+/* ===================== 3B SAHNE · three.js ===================== */
+const S3=(function(){
+  const box=document.getElementById('iso3d'); if(!box||typeof THREE==='undefined') return {ok:false};
+  let renderer; try{ renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'}); }catch(e){ return {ok:false}; }
+  const V3=(x,y,z)=>new THREE.Vector3(x,z,-y);           // ENU -> three (Y yukarı)
+  const E2T=a=>V3(a[0],a[1],a[2]);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.outputEncoding=THREE.sRGBEncoding; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=0.88;
+  renderer.domElement.className='gl'; box.prepend(renderer.domElement);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(38,2,0.1,400);
+  const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- gökyüzü
+  const skyMat=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,
+    uniforms:{top:{value:new THREE.Color('#d7e2ea')},bot:{value:new THREE.Color('#eef2f4')}},
+    vertexShader:'varying float h; void main(){ h=normalize(position).y; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+    fragmentShader:'uniform vec3 top; uniform vec3 bot; varying float h; void main(){ gl_FragColor=vec4(mix(bot,top,smoothstep(-0.05,0.55,h)),1.0); }'});
+  scene.add(new THREE.Mesh(new THREE.SphereGeometry(300,24,16),skyMat));
+
+  // ---- ışıklar
+  const hemi=new THREE.HemisphereLight(0xdfe8f0,0x8a7f70,0.7); scene.add(hemi);
+  const sun=new THREE.DirectionalLight(0xffffff,1.3); sun.castShadow=true;
+  sun.shadow.mapSize.set(2048,2048); const sc=sun.shadow.camera; sc.near=1; sc.far=140; sc.left=-26; sc.right=26; sc.top=26; sc.bottom=-26; sun.shadow.bias=-0.0006; sun.shadow.normalBias=0.02;
+  scene.add(sun); scene.add(sun.target);
+  const spot=new THREE.SpotLight(0xffc36a,0,40,0.2,0.7,1.2); scene.add(spot); scene.add(spot.target);
+  const roomLight=new THREE.PointLight(0xffb070,0,6,2); scene.add(roomLight);
+
+  // ---- malzemeler (tema ile güncellenir)
+  const M={ground:new THREE.MeshStandardMaterial({roughness:1}),
+    stone:new THREE.MeshStandardMaterial({roughness:.95}), stoneDark:new THREE.MeshStandardMaterial({roughness:.95}),
+    roof:new THREE.MeshStandardMaterial({roughness:.9}), glass:new THREE.MeshStandardMaterial({roughness:.2,metalness:.1,transparent:true,opacity:.92}),
+    frame:new THREE.MeshStandardMaterial({roughness:.6}), mirror:new THREE.MeshStandardMaterial({color:0xcfdde8,metalness:.95,roughness:.12}),
+    metal:new THREE.MeshStandardMaterial({color:0x3a3a3a,metalness:.7,roughness:.4}),
+    leaf:new THREE.MeshStandardMaterial({roughness:.9}), trunk:new THREE.MeshStandardMaterial({roughness:1}),
+    beam:new THREE.MeshBasicMaterial({color:0xe9a83c,transparent:true,opacity:.18,side:THREE.DoubleSide,depthWrite:false}),
+    spotDisc:new THREE.MeshBasicMaterial({color:0xf6c25a,transparent:true,opacity:.8,depthWrite:false}),
+    sunMat:new THREE.MeshBasicMaterial({color:0xffd27a}),
+    ray:new THREE.LineDashedMaterial({color:0xf2b84b,dashSize:.6,gapSize:.4,transparent:true,opacity:.9}),
+    normal:new THREE.LineDashedMaterial({color:0x888888,dashSize:.25,gapSize:.15}),
+    core:new THREE.LineBasicMaterial({color:0xffd27a,transparent:true,opacity:.9})};
+  let grid;
+  function applyTheme(){
+    const dk=isDark();
+    M.ground.color.set(mix(TH.ground,TH.ink,0.05)); M.stone.color.set(mix(TH.roof,TH.ink,0.10)); M.stoneDark.color.set(mix(TH.stone,TH.ink,0.14)); M.roof.color.set(mix(TH.roof,TH.panel,0.12));
+    M.glass.color.set(TH.shade); M.frame.color.set(TH.ink); M.leaf.color.set(treeColor()); M.trunk.color.set(trunkColor());
+    hemi.color.set(dk?0x6f7f90:0xe3ebf2); hemi.groundColor.set(dk?0x2a2622:0x9a8e7c);
+    if(grid){ grid.material.color.set(TH['line-2']); grid.material.opacity=dk?.18:.28; }
+    dirty=true;
+  }
+
+  // ---- statik sahne
+  let root=null, labels=[], dyn={};
+  function clearRoot(){ if(root){ scene.remove(root); root.traverse(o=>{ if(o.geometry)o.geometry.dispose(); }); } root=new THREE.Group(); scene.add(root); labels=[]; }
+  function bx(w,h,d,mat,x,y,z,shadow){ const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat); m.position.copy(V3(x,y,z)); m.castShadow=shadow!==false; m.receiveShadow=true; root.add(m); return m; }
+  function tree(x,y,h,r){ const t=new THREE.Mesh(new THREE.CylinderGeometry(.08,.12,h,8),M.trunk); t.position.copy(V3(x,y,h/2)); t.castShadow=true; root.add(t);
+    const c=new THREE.Mesh(new THREE.SphereGeometry(r,18,14),M.leaf); c.position.copy(V3(x,y,h+r*.6)); c.scale.set(1,.85,1); c.castShadow=true; c.receiveShadow=true; root.add(c); }
+  function buildStatic(){
+    clearRoot();
+    const hw=P.hw/2, hd=P.hd, hh=P.hh, wl=Math.min(Math.max(P.hw/2+2.5,Math.abs(P.mx)+2.5),12), wallH=Math.max(P.wallH,P.mz+P.ms*0.6+0.2);
+    const g=new THREE.Mesh(new THREE.PlaneGeometry(90,90),M.ground); g.rotation.x=-Math.PI/2; g.position.set(0,0,-P.D/2); g.receiveShadow=true; root.add(g);
+    grid=new THREE.GridHelper(60,30,0xffffff,0xffffff); grid.material.transparent=true; grid.position.set(0,0.01,-P.D/2); root.add(grid);
+    // ev
+    bx(P.hw,hh,hd,M.stone,0,-hd/2,hh/2);
+    bx(P.hw-.02,.06,hd-.02,M.roof,0,-hd/2,hh+.03,false);
+    [[0,-.15,P.hw,.3],[0,-hd+.15,P.hw,.3]].forEach(a=>bx(a[2],.45,a[3],M.stone,a[0],a[1],hh+.22));
+    [[-hw+.15],[hw-.15]].forEach(a=>bx(.3,.45,hd,M.stone,a[0],-hd/2,hh+.22));
+    bx(.8,.9,.8,M.stoneDark,hw*.45,-hd*.55,hh+.45);
+    // doğu pencereleri
+    [-hd*.7,-hd*.3].forEach(y=>{ bx(.06,1.3,1.0,M.glass,hw+.02,y,1.85,false); bx(.1,1.42,1.12,M.frame,hw-.02,y,1.85,false); });
+    // kuzey pencere
+    bx(P.winW+.14,P.winH+.14,.12,M.frame,0,.02,P.wz,false);
+    dyn.glass=bx(P.winW,P.winH,.05,M.glass,0,.07,P.wz,false);
+    bx(.05,P.winH,.06,M.frame,0,.10,P.wz,false); bx(P.winW,.05,.06,M.frame,0,.10,P.wz,false);
+    // bahçe duvarı
+    bx(2*wl,wallH,.36,M.stoneDark,0,P.D,wallH/2);
+    bx(2*wl+.1,.12,.5,M.stone,0,P.D,wallH+.06,false);
+    // ağaçlar
+    tree(-hw-2.2,7.2,1.6,1.5); tree(-hw-4.0,3.0,1.2,1.2); tree(hw+2.6,2.2,1.4,1.3);
+    // ayna grubu
+    const mg=new THREE.Group(); mg.position.copy(V3(P.mx,P.D,P.mz)); root.add(mg); dyn.mirror=mg;
+    const plate=new THREE.Mesh(new THREE.BoxGeometry(P.ms,P.ms,.03),M.mirror); plate.castShadow=true; mg.add(plate);
+    const back=new THREE.Mesh(new THREE.BoxGeometry(P.ms+.08,P.ms+.08,.05),M.metal); back.position.z=-.04; back.castShadow=true; mg.add(back);
+    const pz0=Math.min(wallH,P.mz-0.05), post=new THREE.Mesh(new THREE.CylinderGeometry(.05,.06,P.mz-pz0,10),M.metal); post.position.copy(V3(P.mx,P.D,(P.mz+pz0)/2)); post.castShadow=true; root.add(post);
+    const yoke=new THREE.Mesh(new THREE.SphereGeometry(.09,12,10),M.metal); yoke.position.copy(V3(P.mx,P.D,P.mz)); root.add(yoke);
+    // güneş + ışın + demet + leke
+    dyn.sun=new THREE.Mesh(new THREE.SphereGeometry(1.1,20,14),M.sunMat); root.add(dyn.sun);
+    const glowTex=(()=>{ const c=document.createElement('canvas'); c.width=c.height=128; const x=c.getContext('2d'); const gr=x.createRadialGradient(64,64,0,64,64,64); gr.addColorStop(0,'rgba(255,220,140,.9)'); gr.addColorStop(.35,'rgba(255,200,110,.35)'); gr.addColorStop(1,'rgba(255,200,110,0)'); x.fillStyle=gr; x.fillRect(0,0,128,128); return new THREE.CanvasTexture(c); })();
+    dyn.glow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})); dyn.glow.scale.set(9,9,1); root.add(dyn.glow);
+    dyn.ray=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]),M.ray); root.add(dyn.ray);
+    dyn.nrm=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]),M.normal); root.add(dyn.nrm);
+    dyn.core=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]),M.core); root.add(dyn.core);
+    const bg=new THREE.BufferGeometry(); bg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(8*3),3));
+    bg.setIndex([0,1,5, 0,5,4, 1,2,6, 1,6,5, 2,3,7, 2,7,6, 3,0,4, 3,4,7]); dyn.beam=new THREE.Mesh(bg,M.beam); dyn.beam.frustumCulled=false; dyn.beam.renderOrder=5; root.add(dyn.beam);
+    dyn.disc=new THREE.Mesh(new THREE.CircleGeometry(1,40),M.spotDisc); dyn.disc.rotation.y=Math.PI; root.add(dyn.disc);
+    // etiketler
+    labels=[{t:'EV',p:[0,-hd/2,hh+.9],c:'ink-2'},{t:'PENCERE',p:[P.winW/2+.35,0,P.wz],c:'shade'},{t:'AYNA',p:[P.mx,P.D,P.mz+P.ms/2+.55],c:'ink'},{t:'BAHÇE DUVARI',p:[wl*.6,P.D,wallH+.5],c:'ink-3'}];
+    applyTheme(); dirty=true;
+  }
+
+  // ---- dinamik güncelleme
+  function update(){
+    if(!root) buildStatic();
+    const ev=evalAt(P.mode,P.min), st=ev.st, dk=isDark();
+    const day=Math.max(0,Math.min(1,(st.alt+6)/18)), warm=Math.exp(-Math.pow((st.alt-2)/8,2));
+    // gökyüzü ve ışık
+    const night=dk?'#0f1319':'#33405a', dusk=dk?'#3b2c33':'#d9a37e', dayTop=dk?'#1a2531':'#9dbad0', dayBot=dk?'#252f3a':'#e4ebef';
+    skyMat.uniforms.top.value.set(mix(mix(night,dayTop,day),dusk,warm*.2)); skyMat.uniforms.bot.value.set(mix(mix(night,dayBot,day),dusk,warm*.65));
+    hemi.intensity=(dk?.3:.34)+.34*day;
+    const Mv=[P.mx,P.D,P.mz];
+    const sunDir=E2T(V.mul(st.s,1)); sun.position.copy(V3(0,P.D/2,0)).add(sunDir.clone().multiplyScalar(60)); sun.target.position.copy(V3(0,P.D/2,0));
+    sun.intensity=st.alt>0?(0.25+1.0*Math.min(1,Math.sin(st.alt*D2R)*1.5)):0; sun.color.set(mix('#fff4e0','#ffb070',warm));
+    sun.visible=st.alt>0;
+    dyn.sun.position.copy(E2T(V.add(Mv,V.mul(st.s,48)))); dyn.glow.position.copy(dyn.sun.position); dyn.sun.visible=dyn.glow.visible=st.alt>-2;
+    // ayna yönelimi
+    const n=ev.ok?ev.n:fromAltAz(-5,180);
+    dyn.mirror.lookAt(E2T(V.add(Mv,n)));
+    dyn.nrm.geometry.setFromPoints([E2T(Mv),E2T(V.add(Mv,V.mul(n,1.6)))]); dyn.nrm.computeLineDistances(); dyn.nrm.visible=ev.ok;
+    const lit=st.alt>0.5;
+    dyn.ray.geometry.setFromPoints([dyn.sun.position.clone(),E2T(Mv)]); dyn.ray.computeLineDistances(); dyn.ray.visible=lit; M.ray.opacity=st.ok?.9:.35;
+    // demet
+    if(ev.ok&&ev.hit){
+      const d=ev.hit.d, up=[0,0,1]; let u=V.cross(up,n); if(V.len(u)<1e-6)u=[1,0,0]; u=V.unit(u); const v=V.unit(V.cross(n,u)), h=P.ms/2;
+      const corners=[V.add(Mv,V.add(V.mul(u,h),V.mul(v,h))),V.add(Mv,V.add(V.mul(u,-h),V.mul(v,h))),V.add(Mv,V.add(V.mul(u,-h),V.mul(v,-h))),V.add(Mv,V.add(V.mul(u,h),V.mul(v,-h)))];
+      const pos=dyn.beam.geometry.attributes.position.array;
+      corners.forEach((c,i)=>{ const k=(0.14-c[1])/d[1]; const q=V.add(c,V.mul(d,k)); const a=E2T(c), b=E2T(q);
+        pos[i*3]=a.x;pos[i*3+1]=a.y;pos[i*3+2]=a.z; pos[(i+4)*3]=b.x;pos[(i+4)*3+1]=b.y;pos[(i+4)*3+2]=b.z; });
+      dyn.beam.geometry.attributes.position.needsUpdate=true; dyn.beam.visible=true;
+      const hitP=[ev.hit.x,0.14,ev.hit.z]; dyn.core.geometry.setFromPoints([E2T(Mv),E2T(hitP)]); dyn.core.visible=true;
+      const spread=ev.hit.k*Math.tan(0.53*D2R), minor=(P.ms+spread)/2, major=minor/Math.max(Math.abs(d[1]),.15);
+      dyn.disc.position.copy(E2T(hitP)); dyn.disc.scale.set(major,minor,1); dyn.disc.rotation.z=Math.atan2(-d[2],-d[0]); dyn.disc.visible=true;
+      const cosg=Math.cos(ev.inc*D2R); spot.position.copy(E2T(Mv)); spot.target.position.copy(E2T(hitP)); spot.angle=Math.atan((minor+.25)/ev.hit.k)*1.8; spot.intensity=(dk?2.6:1.5)*cosg*day; spot.visible=true;
+      M.beam.opacity=.13+.09*cosg; M.spotDisc.opacity=.5+.3*cosg;
+    } else { dyn.beam.visible=dyn.core.visible=dyn.disc.visible=false; spot.visible=false; }
+    // gece: odada ışık
+    roomLight.position.copy(V3(0,-1.2,P.wz)); roomLight.intensity=(1-day)*1.4; M.glass.emissive.set(dk?0x6a4a22:0x8a5a20); M.glass.emissiveIntensity=(1-day)*.9;
+    dirty=true;
+  }
+
+  // ---- yörünge kamerası
+  const cam={az:56,el:25,r:30,t:[1,4,1.5]}; let tw=null, auto=false, dirty=true;
+  function camPos(){ const e=cam.el*D2R,a=cam.az*D2R; return V3(cam.t[0]+cam.r*Math.cos(e)*Math.sin(a), cam.t[1]+cam.r*Math.cos(e)*Math.cos(a), cam.t[2]+cam.r*Math.sin(e)); }
+  function applyCam(){ camera.position.copy(camPos()); camera.lookAt(V3(cam.t[0],cam.t[1],cam.t[2])); dirty=true; }
+  const PRESETS={
+    ne:{az:56,el:25,r:30,t:[1,4,1.5]}, bati:{az:300,el:22,r:30,t:[-1,4,1.5]}, kus:{az:0,el:86,r:34,t:[0,3,0]},
+    pencere:()=>({az:180,el:Math.asin(((P.wz+0.25)-P.mz)/(P.D-0.4))*R2D,r:P.D-0.4,t:[P.mx,P.D,P.mz]}),
+    ayna:()=>{ const c=[P.mx-1.4,P.D+1.2,P.mz+1.3], w=[0,0,P.wz], dv=V.sub(c,w), r=V.len(dv); return {az:Math.atan2(dv[0],dv[1])*R2D,el:Math.asin(dv[2]/r)*R2D,r:r,t:w}; }
+  };
+  function flyTo(k){ const p=typeof PRESETS[k]==='function'?PRESETS[k]():PRESETS[k]; if(!p)return;
+    if(reduced){ Object.assign(cam,{az:p.az,el:p.el,r:p.r,t:p.t.slice()}); applyCam(); return; }
+    const from={az:cam.az,el:cam.el,r:cam.r,t:cam.t.slice()}; let daz=((p.az-from.az+540)%360)-180;
+    tw={t0:performance.now(),dur:850,from:from,to:p,daz:daz}; dirty=true; }
+  function stepTween(now){ if(!tw)return; let u=Math.min(1,(now-tw.t0)/tw.dur); u=u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2;
+    cam.az=tw.from.az+tw.daz*u; cam.el=tw.from.el+(tw.to.el-tw.from.el)*u; cam.r=tw.from.r+(tw.to.r-tw.from.r)*u;
+    cam.t=[0,1,2].map(i=>tw.from.t[i]+(tw.to.t[i]-tw.from.t[i])*u); if(u>=1)tw=null; applyCam(); }
+  // işaretçi
+  const ptrs=new Map(); let lastPinch=0, drag=null;
+  box.addEventListener('pointerdown',e=>{ if(e.target.closest('button'))return; box.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+    drag={x:e.clientX,y:e.clientY,btn:e.button,shift:e.shiftKey}; tw=null; box.classList.add('grab'); });
+  box.addEventListener('pointermove',e=>{ if(!ptrs.has(e.pointerId))return; ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+    if(ptrs.size===2){ const a=[...ptrs.values()], dist=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]); if(lastPinch){ cam.r=Math.max(4,Math.min(90,cam.r*lastPinch/dist)); applyCam(); } lastPinch=dist; return; }
+    if(!drag)return; const dx=e.clientX-drag.x, dy=e.clientY-drag.y; drag.x=e.clientX; drag.y=e.clientY;
+    if(drag.btn===2||drag.btn===1||drag.shift){ // kaydır
+      const e0=cam.el*D2R,a0=cam.az*D2R, s=cam.r*0.0016;
+      const right=[Math.cos(a0),-Math.sin(a0),0], fwd=[-Math.sin(a0),-Math.cos(a0),0];
+      cam.t=[cam.t[0]-right[0]*dx*s+fwd[0]*dy*s*Math.max(.3,Math.sin(e0)), cam.t[1]-right[1]*dx*s+fwd[1]*dy*s*Math.max(.3,Math.sin(e0)), cam.t[2]+dy*s*Math.cos(e0)*.6];
+    } else { cam.az=(cam.az-dx*0.35+360)%360; cam.el=Math.max(-6,Math.min(88,cam.el+dy*0.3)); }
+    applyCam(); });
+  const endPtr=e=>{ ptrs.delete(e.pointerId); if(ptrs.size<2)lastPinch=0; if(ptrs.size===0){drag=null; box.classList.remove('grab');} };
+  box.addEventListener('pointerup',endPtr); box.addEventListener('pointercancel',endPtr);
+  box.addEventListener('contextmenu',e=>e.preventDefault());
+  box.addEventListener('wheel',e=>{ e.preventDefault(); cam.r=Math.max(4,Math.min(90,cam.r*(1+e.deltaY*0.0012))); applyCam(); },{passive:false});
+  box.addEventListener('dblclick',e=>{ if(!e.target.closest('button')) flyTo('ne'); });
+
+  // ---- etiketler ve pusula
+  const lab=box.querySelector('.labels'), comp=box.querySelector('.compass');
+  const labelEls=[]; 
+  function syncLabels(){
+    while(labelEls.length<labels.length){ const d=document.createElement('div'); d.className='l3'; lab.appendChild(d); labelEls.push(d); }
+    labelEls.forEach((el,i)=>{ const L=labels[i]; if(!L){el.hidden=true;return;} el.hidden=false; el.textContent=L.t; el.style.color='var(--'+L.c+')';
+      const v=E2T(L.p).project(camera); const w=box.clientWidth,h=box.clientHeight;
+      if(v.z>1||v.x<-1.1||v.x>1.1||v.y<-1.1||v.y>1.1){ el.style.opacity=0; return; } el.style.opacity=1;
+      el.style.transform='translate(-50%,-50%) translate('+((v.x+1)/2*w).toFixed(1)+'px,'+((1-v.y)/2*h).toFixed(1)+'px)'; });
+    if(comp){ const o=V3(cam.t[0],cam.t[1],0).project(camera), nn=V3(cam.t[0],cam.t[1]+1,0).project(camera);
+      const ang=Math.atan2(-(nn.y-o.y),(nn.x-o.x))*R2D; comp.style.setProperty('--rot',(ang+90).toFixed(1)+'deg'); }
+  }
+  // ---- boyut ve döngü
+  function resize(){ const w=box.clientWidth, h=box.clientHeight; if(!w||!h)return; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); dirty=true; }
+  new ResizeObserver(resize).observe(box); resize(); applyCam();
+  function loop(now){ requestAnimationFrame(loop); if(tw)stepTween(now); if(auto&&!drag){ cam.az=(cam.az+0.08)%360; applyCam(); }
+    if(!dirty)return; dirty=false; renderer.render(scene,camera); syncLabels(); }
+  requestAnimationFrame(loop);
+  // ---- düğmeler
+  box.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{ auto=false; box.querySelector('[data-auto]').setAttribute('aria-pressed','false'); flyTo(b.dataset.view); }));
+  const autoBtn=box.querySelector('[data-auto]'); if(autoBtn){ if(reduced)autoBtn.hidden=true; autoBtn.addEventListener('click',()=>{ auto=!auto; autoBtn.setAttribute('aria-pressed',auto?'true':'false'); dirty=true; }); }
+  let gkey='', lastDk=null;
+  return {ok:true, update:function(){ const k=[P.D,P.mz,P.wz,P.hh,P.hw,P.mx,P.ms,P.wallH].join('|'); if(k!==gkey){gkey=k; buildStatic();}
+    const dk=isDark(); if(dk!==lastDk){lastDk=dk; applyTheme();} update(); }, theme:applyTheme, fly:flyTo};
+})();
+
 
 /* ===================== KADRANLAR ===================== */
 function drawDial(id,val,lo,hi,c,ok){
@@ -1495,8 +1739,8 @@ function drawDial(id,val,lo,hi,c,ok){
 let bandKey='';
 function updateBands(){
   const key=cacheKey(); if(bandKey===key) return; bandKey=key;
-  const stops=[]; const n=(HMAX-HMIN)/10;
-  for(let i=0;i<=n;i++){ const m=HMIN+i*10, st=sunState(m/60);
+  const stops=[]; const n=144;
+  for(let i=0;i<=n;i++){ const m=i*10, st=sunState(m/60);
     const c= st.ok?TH.sun : (st.alt>0.5? TH['beam-soft'] : 'transparent');
     const p0=(i/n*100).toFixed(2), p1=((i+1)/n*100).toFixed(2); stops.push(c+' '+p0+'% '+p1+'%'); }
   const g='linear-gradient(90deg,'+stops.join(',')+')';
@@ -1518,7 +1762,8 @@ let yearKey='';
 let geomKey='';
 function render(){
   readTheme();
-  drawIso(); drawPlan(); drawSec(); drawFac(); drawCmp(); drawChA(); drawChB();
+  if(S3&&S3.ok){ S3.update(); } else { const b=document.getElementById('iso3d'); if(b){ b.classList.add('flat'); document.getElementById('iso').hidden=false; } drawIso(); }
+  drawPlan(); drawSec(); drawFac(); drawCmp(); drawChA(); drawChB();
   renderGauges(); renderModeTable(); updateBands();
   const ev=evalAt(P.mode,P.min);
   drawDial('dPan', ev.ok?ev.pan:0, 120, 245, TH.s1, ev.ok);
@@ -1547,34 +1792,49 @@ MODES.forEach(m=>{ const b=document.createElement('button'); b.type='button'; b.
 function bind(id,key,fmt,el){ const i=document.getElementById(id), l=document.getElementById(el);
   i.addEventListener('input',()=>{ P[key]=parseFloat(i.value); if(l)l.textContent=fmt(P[key]); schedule(); });
   if(l)l.textContent=fmt(P[key]); }
-document.getElementById('iDay').addEventListener('input',e=>{ P.doy=parseInt(e.target.value,10); schedule(); });
-document.getElementById('iMin').addEventListener('input',e=>{ P.min=parseInt(e.target.value,10); schedule(); });
+document.getElementById('iDay').addEventListener('input',e=>{ if(live)setLive(false); P.doy=parseInt(e.target.value,10); schedule(); });
+document.getElementById('iMin').addEventListener('input',e=>{ if(live)setLive(false); P.min=parseInt(e.target.value,10); schedule(); });
 bind('iD','D',v=>v.toFixed(1)+' m','lD');
 bind('iMZ','mz',v=>v.toFixed(2)+' m','lMZ');
 bind('iWZ','wz',v=>v.toFixed(2)+' m','lWZ');
 bind('iHH','hh',v=>v.toFixed(1)+' m','lHH');
 bind('iHW','hw',v=>v.toFixed(1)+' m','lHW');
 bind('iMS','ms',v=>v.toFixed(2)+' m','lMS');
+bind('iWH','wallH',v=>v.toFixed(2)+' m','lWH');
 bind('iMX','mx',v=>v.toFixed(2)+' m','lMX');
 bind('iNS','ns',v=>v.toFixed(2)+'°','lNS');
 document.getElementById('dayPresets').addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b)return;
-  P.doy=parseInt(b.dataset.doy,10); document.getElementById('iDay').value=P.doy; schedule(); });
+  if(live)setLive(false); P.year=2026; P.doy=parseInt(b.dataset.doy,10); document.getElementById('iDay').value=P.doy; schedule(); });
 document.getElementById('btnNoon').addEventListener('click',()=>{
-  let best=780,bv=-99; for(let m=600;m<=900;m+=2){ const a=sunState(m/60).alt; if(a>bv){bv=a;best=m;} }
+  if(live)setLive(false); let best=780,bv=-99; for(let m=600;m<=900;m+=2){ const a=sunState(m/60).alt; if(a>bv){bv=a;best=m;} }
   P.min=best; document.getElementById('iMin').value=best; schedule(); });
 
+/* ---- canlı saat (Türkiye, UTC+3) ---- */
+let live=false, liveTimer=null;
+function nowTR(){ const d=new Date(Date.now()+3*3600e3);
+  const y=d.getUTCFullYear(), doy=Math.floor((Date.UTC(y,d.getUTCMonth(),d.getUTCDate())-Date.UTC(y,0,1))/864e5)+1;
+  return {y:y,doy:doy,min:d.getUTCHours()*60+d.getUTCMinutes()}; }
+function applyNow(){ const n=nowTR(); P.year=n.y; P.doy=n.doy; P.min=n.min; schedule(); }
+function setLive(on){
+  live=on; ['btnNow','tNow'].forEach(i=>{ const b=document.getElementById(i); if(b)b.setAttribute('aria-pressed',on?'true':'false'); });
+  clearInterval(liveTimer); liveTimer=null;
+  if(on){ if(timer)togglePlay(); applyNow(); liveTimer=setInterval(applyNow,20000); } else schedule();
+}
 let timer=null;
 const btnPlay=document.getElementById('btnPlay'), tPlay=document.getElementById('tPlay');
 function setPlayUI(on){ btnPlay.dataset.on=on?'1':'0'; btnPlay.textContent=on?'❚❚ Durdur':'▶ Günü oynat'; tPlay.dataset.on=on?'1':'0'; tPlay.textContent=on?'❚❚':'▶'; }
 function togglePlay(){
   if(timer){ clearInterval(timer); timer=null; setPlayUI(false); return; }
+  if(live) setLive(false);
   setPlayUI(true);
-  timer=setInterval(()=>{ P.min+=4; if(P.min>1260)P.min=240; schedule(); },55);
+  timer=setInterval(()=>{ P.min+=4; if(P.min>1439)P.min=0; schedule(); },55);
 }
 btnPlay.addEventListener('click',togglePlay); tPlay.addEventListener('click',togglePlay);
-document.getElementById('tMin').addEventListener('input',e=>{ P.min=parseInt(e.target.value,10); schedule(); });
-const ctlEl=document.querySelector('.controls'), trEl=document.getElementById('transport');
+document.getElementById('tMin').addEventListener('input',e=>{ if(live)setLive(false); P.min=parseInt(e.target.value,10); schedule(); });
+document.getElementById('btnNow').addEventListener('click',()=>setLive(!live));
+document.getElementById('tNow').addEventListener('click',()=>setLive(!live));
+const ctlEl=document.getElementById('deck'), trEl=document.getElementById('transport');
 function updTransport(){ const r=ctlEl.getBoundingClientRect(); trEl.dataset.off=(r.bottom<0)?'0':'1'; }
 window.addEventListener('scroll',updTransport,{passive:true}); updTransport();
 
@@ -1592,7 +1852,7 @@ new MutationObserver(()=>{bandKey='';schedule();}).observe(document.documentElem
 if(window.matchMedia){ const mq2=window.matchMedia('(prefers-color-scheme: dark)'); if(mq2.addEventListener) mq2.addEventListener('change',()=>{bandKey='';schedule();}); }
 
 document.fonts&&document.fonts.ready.then(()=>render());
-render();
+setLive(true); render();
 })();
 </script>
 </body></html>
