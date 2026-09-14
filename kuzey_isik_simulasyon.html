@@ -1,0 +1,1598 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html{color-scheme:light}body{margin:0;font:14px system-ui;background:#fafaf9}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Kuzey Işık Heliostatı</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#E7E3DC; --panel:#FBFAF7; --panel-2:#F2EEE7; --inset:#EAE4DA;
+  --line:#D6CFC4; --line-2:#C2B8A9;
+  --ink:#241F1A; --ink-2:#6D6255; --ink-3:#968B7B;
+  --sun:#C4651B; --beam:#E9A83C; --beam-soft:rgba(233,168,60,.30);
+  --shade:#3D5A73; --shade-soft:rgba(61,90,115,.14);
+  --ok:#2E7D52; --warn:#A9761A; --bad:#AE3A2C;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
+  --ground:#D9D2C6; --stone:#CFC5B4; --roof:#B9AE9B; --sky:#EDE9E1;
+  --shadow:rgba(36,31,26,.07);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141210; --panel:#211E1A; --panel-2:#2A2621; --inset:#1A1714;
+  --line:#3B352E; --line-2:#4C453B;
+  --ink:#F0EBE2; --ink-2:#ADA294; --ink-3:#7E7364;
+  --sun:#E9A13C; --beam:#F2BE5E; --beam-soft:rgba(242,190,94,.26);
+  --shade:#7FA6C9; --shade-soft:rgba(127,166,201,.16);
+  --ok:#57B182; --warn:#D9A445; --bad:#E07566;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+  --ground:#2C2821; --stone:#3A342C; --roof:#463F35; --sky:#1A1714;
+  --shadow:rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#141210; --panel:#211E1A; --panel-2:#2A2621; --inset:#1A1714;
+  --line:#3B352E; --line-2:#4C453B;
+  --ink:#F0EBE2; --ink-2:#ADA294; --ink-3:#7E7364;
+  --sun:#E9A13C; --beam:#F2BE5E; --beam-soft:rgba(242,190,94,.26);
+  --shade:#7FA6C9; --shade-soft:rgba(127,166,201,.16);
+  --ok:#57B182; --warn:#D9A445; --bad:#E07566;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+  --ground:#2C2821; --stone:#3A342C; --roof:#463F35; --sky:#1A1714;
+  --shadow:rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.6; padding-inline:16px; padding-block:0;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px; margin:0 auto; padding-block:28px 72px}
+h1,h2,h3{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif; text-wrap:balance; margin:0; line-height:1.15}
+h1{font-weight:800; font-size:clamp(28px,5.2vw,46px); letter-spacing:-.02em}
+h2{font-weight:700; font-size:clamp(20px,3vw,27px); letter-spacing:-.01em}
+h3{font-weight:600; font-size:16px; letter-spacing:-.005em}
+p{margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3)}
+
+/* ---- başlık bloğu: mühendislik paftası antedi ---- */
+.titleblock{border-top:2px solid var(--ink); border-bottom:1px solid var(--line-2); padding-block:18px 16px; display:flex; flex-wrap:wrap; gap:18px 28px; align-items:flex-end; justify-content:space-between}
+.titleblock .lede{max-width:46ch; color:var(--ink-2); font-size:15.5px; margin-top:10px}
+.specs{display:grid; grid-template-columns:auto auto; gap:2px 16px; font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-2); font-variant-numeric:tabular-nums}
+.specs dt{color:var(--ink-3)}
+.specs dd{margin:0; color:var(--ink)}
+
+section{margin-top:44px}
+.sechead{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:6px}
+.sechead .n{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--sun); letter-spacing:.1em; padding-top:4px}
+.sub{color:var(--ink-2); max-width:70ch; margin-top:8px}
+
+.panel{background:var(--panel); border:1px solid var(--line); border-radius:10px}
+.pad{padding:18px}
+
+/* ---- konsol ---- */
+.console{margin-top:18px; display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:14px; align-items:start}
+@media(max-width:880px){.console{grid-template-columns:1fr}}
+.viewcard{background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden; display:flex; flex-direction:column}
+.viewcard header{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 13px; border-bottom:1px solid var(--line); background:var(--panel-2)}
+.viewcard header .t{font-family:"Bricolage Grotesque",sans-serif; font-weight:600; font-size:13.5px}
+.viewcard header .h{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink-3); text-align:right}
+canvas{display:block; width:100%; height:auto; max-width:100%}
+.side{display:grid; gap:14px; grid-template-rows:auto auto}
+
+/* ---- ölçü panosu ---- */
+.gauges{display:grid; grid-template-columns:repeat(auto-fit,minmax(112px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden; margin-top:14px}
+.g{background:var(--panel); padding:11px 12px 12px}
+.g .k{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3); white-space:nowrap}
+.g .v{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-size:20px; font-weight:600; margin-top:3px; letter-spacing:-.02em}
+.g .u{font-size:11px; color:var(--ink-3); font-weight:400}
+.g.hi{background:var(--panel-2)}
+.g .v.sun{color:var(--sun)} .g .v.blue{color:var(--shade)}
+
+.status{display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-top:14px; font-size:13.5px}
+.pill{display:inline-flex; align-items:center; gap:7px; border-radius:999px; padding:5px 12px 5px 10px; font-family:"IBM Plex Mono",monospace; font-size:11.5px; font-weight:600; letter-spacing:.04em; border:1px solid}
+.pill::before{content:""; width:8px; height:8px; border-radius:50%; background:currentColor; flex:none}
+.pill.ok{color:var(--ok); border-color:color-mix(in srgb,var(--ok) 40%,transparent); background:color-mix(in srgb,var(--ok) 10%,transparent)}
+.pill.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 40%,transparent); background:color-mix(in srgb,var(--warn) 10%,transparent)}
+.pill.bad{color:var(--bad); border-color:color-mix(in srgb,var(--bad) 40%,transparent); background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.note{color:var(--ink-2); font-size:13px}
+
+/* ---- kumanda ---- */
+.controls{margin-top:14px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px}
+.row{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px 22px}
+.ctl{display:flex; flex-direction:column; gap:6px}
+.ctl .lab{display:flex; justify-content:space-between; align-items:baseline; gap:10px; font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3)}
+.ctl .lab b{font-size:13px; color:var(--ink); font-weight:600; letter-spacing:0; text-transform:none; font-variant-numeric:tabular-nums}
+input[type=range]{width:100%; accent-color:var(--sun); height:22px; margin:0; cursor:pointer}
+.seg{display:flex; flex-wrap:wrap; gap:6px}
+.seg button{font-family:"IBM Plex Sans",sans-serif; font-size:12.5px; font-weight:500; padding:6px 11px; border-radius:7px; border:1px solid var(--line-2); background:var(--panel-2); color:var(--ink-2); cursor:pointer; transition:.14s}
+.seg button:hover{border-color:var(--ink-3); color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--ink); color:var(--panel); border-color:var(--ink)}
+.seg.sunlit button[aria-pressed="true"]{background:var(--sun); border-color:var(--sun); color:#fff}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--sun); outline-offset:2px}
+.play{display:inline-flex; align-items:center; gap:8px; font-family:"IBM Plex Sans",sans-serif; font-size:13px; font-weight:600; padding:8px 16px; border-radius:8px; border:1px solid var(--sun); background:var(--sun); color:#fff; cursor:pointer}
+.play[data-on="1"]{background:transparent; color:var(--sun)}
+details.params{margin-top:14px; border-top:1px solid var(--line); padding-top:12px}
+details.params summary{cursor:pointer; font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); list-style:none}
+details.params summary::-webkit-details-marker{display:none}
+details.params summary::before{content:"▸ "; color:var(--sun)}
+details.params[open] summary::before{content:"▾ "}
+details.params .row{margin-top:14px}
+
+/* ---- tablo ---- */
+.tablewrap{overflow-x:auto; margin-top:16px; border:1px solid var(--line); border-radius:10px; background:var(--panel)}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:620px}
+th,td{padding:9px 13px; text-align:left; border-bottom:1px solid var(--line)}
+thead th{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); font-weight:400; background:var(--panel-2); white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+td.num{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap}
+.swatch{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:8px; vertical-align:-1px}
+.verdict{font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600; letter-spacing:.03em}
+.verdict.y{color:var(--ok)} .verdict.n{color:var(--bad)} .verdict.m{color:var(--warn)}
+
+/* ---- grafik ---- */
+.charts{display:grid; gap:14px; margin-top:16px}
+.legend{display:flex; flex-wrap:wrap; gap:8px 16px; font-size:12.5px; color:var(--ink-2); padding:0 13px 11px}
+.legend span{display:inline-flex; align-items:center; gap:7px}
+.legend i{width:14px; height:3px; border-radius:2px; display:inline-block}
+
+/* ---- kod ---- */
+.codehead{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 14px; border:1px solid var(--line); border-bottom:none; border-radius:10px 10px 0 0; background:var(--panel-2)}
+.codehead .f{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink-2)}
+.copy{font-family:"IBM Plex Sans",sans-serif; font-size:12px; font-weight:500; padding:5px 11px; border-radius:6px; border:1px solid var(--line-2); background:var(--panel); color:var(--ink-2); cursor:pointer}
+.copy:hover{color:var(--ink); border-color:var(--ink-3)}
+pre{margin:0; overflow-x:auto; background:var(--inset); border:1px solid var(--line); border-radius:0 0 10px 10px; padding:15px; font-family:"IBM Plex Mono",monospace; font-size:12px; line-height:1.62; color:var(--ink); max-height:520px}
+pre code{white-space:pre}
+.cmt{color:var(--ink-3)} .kw{color:var(--sun)} .str{color:var(--ok)} .num2{color:var(--shade)}
+
+/* ---- notlar ---- */
+.cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px; margin-top:16px}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px}
+.card h3{margin-bottom:7px}
+.card p{color:var(--ink-2); font-size:13.5px}
+.card .big{font-family:"IBM Plex Mono",monospace; font-size:26px; font-weight:600; letter-spacing:-.02em; margin-bottom:2px}
+.alert{border-left:3px solid var(--bad); background:color-mix(in srgb,var(--bad) 7%,transparent); border-radius:0 8px 8px 0; padding:14px 16px; margin-top:16px}
+.alert h3{color:var(--bad); margin-bottom:6px}
+.alert p{color:var(--ink-2); font-size:13.5px}
+ul.tight{margin:8px 0 0; padding-left:19px; color:var(--ink-2); font-size:13.5px}
+ul.tight li{margin-bottom:5px}
+ul.tight li::marker{color:var(--ink-3)}
+.foot{margin-top:52px; padding-top:18px; border-top:1px solid var(--line); color:var(--ink-3); font-size:12px; display:flex; flex-wrap:wrap; gap:8px 20px; justify-content:space-between}
+/* ---- kahraman görünüm ---- */
+.hero{margin-top:18px}
+.hero canvas{background:var(--sky)}
+/* ---- kaydırıcılar: bilgi taşıyan bant ---- */
+.rng{position:relative; height:28px}
+.rng .band{position:absolute; left:9px; right:9px; top:11px; height:6px; border-radius:3px; background:var(--inset); border:1px solid var(--line)}
+.rng input[type=range]{position:absolute; inset:0; width:100%; height:28px; margin:0; background:transparent; -webkit-appearance:none; appearance:none; cursor:pointer}
+.rng input[type=range]::-webkit-slider-runnable-track{background:transparent; height:28px}
+.rng input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; appearance:none; width:18px; height:18px; border-radius:50%; background:var(--sun); border:2.5px solid var(--panel); box-shadow:0 1px 4px rgba(0,0,0,.35); margin-top:5px}
+.rng input[type=range]::-moz-range-track{background:transparent; height:28px}
+.rng input[type=range]::-moz-range-thumb{width:14px; height:14px; border-radius:50%; background:var(--sun); border:2.5px solid var(--panel); box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.ticks{display:flex; justify-content:space-between; font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.04em; color:var(--ink-3); padding:0 6px; margin-top:-2px}
+.ticks span{flex:1; text-align:center}
+.bandkey{display:flex; gap:14px; flex-wrap:wrap; font-family:"IBM Plex Mono",monospace; font-size:9.5px; color:var(--ink-3); margin-top:2px}
+.bandkey i{display:inline-block; width:14px; height:6px; border-radius:2px; vertical-align:middle; margin-right:5px}
+/* ---- kadranlar ---- */
+.g{position:relative}
+.g canvas.dial{position:absolute; right:6px; top:50%; transform:translateY(-50%); width:38px; height:38px}
+.g:has(.dial){padding-right:50px}
+/* ---- yapışkan zaman çubuğu ---- */
+.transport{position:fixed; left:50%; bottom:14px; transform:translateX(-50%); width:min(880px,calc(100% - 32px)); z-index:40;
+  display:flex; align-items:center; gap:12px; padding:9px 12px 9px 14px; background:var(--panel); border:1px solid var(--line-2); border-radius:12px;
+  box-shadow:0 8px 28px var(--shadow), 0 1px 3px rgba(0,0,0,.12); transition:opacity .18s, transform .18s}
+.transport[data-off="1"]{opacity:0; pointer-events:none; transform:translate(-50%,12px)}
+.transport .rng{flex:1; min-width:120px}
+.transport .mono{font-size:12.5px; white-space:nowrap}
+.transport .tb{width:34px; height:34px; border-radius:50%; border:1px solid var(--sun); background:var(--sun); color:#fff; font-size:13px; cursor:pointer; flex:none; display:grid; place-items:center}
+.transport .tb[data-on="1"]{background:transparent; color:var(--sun)}
+@media(max-width:560px){.transport .hidemob{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="titleblock">
+  <div>
+    <div class="eyebrow">Ürgüp · Nevşehir · 38.6317° K, 34.9128° D</div>
+    <h1>Kuzey Işık Heliostatı</h1>
+    <p class="lede">Evin 10 m kuzeyindeki bahçe duvarına kurulan hareketli bir ayna, gün boyunca dönerek güneşi kuzey cephesindeki pencereye sabit tutuyor. Aşağıdaki simülasyon aynanın her an hangi açıda durması gerektiğini, ışığın cepheye tam olarak nereye düştüğünü ve farklı yönelim yöntemlerinin nerede çuvalladığını gösteriyor.</p>
+  </div>
+  <dl class="specs">
+    <dt>Enlem / Boylam</dt><dd>38.6317 / 34.9128</dd>
+    <dt>Saat dilimi</dt><dd>UTC+3 (yaz saati yok)</dd>
+    <dt>Güneş konumu</dt><dd>NOAA · ±0.02°</dd>
+    <dt>Referans</dt><dd>pvlib (NREL SPA) ile doğrulandı</dd>
+    <dt>Kontrol</dt><dd>Açık döngü · DS3231 + 2 servo</dd>
+  </dl>
+</header>
+
+<section id="sim">
+  <div class="sechead"><span class="n">01</span><h2>Simülasyon</h2></div>
+  <p class="sub">Tarihi ve saati değiştirin: ayna kendini yeniden yöneltir, ışık lekesi cephede yerini korur. <b>Yöntem</b> düğmeleriyle aynayı başka mantıklarla sürüp lekenin nereye kaçtığını izleyebilirsiniz.</p>
+
+  <div class="viewcard hero">
+    <header><span class="t">Genel görünüm · kuzeydoğudan bakış</span><span class="h">bahçe duvarı saydam çizildi — ayna arkasında</span></header>
+    <canvas id="iso" width="1180" height="560"></canvas>
+  </div>
+
+  <div class="console">
+    <div class="viewcard">
+      <header><span class="t">Kuş bakışı · vaziyet planı</span><span class="h" id="planHint">1 m ızgara</span></header>
+      <canvas id="plan" width="1180" height="900"></canvas>
+    </div>
+    <div class="side">
+      <div class="viewcard">
+        <header><span class="t">Düşey kesit · kuzey–güney</span><span class="h" id="secHint">geliş = yansıma</span></header>
+        <canvas id="sec" width="760" height="470"></canvas>
+      </div>
+      <div class="viewcard">
+        <header><span class="t">Kuzey cephesi · aynadan bakış</span><span class="h" id="facHint">ışık lekesi</span></header>
+        <canvas id="fac" width="760" height="470"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="gauges" id="gauges">
+    <div class="g hi"><div class="k">Güneş yükseltisi</div><div class="v sun" id="gAlt">—</div></div>
+    <div class="g hi"><div class="k">Güneş azimutu</div><div class="v sun" id="gAz">—</div></div>
+    <div class="g"><div class="k">PAN · yatay</div><div class="v" id="gPan">—</div><canvas class="dial" id="dPan" width="80" height="80"></canvas></div>
+    <div class="g"><div class="k">TILT · eğim</div><div class="v" id="gTilt">—</div><canvas class="dial" id="dTilt" width="80" height="80"></canvas></div>
+    <div class="g"><div class="k">Geliş açısı γ</div><div class="v" id="gInc">—</div></div>
+    <div class="g"><div class="k">Kosinüs verimi</div><div class="v" id="gCos">—</div></div>
+    <div class="g"><div class="k">Pencereye güç</div><div class="v" id="gPow">—</div></div>
+    <div class="g"><div class="k">Hedeften sapma</div><div class="v blue" id="gErr">—</div></div>
+  </div>
+
+  <div class="status">
+    <span class="pill ok" id="stPill">HESAPLANIYOR</span>
+    <span class="note" id="stNote"></span>
+  </div>
+
+  <div class="controls">
+    <div class="row">
+      <div class="ctl">
+        <div class="lab"><span>Tarih</span><b id="lDate">—</b></div>
+        <div class="rng"><div class="band" id="bandDay"></div><input type="range" id="iDay" min="1" max="365" value="355" step="1" aria-label="Yılın günü"></div>
+        <div class="ticks"><span>Oca</span><span>Şub</span><span>Mar</span><span>Nis</span><span>May</span><span>Haz</span><span>Tem</span><span>Ağu</span><span>Eyl</span><span>Eki</span><span>Kas</span><span>Ara</span></div>
+        <div class="bandkey"><span><i style="background:var(--sun)"></i>koyu = o gün ayna daha uzun süre güneş görür</span></div>
+        <div class="seg" id="dayPresets">
+          <button type="button" data-doy="355">21 Aralık</button>
+          <button type="button" data-doy="80">21 Mart</button>
+          <button type="button" data-doy="172">21 Haziran</button>
+          <button type="button" data-doy="256">13 Eylül</button>
+        </div>
+      </div>
+      <div class="ctl">
+        <div class="lab"><span>Saat</span><b id="lTime">—</b></div>
+        <div class="rng"><div class="band" id="bandMin"></div><input type="range" id="iMin" min="240" max="1260" value="780" step="1" aria-label="Günün saati"></div>
+        <div class="ticks"><span>04</span><span>06</span><span>08</span><span>10</span><span>12</span><span>14</span><span>16</span><span>18</span><span>20</span></div>
+        <div class="bandkey"><span><i style="background:var(--sun)"></i>ayna çalışır</span><span><i style="background:var(--beam-soft)"></i>güneş var, ayna göremiyor</span><span><i style="background:var(--inset);border:1px solid var(--line)"></i>gece</span></div>
+        <div class="seg">
+          <button type="button" class="play" id="btnPlay" data-on="0">▶ Günü oynat</button>
+          <button type="button" id="btnNoon">Öğlen</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:16px">
+      <div class="ctl" style="grid-column:1/-1">
+        <div class="lab"><span>Aynayı yönlendirme yöntemi</span><b id="lMode">—</b></div>
+        <div class="seg sunlit" id="modeSeg"></div>
+      </div>
+    </div>
+
+    <details class="params">
+      <summary>Geometri ve donanım parametreleri</summary>
+      <div class="row">
+        <div class="ctl"><div class="lab"><span>Duvar mesafesi</span><b id="lD">10.0 m</b></div><input type="range" id="iD" min="4" max="20" step="0.5" value="10"></div>
+        <div class="ctl"><div class="lab"><span>Ayna yüksekliği</span><b id="lMZ">2.20 m</b></div><input type="range" id="iMZ" min="0.5" max="5" step="0.05" value="2.2"></div>
+        <div class="ctl"><div class="lab"><span>Pencere merkezi yüks.</span><b id="lWZ">1.80 m</b></div><input type="range" id="iWZ" min="0.5" max="4" step="0.05" value="1.8"></div>
+        <div class="ctl"><div class="lab"><span>Ev yüksekliği (saçak)</span><b id="lHH">6.0 m</b></div><input type="range" id="iHH" min="2.5" max="12" step="0.1" value="6"></div>
+        <div class="ctl"><div class="lab"><span>Ev genişliği</span><b id="lHW">10.0 m</b></div><input type="range" id="iHW" min="4" max="20" step="0.5" value="10"></div>
+        <div class="ctl"><div class="lab"><span>Ayna kenarı (kare)</span><b id="lMS">1.00 m</b></div><input type="range" id="iMS" min="0.2" max="1.5" step="0.05" value="1"></div>
+        <div class="ctl"><div class="lab"><span>Ayna doğu–batı kayıklığı</span><b id="lMX">0.00 m</b></div><input type="range" id="iMX" min="-6" max="6" step="0.1" value="0"></div>
+        <div class="ctl"><div class="lab"><span>Servo açı hatası (RMS)</span><b id="lNS">0.20°</b></div><input type="range" id="iNS" min="0" max="2" step="0.05" value="0.2"></div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section id="yontemler">
+  <div class="sechead"><span class="n">02</span><h2>Aynayı nereye çevirmeli?</h2></div>
+  <p class="sub">Altı farklı mantık, aynı gün, aynı geometri. Tablo seçili günün tamamını 10 dakikalık adımlarla hesaplar; “isabet”, ışık lekesinin merkezinin pencere açıklığı içinde kaldığı zaman oranıdır. Cephe çizimindeki renkli noktalar her yöntemin o andaki lekesini gösterir.</p>
+  <div class="console" style="grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)">
+    <div class="viewcard">
+      <header><span class="t">Altı yöntem aynı anda · kuzey cephesi</span><span class="h">seçili saat</span></header>
+      <canvas id="cmp" width="900" height="620"></canvas>
+    </div>
+    <div class="tablewrap" style="margin-top:0">
+      <table id="modeTable">
+        <thead><tr><th>Yöntem</th><th>Motor</th><th class="num">İsabet</th><th class="num">Ort. sapma</th><th>Sonuç</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="cards" id="modeCards"></div>
+</section>
+
+<section id="grafik">
+  <div class="sechead"><span class="n">03</span><h2>Gün boyu servo açıları</h2></div>
+  <p class="sub">Seçili gün için bisektör yönteminin ürettiği açılar. Dikey çizgi simülasyondaki anı gösterir; grafiğin üzerine gelin.</p>
+  <div class="charts">
+    <div class="viewcard">
+      <header><span class="t">Ayna açıları</span><span class="h">derece</span></header>
+      <canvas id="chA" width="1180" height="330"></canvas>
+      <div class="legend"><span><i style="background:var(--s1)"></i>PAN — yatay dönüş</span><span><i style="background:var(--s2)"></i>TILT — düşey eğim</span></div>
+    </div>
+    <div class="viewcard">
+      <header><span class="t">Kosinüs verimi</span><span class="h">cos γ · aynanın gerçekte yakaladığı oran</span></header>
+      <canvas id="chB" width="1180" height="250"></canvas>
+    </div>
+  </div>
+</section>
+
+<section id="mevsim">
+  <div class="sechead"><span class="n">04</span><h2>Yıl boyunca ne olur?</h2></div>
+  <p class="sub">Bisektör yöntemiyle, varsayılan geometride. Kışın tablo baştan sona yeşil — ki işin güzel yanı da bu: ışığa en çok ihtiyaç duyduğunuz mevsimde sistem en verimli çalışıyor. Yazın duvar öğleden önce ve sonra aynanın kendisini gölgeliyor, çünkü güneş kuzeydoğudan doğup kuzeybatıdan batıyor.</p>
+  <div class="tablewrap"><table id="seasonTable">
+    <thead><tr><th>Tarih</th><th class="num">Öğlen güneş yük.</th><th class="num">Ayna ışık alır</th><th class="num">Süre</th><th class="num">Ort. verim</th><th class="num">Tepe güç</th><th class="num">PAN aralığı</th><th class="num">TILT aralığı</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <p class="note" style="margin-top:10px">Güç değerleri açık gökyüzü (DNI 850 W/m², Ürgüp 1043 m rakımda gerçekçi) ve %90 yansıtmalı gümüş ayna varsayımıyla.</p>
+</section>
+
+<section id="arduino">
+  <div class="sechead"><span class="n">05</span><h2>Arduino tarafı</h2></div>
+  <p class="sub">Açık döngü: Arduino saati DS3231'den okur, güneşin nerede olduğunu <em>hesaplar</em>, bisektörü bulur ve servolara yazar. Bulut geçse de, gölge düşse de şaşmaz — çünkü güneşi aramıyor, nerede olduğunu biliyor.</p>
+
+  <div class="cards">
+    <div class="card"><div class="eyebrow">Adım 1</div><h3>Ölç</h3><p>Aynanın ve pencere merkezinin birbirine göre konumunu üç eksende şeritmetreyle ölçün. Koddaki <span class="mono">MX/MY/MZ</span> ve <span class="mono">WX/WY/WZ</span> bunlar. Aynanın doğu–batı kayıklığını da unutmayın.</p></div>
+    <div class="card"><div class="eyebrow">Adım 2</div><h3>Kuzeyi bul</h3><p>Sistemin tek zayıf noktası: azimut sıfırı. Pusula <b>manyetik</b> kuzeyi gösterir; Ürgüp'te sapma yaklaşık <b>+6°</b> doğuya. Daha iyisi: öğlen güneşin gölgesini kullanın — gölgenin en kısa olduğu an tam kuzeyi verir.</p></div>
+    <div class="card"><div class="eyebrow">Adım 3</div><h3>Kalibre et</h3><p>Seri porttan <span class="mono">u1000</span> ve <span class="mono">u2000</span> yazıp aynanın gerçek açısını ölçün, iki noktayı koda girin. Redüktör varsa oran zaten bu ölçüme gömülür.</p></div>
+    <div class="card"><div class="eyebrow">Adım 4</div><h3>Doğrula</h3><p>Açık bir öğle vakti çalıştırın. Leke pencerenin sağına/soluna kaçıyorsa kuzey referansı, altına/üstüne kaçıyorsa TILT kalibrasyonu hatalıdır. Kayma miktarının yarısı, derece cinsinden aynanın hatasıdır.</p></div>
+  </div>
+
+  <div class="tablewrap"><table>
+    <thead><tr><th>Parça</th><th>Seçim</th><th>Neden</th></tr></thead>
+    <tbody>
+      <tr><td>Kontrolcü</td><td>Arduino Nano / Uno &nbsp;<span class="verdict m">veya ESP32</span></td><td>AVR'nin 32-bit float'ı bu hesap için yeterli (hata 0.0004°). ESP32 seçerseniz NTP ile saat sorunu da biter.</td></tr>
+      <tr><td>Saat</td><td>DS3231 + CR2032</td><td>±2 ppm: yılda ~1 dakika. DS1307 kullanmayın, ayda 5 dakika kayar — 1 dakika = pencerede 4 cm.</td></tr>
+      <tr><td>Motor</td><td>2 × DS3218 (20 kg·cm, metal dişli)</td><td>1 m² ayna rüzgârda ciddi moment üretir. SG90 bu iş için oyuncak.</td></tr>
+      <tr><td>Redüktör</td><td>3:1 – 4:1 (kayış veya sonsuz vida)</td><td><b>Projenin en kritik parçası.</b> Doğrudan servo ~1° oynar; 10 m'de bu 35 cm demek, leke pencereden çıkar.</td></tr>
+      <tr><td>Besleme</td><td>6 V / 5 A anahtarlamalı + 1000 µF</td><td>Servoları Arduino'dan beslemeyin; ani akım kartı resetler. GND ortak olmalı.</td></tr>
+      <tr><td>Ayna</td><td>4 mm gümüş cam, alüminyum çerçeve</td><td>Cam ayna %90–95 yansıtır ve yıllarca bozulmaz; akrilik 1–2 yılda matlaşır ve bombeleşir.</td></tr>
+      <tr><td>Mekanik</td><td>Duvardan 35 cm konsol, paslanmaz cıvata</td><td>TILT 36°'ye kadar çıkıyor; 1 m aynanın alt kenarı duvara çarpmasın.</td></tr>
+      <tr><td>İsteğe bağlı</td><td>Rüzgâr sensörü / limit switch</td><td>50 km/sa üstünde aynayı düz (park) konuma alıp yükü düşürmek için.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="codehead" style="margin-top:22px">
+    <span class="f">kuzey_isik_heliostat.ino</span>
+    <button class="copy" id="btnCopy" type="button">Kodu kopyala</button>
+  </div>
+  <pre><code id="inoCode">/* =============================================================================
+   KUZEY ISIK HELIOSTATI  -  Urgup / Nevsehir
+   Evin 10 m kuzeyindeki duvara kurulu ayna, gunesi kuzey cephesindeki
+   pencereye sabit tutar.  Acik dongu: DS3231 saat + NOAA gunes konumu.
+
+   Donanim : Arduino Uno/Nano (veya ESP32) + DS3231 + 2 adet servo
+   Kutuphane: RTClib (Adafruit), Servo (yerlesik)
+
+   !! SERVO BESLEMESI AYRI OLMALI: MG996R kalkista ~2.5 A ceker, Arduino&#x27;nun
+      5V pini bunu veremez.  Ayri 6V / 5A adaptor kullanin, GND&#x27;leri birlestirin.
+      Servo hattina 1000 uF kondansator koyun.
+
+   KOORDINAT SISTEMI (ENU):  x = Dogu,  y = Kuzey,  z = Yukari
+   Azimut : Kuzey&#x27;den saat yonunde  (K=0, D=90, G=180, B=270)
+   Orijin : Kuzey cephesinin dibi, pencere ortasinin tam altinda
+   ---------------------------------------------------------------------------
+   TEMEL FIZIK
+     s = aynadan GUNESE bakan birim vektor
+     t = aynadan PENCEREYE bakan birim vektor   (sabit!)
+     n = normalize(s + t)                        &lt;-- ayna normali, BISEKTOR
+   Gunes 15 derece/saat doner, ayna normali bunun yarisi kadar (~7.5 d/sa).
+   ============================================================================= */
+
+#include &lt;Wire.h&gt;
+#include &lt;RTClib.h&gt;
+#include &lt;Servo.h&gt;
+
+// ----------------------------------------------------------------- KONUM ----
+const float LAT = 38.6317f;      // Urgup enlem  (+ kuzey)
+const float LON = 34.9128f;      // Urgup boylam (+ dogu)
+const float TZ  = 3.0f;          // UTC+3, Turkiye&#x27;de yaz saati yok
+
+// -------------------------------------------------------------- GEOMETRI ----
+// Sahada seritmetreyle olcun; 1 cm hata pencerede 2 cm kayma demek degil,
+// ama 10 m mesafede aci hatasi buyutulur - dikkatli olcun.
+const float MX = 0.00f, MY = 10.00f, MZ = 2.20f;   // ayna merkezi
+const float WX = 0.00f, WY =  0.00f, WZ = 1.80f;   // pencere merkezi
+
+// ------------------------------------------------------------ SERVO PINS ----
+const uint8_t PIN_PAN  = 9;
+const uint8_t PIN_TILT = 10;
+
+/* SERVO KALIBRASYONU  --  iki nokta yeter.
+   Yontem: servoya bir mikrosaniye degeri yaz (seri portta u1000), AYNANIN
+   gercek acisini pusula/dijital acuolcerle olc, asagiya yaz; ikinci nokta icin
+   tekrarla.  Redüktor kullaniyorsaniz olcumu AYNA uzerinde yaptiginiz icin
+   oran zaten kalibrasyona gomulur, ayrica girmeye gerek yok.
+   Redüktor SART: duz servo ~1 derece cozunurluk verir = 10 m&#x27;de 35 cm kayma. */
+struct Axis { float aLo, uLo, aHi, uHi; float minA, maxA; };
+Axis PAN  = { 135.0f, 1000.0f, 225.0f, 2000.0f, 120.0f, 245.0f };
+Axis TILT = {   0.0f, 1200.0f,  45.0f, 1900.0f,  -5.0f,  45.0f };
+
+// --------------------------------------------------------------- AYARLAR ----
+const float MIN_SUN_ALT = 3.0f;    // bu yukseltinin altinda calisma (atmosfer + engel)
+const float DEADBAND    = 0.05f;   // bu kadar kucuk degisimde servoya dokunma
+const uint32_t PERIOD   = 60000UL; // 60 sn&#x27;de bir guncelle (7.5 d/sa =&gt; 0.125 derece adim)
+const float PARK_PAN    = 180.0f;  // gece/park: aynayi guneye ve asagi cevir
+const float PARK_TILT   = -5.0f;
+const bool  HOUSE_SHADOW_CHECK = true;
+const float HOUSE_H = 6.0f, HOUSE_W = 10.0f;   // evin saçak yuksekligi ve genisligi
+
+RTC_DS3231 rtc;
+Servo sPan, sTilt;
+float curPan = PARK_PAN, curTilt = PARK_TILT;
+uint32_t lastRun = 0;
+bool parked = true;
+
+// hedef vektoru t (sabit) - setup&#x27;ta bir kez hesaplanir
+float TX, TY, TZv;
+
+// ======================================================== YARDIMCI MATEMATIK
+static inline float d2r(float d){ return d * 0.01745329252f; }
+static inline float r2d(float r){ return r * 57.2957795131f; }
+
+/* J2000&#x27;den (2000-01-01 12:00 UTC) gecen TAM GUN sayisi.
+   Dikkat: dogrudan Julian Gun (2.46 milyon) kullanmayin - AVR&#x27;de double 32 bit,
+   buyuk sayida hassasiyet kaybolur.  Once tamsayi gun farkini alip kesirli
+   gunu sonra eklemek hatayi 0.0004 dereceye indirir. */
+long daysFromJ2000(int Y, int M, int D){
+  if (M &lt;= 2) { Y -= 1; M += 12; }
+  long A = Y / 100;
+  long B = 2 - A + A / 4;
+  long jd0 = (long)(365.25f * (Y + 4716)) + (long)(30.6001f * (M + 1)) + D + B - 1524;
+  return jd0 - 2451545L;          // .5&#x27;ler karsilikli sadelesir
+}
+
+/* NOAA gunes konumu.  Cikti: yukselti (derece, kirilma duzeltmeli) ve
+   azimut (Kuzey&#x27;den saat yonunde, derece). */
+void sunAltAz(const DateTime&amp; now, float&amp; alt, float&amp; az){
+  float hLocal = now.hour() + now.minute() / 60.0f + now.second() / 3600.0f;
+  float hUT    = hLocal - TZ;
+  int Y = now.year(), M = now.month(), D = now.day();
+  long nd = daysFromJ2000(Y, M, D);
+  float n  = (float)nd - 0.5f + hUT / 24.0f;     // J2000&#x27;den gun (kesirli)
+  float T  = n / 36525.0f;                        // Julian yuzyil
+
+  float L0 = fmod(280.46646f + T * (36000.76983f + T * 0.0003032f), 360.0f);
+  if (L0 &lt; 0) L0 += 360.0f;
+  float M0 = 357.52911f + T * (35999.05029f - 0.0001537f * T);
+  float ec = 0.016708634f - T * (0.000042037f + 0.0000001267f * T);
+  float Mr = d2r(M0);
+  float C  = sin(Mr) * (1.914602f - T * (0.004817f + 0.000014f * T))
+           + sin(2 * Mr) * (0.019993f - 0.000101f * T)
+           + sin(3 * Mr) * 0.000289f;
+  float om  = 125.04f - 1934.136f * T;
+  float lam = L0 + C - 0.00569f - 0.00478f * sin(d2r(om));
+  float e0  = 23.0f + (26.0f + (21.448f - T * (46.815f + T * (0.00059f - T * 0.001813f))) / 60.0f) / 60.0f;
+  float eps = e0 + 0.00256f * cos(d2r(om));
+
+  float decl = r2d(asin(sin(d2r(eps)) * sin(d2r(lam))));
+
+  float y   = tan(d2r(eps) / 2.0f); y = y * y;
+  float L0r = d2r(L0);
+  float eot = 4.0f * r2d( y * sin(2 * L0r) - 2 * ec * sin(Mr)
+            + 4 * ec * y * sin(Mr) * cos(2 * L0r)
+            - 0.5f * y * y * sin(4 * L0r) - 1.25f * ec * ec * sin(2 * Mr) );
+
+  float tst = hLocal * 60.0f + eot + 4.0f * LON - 60.0f * TZ;   // gercek gunes zamani (dk)
+  float ha  = tst / 4.0f - 180.0f;
+  while (ha &lt; -180.0f) ha += 360.0f;
+  while (ha &gt;  180.0f) ha -= 360.0f;
+
+  float la = d2r(LAT), dl = d2r(decl), Ha = d2r(ha);
+  float cz = sin(la) * sin(dl) + cos(la) * cos(dl) * cos(Ha);
+  cz = constrain(cz, -1.0f, 1.0f);
+  alt = 90.0f - r2d(acos(cz));
+
+  az = r2d(atan2(sin(Ha), cos(Ha) * sin(la) - tan(dl) * cos(la))) + 180.0f;
+  if (az &lt; 0) az += 360.0f; if (az &gt;= 360.0f) az -= 360.0f;
+
+  if (alt &gt; -1.0f &amp;&amp; alt &lt; 85.0f) {           // atmosferik kirilma (yaklasik)
+    float t = tan(d2r(alt));
+    float r = (alt &gt; 5.0f) ? (58.1f / t - 0.07f / (t * t * t))
+                           : (1735.0f + alt * (-518.2f + alt * (103.4f + alt * (-12.79f + alt * 0.711f))));
+    alt += r / 3600.0f;
+  }
+}
+
+// =============================================================== HELIOSTAT ==
+/* Ayna normalini hesapla.  Donen deger: gunes kullanilabilir mi? */
+bool mirrorAim(float alt, float az, float&amp; pan, float&amp; tilt, float&amp; incidence){
+  if (alt &lt; MIN_SUN_ALT) return false;
+
+  float ca = cos(d2r(alt)), sa = sin(d2r(alt));
+  float sx = ca * sin(d2r(az)), sy = ca * cos(d2r(az)), sz = sa;
+
+  // 1) Gunes duvarin arkasinda mi?  (ayna duvarin GUNEY yuzunde)
+  if (sy &gt;= -0.02f) return false;
+
+  // 2) Ev aynayi golgeliyor mu?  Aynadan gunese giden isin cepheyi kesiyor mu?
+  if (HOUSE_SHADOW_CHECK) {
+    float u  = (0.0f - MY) / sy;                 // y=0 duzlemine kadar
+    float hx = MX + u * sx, hz = MZ + u * sz;
+    if (fabs(hx) &lt;= HOUSE_W * 0.5f &amp;&amp; hz &gt;= 0.0f &amp;&amp; hz &lt;= HOUSE_H) return false;
+  }
+
+  // 3) BISEKTOR:  n = normalize(s + t)
+  float nx = sx + TX, ny = sy + TY, nz = sz + TZv;
+  float L  = sqrt(nx * nx + ny * ny + nz * nz);
+  nx /= L; ny /= L; nz /= L;
+
+  pan  = r2d(atan2(nx, ny)); if (pan &lt; 0) pan += 360.0f;
+  tilt = r2d(asin(constrain(nz, -1.0f, 1.0f)));
+  incidence = r2d(acos(constrain(nx * sx + ny * sy + nz * sz, -1.0f, 1.0f)));
+
+  // 4) Yumusak limitler - isin komsunun penceresine gitmesin
+  if (pan  &lt; PAN.minA  || pan  &gt; PAN.maxA)  return false;
+  if (tilt &lt; TILT.minA || tilt &gt; TILT.maxA) return false;
+  return true;
+}
+
+// =================================================================== SERVO ==
+int angleToUs(const Axis&amp; ax, float ang){
+  float a = constrain(ang, ax.minA, ax.maxA);
+  float u = ax.uLo + (a - ax.aLo) * (ax.uHi - ax.uLo) / (ax.aHi - ax.aLo);
+  return (int)constrain(u, 600.0f, 2400.0f);
+}
+
+void driveTo(float pan, float tilt){
+  if (fabs(pan - curPan) &gt; DEADBAND)  { sPan.writeMicroseconds(angleToUs(PAN, pan));   curPan  = pan; }
+  if (fabs(tilt - curTilt) &gt; DEADBAND){ sTilt.writeMicroseconds(angleToUs(TILT, tilt)); curTilt = tilt; }
+}
+
+void park(){
+  if (!parked) { Serial.println(F(&quot;-&gt; PARK&quot;)); }
+  driveTo(PARK_PAN, PARK_TILT);
+  parked = true;
+}
+
+// =================================================================== SETUP ==
+void setup(){
+  Serial.begin(115200);
+  Wire.begin();
+  if (!rtc.begin()) { Serial.println(F(&quot;HATA: DS3231 yok&quot;)); while (1) delay(1000); }
+  if (rtc.lostPower()) {
+    Serial.println(F(&quot;RTC sifirlandi - derleme zamani yazildi&quot;));
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  }
+
+  // hedef vektoru t = normalize(W - M)  (bir kez)
+  float dx = WX - MX, dy = WY - MY, dz = WZ - MZ;
+  float L = sqrt(dx * dx + dy * dy + dz * dz);
+  TX = dx / L; TY = dy / L; TZv = dz / L;
+  float tAz = r2d(atan2(TX, TY)); if (tAz &lt; 0) tAz += 360.0f;
+  Serial.print(F(&quot;Hedef: mesafe &quot;)); Serial.print(L, 2);
+  Serial.print(F(&quot; m, azimut &quot;));    Serial.print(tAz, 2);
+  Serial.print(F(&quot;, yukselti &quot;));    Serial.println(r2d(asin(TZv)), 2);
+
+  sPan.attach(PIN_PAN, 600, 2400);
+  sTilt.attach(PIN_TILT, 600, 2400);
+  park();
+  delay(1500);
+  lastRun = millis() - PERIOD;       // hemen ilk hesabi yap
+}
+
+// ==================================================================== LOOP ==
+void loop(){
+  handleSerial();
+  if (millis() - lastRun &lt; PERIOD) return;
+  lastRun = millis();
+
+  DateTime now = rtc.now();
+  float alt, az; sunAltAz(now, alt, az);
+  float pan, tilt, inc;
+
+  if (mirrorAim(alt, az, pan, tilt, inc)) {
+    driveTo(pan, tilt);
+    parked = false;
+    Serial.print(now.hour()); Serial.print(&#x27;:&#x27;);
+    if (now.minute() &lt; 10) Serial.print(&#x27;0&#x27;); Serial.print(now.minute());
+    Serial.print(F(&quot;  gunes &quot;)); Serial.print(alt, 2); Serial.print(&#x27;/&#x27;); Serial.print(az, 2);
+    Serial.print(F(&quot;  ayna &quot;));  Serial.print(pan, 2); Serial.print(&#x27;/&#x27;); Serial.print(tilt, 2);
+    Serial.print(F(&quot;  gelis &quot;));  Serial.print(inc, 1);
+    Serial.print(F(&quot;  verim %&quot;)); Serial.println(100.0f * cos(d2r(inc)), 0);
+  } else {
+    park();
+  }
+}
+
+// ====================================================== SERI KALIBRASYON ====
+/*  p&lt;aci&gt;  : PAN eksenini bu aciya getir      ornek:  p172.5
+    t&lt;aci&gt;  : TILT eksenini bu aciya getir     ornek:  t12.8
+    u&lt;us&gt;   : PAN&#x27;a ham mikrosaniye yaz        ornek:  u1480
+    v&lt;us&gt;   : TILT&#x27;e ham mikrosaniye yaz
+    k       : park
+    s       : saati yaz -&gt; sYYYY,MM,DD,hh,mm,ss                              */
+void handleSerial(){
+  if (!Serial.available()) return;
+  char c = Serial.read();
+  String a = Serial.readStringUntil(&#x27;\n&#x27;); a.trim();
+  switch (c) {
+    case &#x27;p&#x27;: curPan  = -999; driveTo(a.toFloat(), curTilt); Serial.println(F(&quot;pan ok&quot;)); break;
+    case &#x27;t&#x27;: curTilt = -999; driveTo(curPan, a.toFloat());  Serial.println(F(&quot;tilt ok&quot;)); break;
+    case &#x27;u&#x27;: sPan.writeMicroseconds(a.toInt());  Serial.println(F(&quot;us ok&quot;)); break;
+    case &#x27;v&#x27;: sTilt.writeMicroseconds(a.toInt()); Serial.println(F(&quot;us ok&quot;)); break;
+    case &#x27;k&#x27;: park(); break;
+    case &#x27;s&#x27;: {
+      int y, mo, d, h, mi, se;
+      if (sscanf(a.c_str(), &quot;%d,%d,%d,%d,%d,%d&quot;, &amp;y, &amp;mo, &amp;d, &amp;h, &amp;mi, &amp;se) == 6) {
+        rtc.adjust(DateTime(y, mo, d, h, mi, se)); Serial.println(F(&quot;saat yazildi&quot;));
+      }
+      break; }
+  }
+}
+</code></pre>
+</section>
+
+<section id="notlar">
+  <div class="sechead"><span class="n">06</span><h2>Mühendislik notları</h2></div>
+  <div class="cards">
+    <div class="card"><div class="eyebrow">Hassasiyet</div><div class="big mono" style="color:var(--sun)">0.3°</div><p>Aynadaki her 1° hata ışını 2° saptırır; 10 m'de 35 cm kayma eder. 1.2 m genişliğinde bir pencere ve ~1.1 m'lik leke için toplam hata bütçeniz aşağı yukarı <b>0.3°</b>. Redüktörün sebebi bu.</p></div>
+    <div class="card"><div class="eyebrow">Leke boyutu</div><div class="big mono" style="color:var(--sun)">1.09 m</div><p>Güneş nokta kaynak değil, 0.53°'lik bir disk. 10 m'de bu leke kenarına her yönde 9 cm ekler. 1 m'lik ayna pencerede 1.09 m'lik bir leke yapar — yani ayna ne kadar büyükse leke o kadar büyür, odaklanmaz.</p></div>
+    <div class="card"><div class="eyebrow">Güncelleme</div><div class="big mono" style="color:var(--sun)">60 sn</div><p>Ayna normali en fazla 11°/saat döner. Dakikada bir güncelleme lekeyi 4 cm'lik adımlarla ilerletir — göz bunu fark etmez. Daha sık güncellemek sadece servoyu yorar.</p></div>
+    <div class="card"><div class="eyebrow">Rüzgâr</div><div class="big mono" style="color:var(--bad)">≈500 N</div><p>1 m² düz levha 100 km/sa rüzgârda yaklaşık 0.5 kPa basınç görür. Aynayı taşıyan konsol ve servo dişlisi bunu <em>statik</em> olarak karşılamalı; servo tutamazsa gece park konumuna alan bir mekanik kilit düşünün.</p></div>
+  </div>
+
+  <div class="alert">
+    <h3>Güvenlik — bunu atlamayın</h3>
+    <p>Aynadan yansıyan ışık <b>seyreltilmiş değil</b>: aynaya doğrudan bakmak güneşe bakmakla aynı şeydir. Lekeyi pencereden girip <em>tavana veya açık renk bir duvara</em> düşürün, oturma yerine değil. Odaya giren 700 W ciddi bir ısı yüküdür; lekenin düştüğü yüzey koyu renkliyse saatler içinde ısınır. Ayrıca yumuşak limitleri (<span class="mono">PAN.minA / maxA</span>) mutlaka ayarlayın: bir yazılım hatasında ışın komşu evin penceresine ya da yola gitmemeli. Aynayı çocukların ulaşamayacağı yükseklikte kurun.</p>
+  </div>
+
+  <div class="cards" style="margin-top:14px">
+    <div class="card"><h3>Duvar açısı</h3><p>Simülasyon duvarın cepheye paralel (doğu–batı) uzandığını varsayıyor. Duvarınız eğikse aynanın güneş görebildiği saat aralığı kayar; koddaki <span class="mono">sy &gt;= -0.02</span> kontrolünü duvarın gerçek normaline göre yazın.</p></div>
+    <div class="card"><h3>İkinci ayna</h3><p>Tek ayna yetmezse doğru yol aynayı büyütmek değil, ikinci bir ayna eklemektir: aynı kodu ikinci bir Arduino'ya atın, sadece <span class="mono">MX</span> değerini değiştirin. Lekeler pencerede üst üste biner, güç toplanır.</p></div>
+    <div class="card"><h3>Kapalı döngü eklemek</h3><p>Pencere kenarına dört LDR koyup farkı okursanız ±0.2° düzeltme yapabilirsiniz. Ama <b>yalnızca</b> toplam ışık yüksekken düzeltin; bulut geçerken LDR'ye güvenen sistem aynayı kaybeder. Hesap ana kontrol, LDR ince ayar olmalı.</p></div>
+  </div>
+</section>
+
+<div class="transport" id="transport" data-off="1" aria-label="Zaman kontrolü">
+  <button type="button" class="tb" id="tPlay" data-on="0" aria-label="Oynat">▶</button>
+  <span class="mono hidemob" id="tDate">—</span>
+  <div class="rng"><div class="band" id="bandT"></div><input type="range" id="tMin" min="240" max="1260" value="780" step="1" aria-label="Günün saati"></div>
+  <span class="mono" id="tTime">—</span>
+</div>
+
+<div class="foot">
+  <span>Güneş konumu: NOAA algoritması, pvlib (NREL SPA) ile 0.016° içinde doğrulandı · Ürgüp 38.6317° K, 34.9128° D, UTC+3</span>
+  <span class="mono">KÜN Geospatial AI &amp; UAV Lab</span>
+</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const D2R=Math.PI/180, R2D=180/Math.PI;
+const LAT=38.6317, LON=34.9128, TZ=3.0;
+
+/* ===================== GÜNEŞ KONUMU (NOAA) ===================== */
+function jdFromYMD(y,m,d){ if(m<=2){y-=1;m+=12;} const A=Math.floor(y/100), B=2-A+Math.floor(A/4);
+  return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5; }
+function sunPos(y,mo,d,hour){            // hour = yerel ondalık saat
+  const hUT=hour-TZ, jd=jdFromYMD(y,mo,d)+hUT/24, T=(jd-2451545)/36525;
+  let L0=(280.46646+T*(36000.76983+T*0.0003032))%360; if(L0<0)L0+=360;
+  const M=357.52911+T*(35999.05029-0.0001537*T), ec=0.016708634-T*(0.000042037+0.0000001267*T), Mr=M*D2R;
+  const C=Math.sin(Mr)*(1.914602-T*(0.004817+0.000014*T))+Math.sin(2*Mr)*(0.019993-0.000101*T)+Math.sin(3*Mr)*0.000289;
+  const om=125.04-1934.136*T, lam=L0+C-0.00569-0.00478*Math.sin(om*D2R);
+  const e0=23+(26+(21.448-T*(46.815+T*(0.00059-T*0.001813)))/60)/60, eps=e0+0.00256*Math.cos(om*D2R);
+  const decl=Math.asin(Math.sin(eps*D2R)*Math.sin(lam*D2R))*R2D;
+  let yy=Math.tan(eps*D2R/2); yy*=yy; const L0r=L0*D2R;
+  const eot=4*R2D*(yy*Math.sin(2*L0r)-2*ec*Math.sin(Mr)+4*ec*yy*Math.sin(Mr)*Math.cos(2*L0r)
+            -0.5*yy*yy*Math.sin(4*L0r)-1.25*ec*ec*Math.sin(2*Mr));
+  const tst=hour*60+eot+4*LON-60*TZ; let ha=tst/4-180;
+  while(ha<-180)ha+=360; while(ha>180)ha-=360;
+  const la=LAT*D2R, dl=decl*D2R, Ha=ha*D2R;
+  let cz=Math.sin(la)*Math.sin(dl)+Math.cos(la)*Math.cos(dl)*Math.cos(Ha); cz=Math.max(-1,Math.min(1,cz));
+  let alt=90-Math.acos(cz)*R2D;
+  let az=Math.atan2(Math.sin(Ha),Math.cos(Ha)*Math.sin(la)-Math.tan(dl)*Math.cos(la))*R2D+180;
+  az=(az+360)%360;
+  if(alt>-1&&alt<85){ const t=Math.tan(alt*D2R);
+    const r=alt>5?(58.1/t-0.07/(t*t*t)):(1735+alt*(-518.2+alt*(103.4+alt*(-12.79+alt*0.711))));
+    alt+=r/3600; }
+  return {alt:alt,az:az};
+}
+function doyToDate(doy,y){ const d=new Date(Date.UTC(y,0,1)); d.setUTCDate(doy); return {m:d.getUTCMonth()+1,d:d.getUTCDate(),dt:d}; }
+const AYLAR=["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+
+/* ===================== VEKTÖR ===================== */
+const V={ sub:(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]], add:(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]],
+  mul:(a,k)=>[a[0]*k,a[1]*k,a[2]*k], dot:(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2],
+  cross:(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],
+  len:a=>Math.hypot(a[0],a[1],a[2]), unit:a=>{const L=Math.hypot(a[0],a[1],a[2])||1;return [a[0]/L,a[1]/L,a[2]/L];} };
+function fromAltAz(alt,az){ const c=Math.cos(alt*D2R); return [c*Math.sin(az*D2R), c*Math.cos(az*D2R), Math.sin(alt*D2R)]; }
+function toAltAz(n){ let az=Math.atan2(n[0],n[1])*R2D; if(az<0)az+=360; return {az:az, alt:Math.asin(Math.max(-1,Math.min(1,n[2])))*R2D}; }
+function rotAxis(v,axis,ang){ const a=V.unit(axis),c=Math.cos(ang),s=Math.sin(ang);
+  return V.add(V.add(V.mul(v,c),V.mul(V.cross(a,v),s)),V.mul(a,V.dot(a,v)*(1-c))); }
+function noise(i,k){ const x=Math.sin(i*127.1+k*311.7)*43758.5453; return (x-Math.floor(x))*2-1; }
+
+/* ===================== PARAMETRELER ===================== */
+const P={ doy:355, min:780, mode:'bisektor', D:10, mz:2.2, wz:1.8, hh:6, hw:10, ms:1.0, mx:0, ns:0.20,
+          hd:7, winW:1.2, winH:1.4, wallH:2.9, refl:0.90 };
+const MODES=[
+ {id:'bisektor', name:'Bisektör — n = normalize(s + t)', short:'BİSEKTÖR', c:'--s1', mot:'2 servo'},
+ {id:'tekeksen', name:'Tek eksen, sabit hız', short:'TEK EKSEN', c:'--s6', mot:'1 motor'},
+ {id:'ldr',      name:'LDR kapalı döngü',     short:'LDR', c:'--s3', mot:'2 servo + 4 LDR'},
+ {id:'panonly',  name:'Sadece PAN döner',     short:'SADECE PAN', c:'--s4', mot:'1 servo'},
+ {id:'sabit',    name:'Sabit ayna (motorsuz)',short:'SABİT', c:'--s5', mot:'yok'},
+ {id:'gunes',    name:'Güneş takibi (n = s)', short:'GÜNEŞ TAKİBİ', c:'--s2', mot:'2 servo'}
+];
+
+function M(){ return [P.mx, P.D, P.mz]; }
+function Wp(){ return [0,0,P.wz]; }
+function Tv(){ return V.unit(V.sub(Wp(),M())); }
+
+/* ===================== TEMEL HESAP ===================== */
+function sunState(hour){
+  const dd=doyToDate(P.doy,2026), sp=sunPos(2026,dd.m,dd.d,hour);
+  const s=fromAltAz(sp.alt,sp.az);
+  let status='ok';
+  if(sp.alt<=0.5) status='gece';
+  else if(s[1]>=-0.02) status='duvar';
+  else { const u=(0-P.D)/s[1], hx=P.mx+u*s[0], hz=P.mz+u*s[2];
+         if(Math.abs(hx)<=P.hw/2 && hz>=0 && hz<=P.hh) status='golge'; }
+  return {alt:sp.alt, az:sp.az, s:s, status:status, ok:status==='ok'};
+}
+function bisector(s){ return V.unit(V.add(s,Tv())); }
+function reflectDir(s,n){ return V.unit(V.add(V.mul(s,-1), V.mul(n,2*V.dot(s,n)))); }
+function facadeHit(n,s){ const d=reflectDir(s,n); if(d[1]>=-1e-9) return null;
+  const k=(0-P.D)/d[1]; if(k<=0) return null;
+  return {x:P.mx+k*d[0], z:P.mz+k*d[2], k:k, d:d}; }
+function dni(alt){ if(alt<=0) return 0;
+  const am=1/(Math.sin(alt*D2R)+0.50572*Math.pow(alt+6.07995,-1.6364));
+  return 1361*Math.pow(0.7,Math.pow(am,0.678))*1.08; }
+
+/* gün boyunca aydınlık örnekler (tek eksen uydurması ve iz için) */
+function daySamples(step){
+  step=step||10; const out=[];
+  for(let m=0;m<1440;m+=step){ const st=sunState(m/60); if(st.ok) out.push({m:m,st:st}); }
+  return out;
+}
+let cache={key:'',samples:[],fit:null,ref:null};
+function dayCache(){
+  const key=[P.doy,P.D,P.mz,P.wz,P.hh,P.hw,P.mx].join('|');
+  if(cache.key===key) return cache;
+  const S=daySamples(10); cache.key=key; cache.samples=S;
+  if(S.length>2){
+    const a=S[0], b=S[S.length-1], mid=S[Math.floor(S.length/2)];
+    const na=bisector(a.st.s), nb=bisector(b.st.s), n0=bisector(mid.st.s);
+    let ax=V.cross(V.sub(n0,na),V.sub(nb,n0));
+    if(V.len(ax)<1e-9) ax=[0,0,1]; ax=V.unit(ax);
+    const pa=V.unit(V.sub(na,V.mul(ax,V.dot(ax,na)))), pb=V.unit(V.sub(nb,V.mul(ax,V.dot(ax,nb))));
+    let ang=Math.atan2(V.dot(V.cross(pa,pb),ax),V.dot(pa,pb));
+    const dt=(b.m-a.m)/60;
+    cache.fit={ax:ax,n0:na,t0:a.m/60,w:ang/dt};
+    cache.ref={n:n0,angles:toAltAz(n0),t:mid.m/60};
+  } else { cache.fit=null; cache.ref=null; }
+  return cache;
+}
+function normalFor(mode,st,minute){
+  const c=dayCache(), s=st.s, i=minute;
+  let n;
+  if(mode==='bisektor'||mode==='hedef') n=bisector(s);
+  else if(mode==='gunes') n=s.slice();
+  else if(mode==='sabit') n=c.ref?c.ref.n.slice():bisector(s);
+  else if(mode==='panonly'){ const b=toAltAz(bisector(s)); const tl=c.ref?c.ref.angles.alt:b.alt; n=fromAltAz(tl,b.az); }
+  else if(mode==='tekeksen'){ n=c.fit?rotAxis(c.fit.n0,c.fit.ax,(i/60-c.fit.t0)*c.fit.w):bisector(s); }
+  else if(mode==='ldr'){ const b=toAltAz(bisector(s)); n=fromAltAz(b.alt+noise(i,3)*0.7, b.az+noise(i,4)*0.7); }
+  else n=bisector(s);
+  if(P.ns>0 && mode!=='sabit'){ const a=toAltAz(n); n=fromAltAz(a.alt+noise(i,1)*P.ns, a.az+noise(i,2)*P.ns); }
+  return n;
+}
+function evalAt(mode,minute){
+  const st=sunState(minute/60); if(!st.ok) return {st:st,ok:false};
+  const n=normalFor(mode,st,minute), a=toAltAz(n);
+  const inc=Math.acos(Math.max(-1,Math.min(1,V.dot(n,st.s))))*R2D;
+  const hit=facadeHit(n,st.s);
+  const area=P.ms*P.ms, pw=dni(st.alt)*area*P.refl*Math.cos(inc*D2R);
+  let err=null, inWin=false;
+  if(hit){ err=Math.hypot(hit.x-0, hit.z-P.wz);
+           inWin=Math.abs(hit.x)<=P.winW/2 && Math.abs(hit.z-P.wz)<=P.winH/2; }
+  return {st:st,ok:true,n:n,pan:a.az,tilt:a.alt,inc:inc,hit:hit,err:err,inWin:inWin,pw:pw>0?pw:0};
+}
+
+/* ===================== ÇİZİM ALTYAPISI ===================== */
+const CS=getComputedStyle(document.documentElement);
+function col(name){ return CS.getPropertyValue(name).trim()||'#888'; }
+let TH={};
+function readTheme(){ const g=getComputedStyle(document.documentElement);
+  const k=['--ink','--ink-2','--ink-3','--line','--line-2','--panel','--panel-2','--sun','--beam','--shade',
+           '--ground','--stone','--roof','--sky','--ok','--bad','--warn','--s1','--s2','--s3','--s4','--s5','--s6','--inset','--bg','--beam-soft'];
+  TH={}; k.forEach(n=>TH[n.slice(2)]=g.getPropertyValue(n).trim()); }
+function fit(cv,aspect){
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  const w=cv.clientWidth||cv.parentElement.clientWidth||600, h=Math.round(w/aspect);
+  if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){ cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr); }
+  cv.style.height=h+'px';
+  const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
+  return {ctx:ctx,w:w,h:h};
+}
+function rr(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function lbl(ctx,t,x,y,c,size,align,weight){
+  ctx.font=(weight||600)+' '+(size||10)+'px "IBM Plex Mono", monospace';
+  ctx.fillStyle=c; ctx.textAlign=align||'left'; ctx.textBaseline='middle'; ctx.fillText(t,x,y); }
+function arrow(ctx,x1,y1,x2,y2,c,wd,head){
+  ctx.strokeStyle=c; ctx.lineWidth=wd; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1), s=head||7;
+  ctx.fillStyle=c; ctx.beginPath(); ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-s*Math.cos(a-0.42),y2-s*Math.sin(a-0.42));
+  ctx.lineTo(x2-s*Math.cos(a+0.42),y2-s*Math.sin(a+0.42)); ctx.closePath(); ctx.fill(); }
+function dash(ctx,pts,c,wd,pat){ ctx.save(); ctx.setLineDash(pat||[5,4]); ctx.strokeStyle=c; ctx.lineWidth=wd;
+  ctx.beginPath(); ctx.moveTo(pts[0],pts[1]); for(let i=2;i<pts.length;i+=2)ctx.lineTo(pts[i],pts[i+1]); ctx.stroke(); ctx.restore(); }
+function edgePt(x0,y0,dx,dy,W,H,ins){
+  let t=1e9;
+  if(dx>1e-6)t=Math.min(t,(W-ins-x0)/dx); if(dx<-1e-6)t=Math.min(t,(ins-x0)/dx);
+  if(dy>1e-6)t=Math.min(t,(H-ins-y0)/dy); if(dy<-1e-6)t=Math.min(t,(ins-y0)/dy);
+  return [x0+dx*t, y0+dy*t];
+}
+function arcBetween(ctx,x,y,r,a1,a2,c){
+  let d=a2-a1; while(d>Math.PI)d-=2*Math.PI; while(d<-Math.PI)d+=2*Math.PI;
+  ctx.strokeStyle=c; ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.arc(x,y,r,a1,a1+d,d<0); ctx.stroke();
+  return a1+d/2;
+}
+function beam(ctx,x1,y1,x2,y2,c,soft,wd){
+  ctx.save(); ctx.strokeStyle=soft; ctx.lineWidth=(wd||3)*3.4; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  ctx.strokeStyle=c; ctx.lineWidth=wd||3; ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore(); }
+
+function hex2rgb(h){ h=String(h).trim();
+  if(h.startsWith('rgb')){ const m=h.match(/[\d.]+/g); return [+m[0],+m[1],+m[2]]; }
+  h=h.replace('#',''); if(h.length===3)h=h.split('').map(c=>c+c).join('');
+  return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; }
+function mix(a,b,t){ const A=hex2rgb(a),B=hex2rgb(b); t=Math.max(0,Math.min(1,t));
+  return 'rgb('+Math.round(A[0]+(B[0]-A[0])*t)+','+Math.round(A[1]+(B[1]-A[1])*t)+','+Math.round(A[2]+(B[2]-A[2])*t)+')'; }
+function isDark(){ return hex2rgb(TH.ink)[0]>150; }
+/* gökyüzü: güneş yükseltisine göre gece → alacakaranlık → gündüz */
+function skyFill(ctx,W,H,alt){
+  const dk=isDark();
+  const night=dk?'#12161d':'#3a4356', dusk=dk?'#3a2f36':'#c9a58a', day=dk?'#1c2733':'#d7e2ea', dayLo=dk?'#26333f':'#eef2f4';
+  const f=Math.max(0,Math.min(1,(alt+8)/22)), w=Math.exp(-Math.pow((alt-1)/7,2));
+  const top=mix(mix(night,day,f),dusk,w*0.25), bot=mix(mix(night,dayLo,f),dusk,w*0.7);
+  const g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,top); g.addColorStop(1,bot);
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+}
+function treeColor(){ return isDark()?'#4b5a3f':'#8a9b6e'; }
+function trunkColor(){ return isDark()?'#5a4a3a':'#7a6552'; }
+function sunDisc(ctx,x,y,r,c,rays){
+  ctx.save(); ctx.fillStyle=c; ctx.globalAlpha=.18; ctx.beginPath(); ctx.arc(x,y,r*2.3,0,7); ctx.fill();
+  ctx.globalAlpha=1; ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.fill();
+  if(rays){ ctx.strokeStyle=c; ctx.lineWidth=1.4; ctx.globalAlpha=.7;
+    for(let i=0;i<12;i++){ const a=i*Math.PI/6; ctx.beginPath(); ctx.moveTo(x+Math.cos(a)*r*1.5,y+Math.sin(a)*r*1.5); ctx.lineTo(x+Math.cos(a)*r*2.1,y+Math.sin(a)*r*2.1); ctx.stroke(); } }
+  ctx.restore();
+}
+
+/* ===================== 00 · İZOMETRİK GENEL GÖRÜNÜM ===================== */
+function drawIso(){
+  const cv=document.getElementById('iso'); if(!cv) return;
+  const F=fit(cv,(cv.clientWidth||900)<620?1.35:2.05), ctx=F.ctx, W=F.w, H=F.h;
+  const ev=evalAt(P.mode,P.min), st=ev.st;
+  const wl=Math.min(Math.max(P.hw/2+2.5, Math.abs(P.mx)+2.5),12), wallH=Math.max(P.wallH,P.mz+P.ms*0.6+0.2);
+  const c30=Math.cos(Math.PI/6), s30=0.5;
+  const pr=p=>[c30*(p[0]-p[1]), s30*(p[0]+p[1])-p[2]];
+  const box=[[-wl-1,-P.hd-1,0],[wl+1,-P.hd-1,0],[wl+1,P.D+1.5,0],[-wl-1,P.D+1.5,0],[-P.hw/2,-P.hd,P.hh+1],[P.hw/2,0,P.hh+1],[wl,P.D,wallH]];
+  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;
+  box.forEach(p=>{const q=pr(p);x0=Math.min(x0,q[0]);x1=Math.max(x1,q[0]);y0=Math.min(y0,q[1]);y1=Math.max(y1,q[1]);});
+  const padT=58, pad=18;
+  const k=Math.min((W-pad*2)/(x1-x0),(H-padT-pad)/(y1-y0));
+  const ox=W/2-(x0+x1)/2*k, oy=padT+(H-padT-pad)/2-(y0+y1)/2*k;
+  const Pj=p=>{const q=pr(p);return [ox+q[0]*k, oy+q[1]*k];};
+  const poly=(pts,fill,stroke,lw,alpha)=>{ ctx.save(); if(alpha!==undefined)ctx.globalAlpha=alpha; ctx.beginPath();
+    pts.forEach((p,i)=>{const q=Pj(p); i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]);}); ctx.closePath();
+    if(fill){ctx.fillStyle=fill;ctx.fill();} if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1;ctx.lineJoin='round';ctx.stroke();} ctx.restore(); };
+  const seg=(a,b,c,lw,pat)=>{ const A=Pj(a),B=Pj(b); if(pat)dash(ctx,[A[0],A[1],B[0],B[1]],c,lw,pat);
+    else{ctx.strokeStyle=c;ctx.lineWidth=lw;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(A[0],A[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();} };
+
+  skyFill(ctx,W,H,st.alt);
+  // zemin adası
+  poly([[-wl-3,-P.hd-3,0],[wl+3,-P.hd-3,0],[wl+3,P.D+3,0],[-wl-3,P.D+3,0]],TH.ground,TH['line-2'],1);
+  ctx.save(); ctx.globalAlpha=.35; ctx.strokeStyle=TH.line; ctx.lineWidth=1;
+  for(let x=Math.ceil(-wl-3);x<=wl+3;x+=2) seg([x,-P.hd-3,0],[x,P.D+3,0],TH.line,1);
+  for(let y=Math.ceil(-P.hd-3);y<=P.D+3;y+=2) seg([-wl-3,y,0],[wl+3,y,0],TH.line,1);
+  ctx.restore();
+
+  // evin gölgesi
+  if(st.alt>0.5 && st.s[1]<0.999){
+    const L=Math.min(P.hh/Math.max(Math.tan(Math.max(st.alt,1)*D2R),0.02),40);
+    const hx=-st.s[0],hy=-st.s[1],hL=Math.hypot(hx,hy)||1, ux=hx/hL*L, uy=hy/hL*L;
+    const cor=[[-P.hw/2,-P.hd],[P.hw/2,-P.hd],[P.hw/2,0],[-P.hw/2,0]];
+    const hull=convexHull(cor.concat(cor.map(c=>[c[0]+ux,c[1]+uy])));
+    poly(hull.map(q=>[q[0],q[1],0]),TH.shade,null,0,.14);
+  }
+
+  // ağaçlar (arka plan): batı tarafı
+  const trees=[[-P.hw/2-2.2,7.2,2.6,1.4],[-P.hw/2-4.0,3.0,2.2,1.2]];
+  const tree=(t)=>{ const b=Pj([t[0],t[1],0]), c=Pj([t[0],t[1],t[2]]);
+    ctx.strokeStyle=trunkColor(); ctx.lineWidth=Math.max(2,0.18*k); ctx.beginPath(); ctx.moveTo(b[0],b[1]); ctx.lineTo(c[0],c[1]); ctx.stroke();
+    ctx.fillStyle=treeColor(); ctx.beginPath(); ctx.arc(c[0],c[1]-t[3]*k*0.35,t[3]*k,0,7); ctx.fill();
+    ctx.globalAlpha=.25; ctx.fillStyle=TH.ink; ctx.beginPath(); ctx.ellipse(b[0],b[1],t[3]*k*0.9,t[3]*k*0.35,0,0,7); ctx.fill(); ctx.globalAlpha=1; };
+  tree(trees[0]); tree(trees[1]);
+
+  // ev: çatı, kuzey cephesi (gölgeli taraf), doğu cephesi
+  const hw=P.hw/2, hd=P.hd, hh=P.hh;
+  poly([[-hw,0,0],[hw,0,0],[hw,0,hh],[-hw,0,hh]], mix(TH.roof,TH.ink,isDark()?0.35:0.28), TH['line-2'],1);   // kuzey: gölgede
+  poly([[hw,-hd,0],[hw,0,0],[hw,0,hh],[hw,-hd,hh]], mix(TH.roof,TH.ink,0.10), TH['line-2'],1);              // doğu
+  poly([[-hw,-hd,hh],[hw,-hd,hh],[hw,0,hh],[-hw,0,hh]], mix(TH.roof,TH.panel,0.35), TH['line-2'],1);        // çatı
+  // parapet + baca
+  poly([[-hw+.4,-hd+.4,hh],[hw-.4,-hd+.4,hh],[hw-.4,-.4,hh],[-hw+.4,-.4,hh]], null, TH['line-2'],1);
+  const bx=hw*0.45, by=-hd*0.55, bs=0.45, bh=0.8;
+  poly([[bx-bs,by-bs,hh+bh],[bx+bs,by-bs,hh+bh],[bx+bs,by+bs,hh+bh],[bx-bs,by+bs,hh+bh]], mix(TH.roof,TH.panel,0.2), TH['line-2'],1);
+  poly([[bx-bs,by+bs,hh],[bx+bs,by+bs,hh],[bx+bs,by+bs,hh+bh],[bx-bs,by+bs,hh+bh]], mix(TH.roof,TH.ink,0.3), TH['line-2'],1);
+  poly([[bx+bs,by-bs,hh],[bx+bs,by+bs,hh],[bx+bs,by+bs,hh+bh],[bx+bs,by-bs,hh+bh]], mix(TH.roof,TH.ink,0.15), TH['line-2'],1);
+  // doğu cephede iki pencere
+  [[-hd*0.7],[-hd*0.3]].forEach(w=>{ const y=w[0]; poly([[hw,y-.5,1.2],[hw,y+.5,1.2],[hw,y+.5,2.5],[hw,y-.5,2.5]], TH.shade, TH.ink, .8, .55); });
+  // kuzey pencere
+  const ww=P.winW/2, wz0=P.wz-P.winH/2, wz1=P.wz+P.winH/2;
+  poly([[-ww,0,wz0],[ww,0,wz0],[ww,0,wz1],[-ww,0,wz1]], mix(TH.shade,TH.sky,0.35), TH.ink, 1.2);
+  seg([0,0,wz0],[0,0,wz1],TH.ink,.8); seg([-ww,0,P.wz],[ww,0,P.wz],TH.ink,.8);
+
+  // ışık lekesi (cephe düzleminde elips)
+  const Mv=[P.mx,P.D-0.42,P.mz];
+  if(ev.ok&&ev.hit){
+    const d=ev.hit.d, spread=ev.hit.k*Math.tan(0.53*D2R), dia=P.ms+spread, minor=dia/2, major=minor/Math.max(Math.abs(d[1]),0.15);
+    let e1=[d[0],0,d[2]]; const eL=Math.hypot(e1[0],e1[2]); e1=eL>1e-6?[e1[0]/eL,0,e1[2]/eL]:[1,0,0];
+    const e2=[-e1[2],0,e1[0]];
+    const ring=[]; for(let i=0;i<40;i++){ const a=i/40*2*Math.PI; ring.push([ev.hit.x+major*Math.cos(a)*e1[0]+minor*Math.sin(a)*e2[0], 0.01, ev.hit.z+major*Math.cos(a)*e1[2]+minor*Math.sin(a)*e2[2]]); }
+    poly(ring,TH.beam,null,0,.5); poly(ring,null,TH.beam,1.5,.95);
+  }
+  // ön ağaç (doğu, cepheye yakın)
+  tree([hw+2.6,2.2,2.4,1.25]);
+
+  // ışın demeti
+  if(ev.ok&&ev.hit){
+    const A=Pj(Mv), B=Pj([ev.hit.x,0,ev.hit.z]);
+    beam(ctx,A[0],A[1],B[0],B[1],TH.beam,'rgba(233,168,60,.26)',3.2);
+  }
+  // ayna: destek + düzlem
+  const mBase=Pj([P.mx,P.D,0]), mC=Pj(Mv);
+  dash(ctx,[mBase[0],mBase[1],mC[0],mC[1]],TH['ink-3'],1,[2,3]);
+  seg([P.mx,P.D,P.mz],Mv,TH.ink,3);
+  if(ev.ok){
+    const n=ev.n, up=[0,0,1]; let u=V.cross(up,n); if(V.len(u)<1e-6)u=[1,0,0]; u=V.unit(u); const v=V.unit(V.cross(n,u));
+    const h=P.ms/2, q=[V.add(Mv,V.add(V.mul(u,h),V.mul(v,h))),V.add(Mv,V.add(V.mul(u,-h),V.mul(v,h))),V.add(Mv,V.add(V.mul(u,-h),V.mul(v,-h))),V.add(Mv,V.add(V.mul(u,h),V.mul(v,-h)))];
+    poly(q, mix(TH.shade,TH.panel,0.25), TH.ink, 2);
+    const nEnd=V.add(Mv,V.mul(n,1.3)); seg(Mv,nEnd,TH['ink-2'],1.2,[4,3]);
+  } else {
+    const h=P.ms/2; poly([[P.mx-h,Mv[1],P.mz-h],[P.mx+h,Mv[1],P.mz-h],[P.mx+h,Mv[1],P.mz+h],[P.mx-h,Mv[1],P.mz+h]], TH.stone, TH['ink-3'], 1.5, .8);
+  }
+  // bahçe duvarı (saydam)
+  const wy0=P.D-0.18, wy1=P.D+0.18;
+  poly([[-wl,wy0,0],[-wl,wy1,0],[-wl,wy1,wallH],[-wl,wy0,wallH]], TH.stone, TH['line-2'],1,.55);
+  poly([[-wl,wy1,0],[wl,wy1,0],[wl,wy1,wallH],[-wl,wy1,wallH]], mix(TH.stone,TH.ink,0.12), TH['line-2'],1,.55);
+  poly([[wl,wy0,0],[wl,wy1,0],[wl,wy1,wallH],[wl,wy0,wallH]], mix(TH.stone,TH.ink,0.2), TH['line-2'],1,.55);
+  poly([[-wl,wy0,wallH],[wl,wy0,wallH],[wl,wy1,wallH],[-wl,wy1,wallH]], mix(TH.stone,TH.panel,0.3), TH['line-2'],1,.75);
+  // taş derzleri
+  ctx.save(); ctx.globalAlpha=.25; for(let x=-wl+1;x<wl;x+=1.4) seg([x,wy1,0.02],[x,wy1,wallH-0.02],TH.ink,.7); ctx.restore();
+
+  // güneş + gelen ışın
+  if(st.alt>-1){
+    let sp=Pj(V.add(Mv,V.mul(st.s,14)));
+    sp=[Math.max(40,Math.min(W-40,sp[0])), Math.max(30,Math.min(H*0.45,sp[1]))];
+    const c=st.status==='ok'?TH.beam:(st.alt>0?mix(TH.beam,TH['ink-3'],0.6):TH['ink-3']);
+    if(st.alt>0.5){ const A=sp,B=Pj(Mv); dash(ctx,[A[0],A[1],B[0],B[1]],c,1.8,[7,6]); }
+    sunDisc(ctx,sp[0],sp[1],9,c,st.alt>0.5);
+    lbl(ctx,'GÜNEŞ · '+st.alt.toFixed(0)+'° / '+st.az.toFixed(0)+'°',sp[0],sp[1]+24,TH['ink-2'],9.5,'center');
+  }
+  // etiketler + kuzey oku
+  const lEv=Pj([0,-hd/2,hh]); lbl(ctx,'EV',lEv[0],lEv[1],TH['ink-2'],11,'center');
+  const lW=Pj([wl*0.55,P.D,wallH]); lbl(ctx,'BAHÇE DUVARI',lW[0],lW[1]-12,TH['ink-3'],9.5,'center');
+  const lM=Pj([P.mx,P.D-0.4,P.mz+P.ms/2]); lbl(ctx,'AYNA',lM[0],lM[1]-16,TH.ink,10,'center');
+  const lP=Pj([P.winW/2,0,P.wz]); lbl(ctx,'PENCERE',lP[0]+8,lP[1],TH.shade,9.5,'left');
+  const nA=Pj([wl+1.2,P.D-4,0]), nB=Pj([wl+1.2,P.D-1.6,0]);
+  arrow(ctx,nA[0],nA[1],nB[0],nB[1],TH.ink,1.6,7); lbl(ctx,'K',nB[0]-9,nB[1]+9,TH.ink,10.5,'center');
+  lbl(ctx,P.D.toFixed(0)+' m',Pj([P.hw/2+0.8,P.D/2,0])[0]+8,Pj([P.hw/2+0.8,P.D/2,0])[1],TH['ink-2'],10,'left');
+  seg([P.hw/2+0.8,0,0],[P.hw/2+0.8,P.D,0],TH['ink-3'],1,[3,3]);
+}
+
+/* ===================== 01 · KUŞ BAKIŞI ===================== */
+function drawPlan(){
+  const cv=document.getElementById('plan'), F=fit(cv,1.10), ctx=F.ctx, W=F.w, H=F.h;
+  const ev=evalAt(P.mode,P.min), st=ev.st;
+  const xExt=Math.max(P.hw/2, Math.abs(P.mx)+P.ms)+3.3;
+  const y0=-P.hd-1.0, y1=P.D+2.2;
+  const pad=26, k=Math.min((W-pad*2)/(2*xExt), (H-pad*2)/(y1-y0));
+  const cx=W/2-P.mx*0, cy=pad+(y1)*k;
+  const X=x=>cx+x*k, Y=y=>cy-y*k;
+
+  ctx.fillStyle=TH.sky; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=TH.ground; ctx.fillRect(0,0,W,H);
+
+  // evin gölgesi (zeminde) — ızgaranın altında
+  let shLabel=null;
+  if(st.alt>0.5 && st.s[1]<0){
+    const L=Math.min(P.hh/Math.max(Math.tan(Math.max(st.alt,1)*D2R),0.02),60);
+    const hx=-st.s[0], hy=-st.s[1], hL=Math.hypot(hx,hy)||1;
+    const ux=hx/hL*L, uy=hy/hL*L;
+    const cor=[[-P.hw/2,-P.hd],[P.hw/2,-P.hd],[P.hw/2,0],[-P.hw/2,0]];
+    const hull=convexHull(cor.concat(cor.map(c=>[c[0]+ux,c[1]+uy])));
+    ctx.fillStyle=TH['shade']; ctx.globalAlpha=.12; ctx.beginPath();
+    hull.forEach((q,i)=>i?ctx.lineTo(X(q[0]),Y(q[1])):ctx.moveTo(X(q[0]),Y(q[1]))); ctx.closePath(); ctx.fill();
+    ctx.globalAlpha=1;
+    const zh=P.hh-P.D*Math.tan(st.alt*D2R);
+    shLabel = zh>0.05 ? ('evin gölgesi duvarda '+zh.toFixed(1)+' m yüksekliğe kadar')
+                      : 'evin gölgesi duvara ulaşmıyor';
+  }
+
+  // ızgara
+  ctx.strokeStyle=TH.line; ctx.lineWidth=1; ctx.globalAlpha=.45; ctx.beginPath();
+  for(let x=Math.ceil(-xExt);x<=xExt;x++){ ctx.moveTo(X(x),Y(y0)); ctx.lineTo(X(x),Y(y1)); }
+  for(let y=Math.ceil(y0);y<=y1;y++){ ctx.moveTo(X(-xExt),Y(y)); ctx.lineTo(X(xExt),Y(y)); }
+  ctx.stroke(); ctx.globalAlpha=1;
+
+  // ev
+  ctx.fillStyle=TH.roof; ctx.strokeStyle=TH['line-2']; ctx.lineWidth=1.4;
+  ctx.fillRect(X(-P.hw/2),Y(0),P.hw*k,P.hd*k); ctx.strokeRect(X(-P.hw/2),Y(0),P.hw*k,P.hd*k);
+  ctx.strokeStyle=TH.stone; ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.moveTo(X(-P.hw/2+.6),Y(-.6)); ctx.lineTo(X(P.hw/2-.6),Y(-.6));
+  ctx.lineTo(X(P.hw/2-.6),Y(-P.hd+.6)); ctx.lineTo(X(-P.hw/2+.6),Y(-P.hd+.6)); ctx.closePath(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(X(-P.hw/2),Y(-P.hd/2)); ctx.lineTo(X(P.hw/2),Y(-P.hd/2)); ctx.stroke();
+  lbl(ctx,'EV',X(0),Y(-P.hd*0.72),TH['ink-2'],11,'center');
+  lbl(ctx,P.hh.toFixed(1)+' m saçak',X(0),Y(-P.hd*0.72)+15,TH['ink-3'],9,'center',400);
+
+  // bahçe: ağaçlar ve yol
+  const planTree=(x,y,r)=>{ ctx.fillStyle=TH.ink; ctx.globalAlpha=.10; ctx.beginPath(); ctx.arc(X(x)+3,Y(y)+3,r*k,0,7); ctx.fill(); ctx.globalAlpha=1;
+    ctx.fillStyle=treeColor(); ctx.beginPath(); ctx.arc(X(x),Y(y),r*k,0,7); ctx.fill();
+    ctx.strokeStyle=trunkColor(); ctx.lineWidth=1; ctx.globalAlpha=.6; ctx.beginPath(); ctx.arc(X(x),Y(y),r*k*0.55,0,7); ctx.stroke(); ctx.globalAlpha=1; };
+  planTree(-P.hw/2-1.9,7.2,1.25); planTree(-P.hw/2-1.7,3.0,1.05); planTree(P.hw/2+1.9,2.2,1.1);
+  ctx.strokeStyle=TH['line-2']; ctx.lineWidth=Math.max(2,0.9*k); ctx.globalAlpha=.35; ctx.lineCap='butt';
+  ctx.beginPath(); ctx.moveTo(X(P.hw/2+0.2),Y(-P.hd*0.5)); ctx.lineTo(X(P.hw/2+1.4),Y(-P.hd*0.5)); ctx.lineTo(X(P.hw/2+1.4),Y(P.D+0.6)); ctx.stroke(); ctx.globalAlpha=1;
+
+  // kuzey cephesi + pencere
+  ctx.strokeStyle=TH.ink; ctx.lineWidth=2.6;
+  ctx.beginPath(); ctx.moveTo(X(-P.hw/2),Y(0)); ctx.lineTo(X(P.hw/2),Y(0)); ctx.stroke();
+  ctx.strokeStyle=TH.shade; ctx.lineWidth=5.5; ctx.lineCap='butt';
+  ctx.beginPath(); ctx.moveTo(X(-P.winW/2),Y(0)); ctx.lineTo(X(P.winW/2),Y(0)); ctx.stroke();
+  lbl(ctx,'PENCERE',X(0),Y(0)+15,TH.shade,9.5,'center');
+
+  // bahçe duvarı
+  const wh=Math.min(xExt-0.4,10);
+  ctx.fillStyle=TH.stone; ctx.strokeStyle=TH['line-2']; ctx.lineWidth=1.2;
+  ctx.fillRect(X(-wh),Y(P.D+0.18),wh*2*k,0.36*k); ctx.strokeRect(X(-wh),Y(P.D+0.18),wh*2*k,0.36*k);
+  ctx.save(); ctx.beginPath(); ctx.rect(X(-wh),Y(P.D+0.18),wh*2*k,0.36*k); ctx.clip();
+  ctx.strokeStyle=TH['line-2']; ctx.lineWidth=.8; ctx.beginPath();
+  for(let x=-wh;x<=wh;x+=0.7){ ctx.moveTo(X(x),Y(P.D+0.18)); ctx.lineTo(X(x),Y(P.D-0.18)); } ctx.stroke(); ctx.restore();
+  lbl(ctx,'BAHÇE DUVARI',X(-wh+0.3),Y(P.D)-19,TH['ink-3'],9.5,'left');
+
+  // ölçü çizgisi
+  const dimX=X(-P.hw/2-1.4);
+  dash(ctx,[dimX,Y(0),dimX,Y(P.D)],TH['ink-3'],1,[3,3]);
+  ctx.strokeStyle=TH['ink-3']; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(dimX-5,Y(0)); ctx.lineTo(dimX+5,Y(0)); ctx.moveTo(dimX-5,Y(P.D)); ctx.lineTo(dimX+5,Y(P.D)); ctx.stroke();
+  ctx.save(); ctx.translate(dimX-7,Y(P.D/2)); ctx.rotate(-Math.PI/2);
+  lbl(ctx,P.D.toFixed(1)+' m',0,0,TH['ink-2'],10.5,'center'); ctx.restore();
+
+  // güneş ışını + güneş
+  const mxs=X(P.mx), mys=Y(P.D);
+  if(st.alt>0.5){
+    const hx=st.s[0], hy=st.s[1], hL=Math.hypot(hx,hy)||1;
+    const ep=edgePt(mxs,mys,hx/hL,-hy/hL,W,H,26);
+    const sx=ep[0], sy=ep[1];
+    const c=st.status==='ok'?TH.beam:TH['ink-3'];
+    dash(ctx,[sx,sy,mxs+(hx/hL)*22,mys-(hy/hL)*22],c,2,[7,5]);
+    arrow(ctx,mxs+(hx/hL)*30,mys-(hy/hL)*30,mxs+(hx/hL)*14,mys-(hy/hL)*14,c,2,7);
+    sunDisc(ctx,sx,sy,7,c,st.status==='ok');
+    const ly=sy<H/2? sy+22 : sy-21;
+    lbl(ctx,'GÜNEŞ '+st.az.toFixed(0)+'°',Math.max(52,Math.min(W-52,sx)),ly,TH['ink-2'],9.5,'center');
+  }
+
+  // ayna + yansıyan ışın
+  if(ev.ok){
+    const nh=[ev.n[0],ev.n[1]], nL=Math.hypot(nh[0],nh[1])||1;
+    const px=-nh[1]/nL, py=nh[0]/nL, hl=P.ms/2;
+    const ax1=X(P.mx+px*hl), ay1=Y(P.D+py*hl), ax2=X(P.mx-px*hl), ay2=Y(P.D-py*hl);
+    if(ev.hit){
+      const hx=X(ev.hit.x), hy=Y(0);
+      beam(ctx,mxs,mys,hx,hy,TH.beam,'rgba(233,168,60,.28)',3);
+      ctx.fillStyle=TH.beam; ctx.globalAlpha=.35; ctx.beginPath(); ctx.arc(hx,hy,9,0,7); ctx.fill(); ctx.globalAlpha=1;
+      ctx.beginPath(); ctx.arc(hx,hy,4,0,7); ctx.fill();
+    }
+    ctx.strokeStyle=TH.ink; ctx.lineWidth=5; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(ax1,ay1); ctx.lineTo(ax2,ay2); ctx.stroke();
+    ctx.strokeStyle=TH.shade; ctx.lineWidth=2.4;
+    ctx.beginPath(); ctx.moveTo(ax1,ay1); ctx.lineTo(ax2,ay2); ctx.stroke();
+    dash(ctx,[mxs,mys,mxs+nh[0]/nL*34,mys-nh[1]/nL*34],TH['ink-2'],1.2,[4,3]);
+  } else {
+    ctx.strokeStyle=TH['ink-3']; ctx.lineWidth=5; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(X(P.mx-P.ms/2),mys); ctx.lineTo(X(P.mx+P.ms/2),mys); ctx.stroke();
+  }
+  ctx.fillStyle=TH.ink; ctx.beginPath(); ctx.arc(mxs,mys,3,0,7); ctx.fill();
+  lbl(ctx,'AYNA',mxs,mys-26,TH.ink,10,'center');
+
+  // pusula + ölçek
+  const crx=W-46, cry=46;
+  ctx.strokeStyle=TH['line-2']; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(crx,cry,19,0,7); ctx.stroke();
+  arrow(ctx,crx,cry+15,crx,cry-16,TH.ink,1.8,7);
+  lbl(ctx,'K',crx,cry-26,TH.ink,11,'center');
+  if(shLabel) lbl(ctx,shLabel,14,16,TH['ink-3'],9.5,'left',400);
+  const sbl=(P.D>=12?5:2);
+  ctx.strokeStyle=TH['ink-2']; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(16,H-20); ctx.lineTo(16+sbl*k,H-20);
+  ctx.moveTo(16,H-24); ctx.lineTo(16,H-16); ctx.moveTo(16+sbl*k,H-24); ctx.lineTo(16+sbl*k,H-16); ctx.stroke();
+  lbl(ctx,sbl+' m',16+sbl*k/2,H-31,TH['ink-2'],9.5,'center');
+}
+function convexHull(pts){
+  const p=pts.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+  const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);
+  const lo=[],up=[];
+  for(const q of p){ while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],q)<=0)lo.pop(); lo.push(q); }
+  for(let i=p.length-1;i>=0;i--){ const q=p[i]; while(up.length>=2&&cr(up[up.length-2],up[up.length-1],q)<=0)up.pop(); up.push(q); }
+  lo.pop(); up.pop(); return lo.concat(up);
+}
+
+/* ===================== 02 · DÜŞEY KESİT ===================== */
+function drawSec(){
+  const cv=document.getElementById('sec'), F=fit(cv,1.60), ctx=F.ctx, W=F.w, H=F.h;
+  const ev=evalAt(P.mode,P.min), st=ev.st;
+  const yA=-P.hd-1, yB=P.D+2.2, zA=-0.6, zB=Math.max(P.hh,P.mz+2)+1.6;
+  const pad=22, k=Math.min((W-pad*2)/(yB-yA),(H-pad*2)/(zB-zA));
+  const ox=pad-yA*k, oy=H-pad+zA*k;
+  const X=y=>ox+y*k, Y=z=>oy-z*k;
+
+  skyFill(ctx,W,H,st.alt);
+  ctx.fillStyle=TH.ground; ctx.fillRect(0,Y(0),W,H-Y(0));
+  ctx.strokeStyle=TH['line-2']; ctx.lineWidth=1.4; ctx.beginPath(); ctx.moveTo(0,Y(0)); ctx.lineTo(W,Y(0)); ctx.stroke();
+
+  // ev kesiti
+  ctx.fillStyle=TH.roof; ctx.strokeStyle=TH['line-2']; ctx.lineWidth=1.3;
+  ctx.beginPath(); ctx.moveTo(X(-P.hd),Y(0)); ctx.lineTo(X(-P.hd),Y(P.hh-0.5));
+  ctx.quadraticCurveTo(X(-P.hd/2),Y(P.hh+0.5),X(0),Y(P.hh-0.5)); ctx.lineTo(X(0),Y(0)); ctx.closePath();
+  ctx.fill(); ctx.stroke();
+  // pencere
+  ctx.fillStyle=TH.shade; ctx.globalAlpha=.22;
+  ctx.fillRect(X(0)-3,Y(P.wz+P.winH/2),6,P.winH*k); ctx.globalAlpha=1;
+  ctx.strokeStyle=TH.shade; ctx.lineWidth=3; ctx.lineCap='butt';
+  ctx.beginPath(); ctx.moveTo(X(0),Y(P.wz-P.winH/2)); ctx.lineTo(X(0),Y(P.wz+P.winH/2)); ctx.stroke();
+  lbl(ctx,'PENCERE',X(0)-8,Y(P.wz),TH.shade,9,'right');
+
+  // duvar
+  const wallTop=Math.max(P.wallH,P.mz+P.ms*0.6+0.2);
+  ctx.fillStyle=TH.stone; ctx.strokeStyle=TH['line-2']; ctx.lineWidth=1.2;
+  ctx.fillRect(X(P.D)-0.18*k,Y(wallTop),0.36*k,wallTop*k); ctx.strokeRect(X(P.D)-0.18*k,Y(wallTop),0.36*k,wallTop*k);
+
+  const mx=X(P.D), my=Y(P.mz);
+  if(ev.ok){
+    const n2=[ev.n[1],ev.n[2]], nL=Math.hypot(n2[0],n2[1])||1;
+    const px=-n2[1]/nL, py=n2[0]/nL, hl=P.ms/2;
+    // gelen ışın
+    const sv=[st.s[1],st.s[2]], sL=Math.hypot(sv[0],sv[1])||1;
+    const R=Math.min(W,H)*0.42;
+    dash(ctx,[mx+sv[0]/sL*R,my-sv[1]/sL*R,mx,my],TH.beam,2,[7,5]);
+    arrow(ctx,mx+sv[0]/sL*46,my-sv[1]/sL*46,mx+sv[0]/sL*16,my-sv[1]/sL*16,TH.beam,2,7);
+    // yansıyan
+    beam(ctx,mx,my,X(0),Y(P.wz),TH.beam,'rgba(233,168,60,.30)',3);
+    // normal
+    dash(ctx,[mx,my,mx+n2[0]/nL*58,my-n2[1]/nL*58],TH['ink-2'],1.3,[5,4]);
+    lbl(ctx,'n',mx+n2[0]/nL*66,my-n2[1]/nL*66,TH['ink-2'],10,'center');
+    // ayna
+    ctx.strokeStyle=TH.ink; ctx.lineWidth=5.5; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(mx+px*hl*k,my-py*hl*k); ctx.lineTo(mx-px*hl*k,my+py*hl*k); ctx.stroke();
+    ctx.strokeStyle=TH.shade; ctx.lineWidth=2.6;
+    ctx.beginPath(); ctx.moveTo(mx+px*hl*k,my-py*hl*k); ctx.lineTo(mx-px*hl*k,my+py*hl*k); ctx.stroke();
+    // açı yayları γ = γ
+    const aN=Math.atan2(-n2[1]/nL,n2[0]/nL), aS=Math.atan2(-sv[1]/sL,sv[0]/sL);
+    const T3=Tv(), tv=[T3[1],T3[2]], tL=Math.hypot(tv[0],tv[1])||1;
+    const aT=Math.atan2(-tv[1]/tL,tv[0]/tL);
+    const m1=arcBetween(ctx,mx,my,42,aN,aS,TH.sun);
+    const m2=arcBetween(ctx,mx,my,42,aN,aT,TH.sun);
+    lbl(ctx,'γ',mx+53*Math.cos(m1),my+53*Math.sin(m1),TH.sun,11,'center');
+    lbl(ctx,'γ',mx+53*Math.cos(m2),my+53*Math.sin(m2),TH.sun,11,'center');
+    lbl(ctx,'γ = '+ev.inc.toFixed(1)+'° · geliş açısı = yansıma açısı',W-12,16,TH.sun,10.5,'right');
+  } else {
+    ctx.strokeStyle=TH['ink-3']; ctx.lineWidth=5; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(mx,my-P.ms/2*k); ctx.lineTo(mx,my+P.ms/2*k); ctx.stroke();
+  }
+  ctx.fillStyle=TH.ink; ctx.beginPath(); ctx.arc(mx,my,3,0,7); ctx.fill();
+  lbl(ctx,'← GÜNEY',12,H-12,TH['ink-3'],9,'left',400);
+  lbl(ctx,'KUZEY →',W-12,H-12,TH['ink-3'],9,'right',400);
+}
+
+/* ===================== 03 · KUZEY CEPHESİ ===================== */
+function facadeFrame(F,showTrail){
+  const ctx=F.ctx,W=F.w,H=F.h;
+  const xE=Math.max(P.hw/2+0.8,3), zB=P.hh+0.9;
+  const pad=26, k=Math.min((W-pad*2)/(2*xE),(H-pad*2)/(zB+0.4));
+  const cx=W/2, oy=H-pad;
+  const X=x=>cx-x*k, Y=z=>oy-z*k;      // kuzeyden bakış: doğu SOLDA
+  ctx.fillStyle=TH.sky; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=TH.roof; ctx.strokeStyle=TH['line-2']; ctx.lineWidth=1.3;
+  ctx.fillRect(X(P.hw/2),Y(P.hh),P.hw*k,P.hh*k); ctx.strokeRect(X(P.hw/2),Y(P.hh),P.hw*k,P.hh*k);
+  ctx.strokeStyle=TH['ink-3']; ctx.lineWidth=1.6;
+  ctx.beginPath(); ctx.moveTo(X(P.hw/2+0.4),Y(P.hh)); ctx.lineTo(X(-P.hw/2-0.4),Y(P.hh)); ctx.stroke();
+  ctx.strokeStyle=TH['line-2']; ctx.lineWidth=1.6; ctx.beginPath(); ctx.moveTo(0,Y(0)); ctx.lineTo(W,Y(0)); ctx.stroke();
+  // pencere
+  ctx.fillStyle=TH.sky; ctx.strokeStyle=TH.shade; ctx.lineWidth=2.2;
+  ctx.fillRect(X(P.winW/2),Y(P.wz+P.winH/2),P.winW*k,P.winH*k);
+  ctx.strokeRect(X(P.winW/2),Y(P.wz+P.winH/2),P.winW*k,P.winH*k);
+  ctx.strokeStyle=TH.shade; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(X(0),Y(P.wz+P.winH/2)); ctx.lineTo(X(0),Y(P.wz-P.winH/2));
+  ctx.moveTo(X(P.winW/2),Y(P.wz)); ctx.lineTo(X(-P.winW/2),Y(P.wz)); ctx.stroke();
+  lbl(ctx,'DOĞU',12,18,TH['ink-3'],9.5,'left',400);
+  lbl(ctx,'BATI',W-12,18,TH['ink-3'],9.5,'right',400);
+  lbl(ctx,'kuzeyden bakış',W/2,H-9,TH['ink-3'],9,'center',400);
+  return {X:X,Y:Y,k:k};
+}
+function spotEllipse(ctx,g,hit,color,alpha){
+  const spread=hit.k*Math.tan(0.53*D2R);
+  const dia=P.ms+spread, minor=dia/2, major=minor/Math.max(Math.abs(hit.d[1]),0.15);
+  const ang=Math.atan2(-hit.d[2],-(-hit.d[0]));
+  ctx.save(); ctx.translate(g.X(hit.x),g.Y(hit.z)); ctx.rotate(ang);
+  ctx.globalAlpha=alpha*0.5; ctx.fillStyle=color;
+  ctx.beginPath(); ctx.ellipse(0,0,major*g.k,minor*g.k,0,0,7); ctx.fill();
+  ctx.globalAlpha=alpha; ctx.lineWidth=1.6; ctx.strokeStyle=color;
+  ctx.beginPath(); ctx.ellipse(0,0,major*g.k,minor*g.k,0,0,7); ctx.stroke();
+  ctx.restore(); ctx.globalAlpha=1;
+  return {x:g.X(hit.x), y:g.Y(hit.z), r:minor*g.k};
+}
+function drawFac(){
+  const cv=document.getElementById('fac'), F=fit(cv,1.60), ctx=F.ctx;
+  const g=facadeFrame(F,true);
+  // gün boyu iz
+  const S=dayCache().samples;
+  ctx.fillStyle=TH['ink-3'];
+  S.forEach(s=>{ const e=evalAt(P.mode,s.m); if(e.ok&&e.hit){
+    ctx.globalAlpha=.34; ctx.beginPath(); ctx.arc(g.X(e.hit.x),g.Y(e.hit.z),2,0,7); ctx.fill(); }});
+  ctx.globalAlpha=1;
+  const ev=evalAt(P.mode,P.min);
+  if(ev.ok&&ev.hit) spotEllipse(ctx,g,ev.hit,TH.beam,1);
+  else lbl(ctx,ev.st.status==='gece'?'GÜNEŞ YOK':(ev.st.status==='duvar'?'GÜNEŞ DUVARIN ARKASINDA':'AYNA EVİN GÖLGESİNDE'),
+           F.w/2,F.h/2,TH['ink-3'],11,'center');
+}
+function drawCmp(){
+  const cv=document.getElementById('cmp'); if(!cv) return;
+  const F=fit(cv,1.45), ctx=F.ctx, g=facadeFrame(F,false);
+  const off=[], tags=[], used=[];
+  MODES.forEach(m=>{
+    const e=evalAt(m.id,P.min); const c=TH[m.c.slice(2)];
+    if(!e.ok) return;
+    if(e.hit){
+      const sx=g.X(e.hit.x), sy=g.Y(e.hit.z);
+      if(sx<10||sx>F.w-10||sy<10||sy>F.h-56){ off.push({m:m,c:c,hit:e.hit}); return; }
+      const sp=spotEllipse(ctx,g,e.hit,c,.9);
+      tags.push({x:sp.x, y:sp.y-sp.r-10, t:m.short, c:c});
+    } else off.push({m:m,c:c,hit:null});
+  });
+  tags.sort((a,b)=>a.y-b.y);
+  tags.forEach(t=>{
+    let y=Math.max(14,Math.min(F.h-58,t.y));
+    while(used.some(u=>Math.abs(u.y-y)<13 && Math.abs(u.x-t.x)<74)) y-=13;
+    used.push({x:t.x,y:y});
+    ctx.save(); ctx.globalAlpha=.9;
+    dash(ctx,[t.x,t.y+8,t.x,y+5],t.c,1,[2,2]); ctx.restore();
+    lbl(ctx,t.t,Math.max(34,Math.min(F.w-34,t.x)),y,t.c,9.5,'center');
+  });
+  lbl(ctx,fmtTime(P.min),F.w-12,F.h-10,TH['ink-3'],10,'right',400);
+  let yy=F.h-44;
+  off.forEach(o=>{
+    const t=o.hit? (o.m.short+' → cephe dışında: '+(o.hit.x>0?'batıya ':'doğuya ')+Math.abs(o.hit.x).toFixed(1)+' m, '+o.hit.z.toFixed(1)+' m yükseklikte')
+                 : (o.m.short+' → ışın gökyüzüne gidiyor');
+    lbl(ctx,'● '+t,12,yy,o.c,10,'left'); yy-=15;
+  });
+}
+
+/* ===================== 04 · GRAFİKLER ===================== */
+let series=null, seriesKey='';
+function buildSeries(){
+  const key=cacheKey(); if(seriesKey===key&&series) return series;
+  const saveNs=P.ns; P.ns=0;            // grafikte KOMUT açıları: gürültüsüz
+  const A=[],B=[],lit=[];
+  for(let m=240;m<=1260;m+=5){
+    const e=evalAt('bisektor',m);
+    if(e.ok){ A.push({m:m,pan:e.pan,tilt:e.tilt,cos:Math.cos(e.inc*D2R),pw:e.pw}); lit.push(m); }
+    else B.push(m);
+  }
+  P.ns=saveNs; seriesKey=key; series={pts:A,dark:B}; return series;
+}
+function cacheKey(){ return [P.doy,P.D,P.mz,P.wz,P.hh,P.hw,P.mx,P.ms].join('|'); }
+const HMIN=240, HMAX=1260;
+function nice(lo,hi,n){ const span=hi-lo||1, raw=span/(n||4);
+  const mag=Math.pow(10,Math.floor(Math.log10(raw))), norm=raw/mag;
+  const step=(norm<1.5?1:(norm<3?2:(norm<7?5:10)))*mag;
+  const a=Math.floor(lo/step)*step, b=Math.ceil(hi/step)*step, t=[];
+  for(let v=a;v<=b+1e-9;v+=step) t.push(Math.round(v*1e6)/1e6);
+  return {lo:a,hi:b,ticks:t};
+}
+/* tek bir panel çizer: kendi ölçeği, kendi etiketleri (small multiples) */
+function panel(F,y0,y1,vLo,vHi,ticks,fmt,showX){
+  const ctx=F.ctx,W=F.w, L=52,R=62;
+  const X=m=>L+(m-HMIN)/(HMAX-HMIN)*(W-L-R), Y=v=>y1-(v-vLo)/(vHi-vLo)*(y1-y0);
+  const s=buildSeries();
+  ctx.fillStyle=TH['line']; ctx.globalAlpha=.42;
+  let run=null;
+  s.dark.concat([99999]).forEach(m=>{ if(run===null){run=[m,m];}
+    else if(m===run[1]+5){run[1]=m;} else { ctx.fillRect(X(run[0]),y0,Math.max(1,X(run[1])-X(run[0])),y1-y0); run=[m,m]; } });
+  ctx.globalAlpha=1;
+  ctx.strokeStyle=TH.line; ctx.lineWidth=1; ctx.beginPath();
+  ticks.forEach(v=>{ const y=Y(v); ctx.moveTo(L,y); ctx.lineTo(W-R,y); }); ctx.stroke();
+  ticks.forEach(v=>lbl(ctx,fmt(v),L-9,Y(v),TH['ink-3'],9.5,'right',400));
+  ctx.strokeStyle=TH['line-2']; ctx.beginPath(); ctx.moveTo(L,y1); ctx.lineTo(W-R,y1); ctx.stroke();
+  if(showX){ for(let h=6;h<=20;h+=2){ const x=X(h*60);
+      ctx.strokeStyle=TH.line; ctx.beginPath(); ctx.moveTo(x,y1); ctx.lineTo(x,y1+4); ctx.stroke();
+      lbl(ctx,h+':00',x,y1+14,TH['ink-3'],9.5,'center',400); } }
+  dash(ctx,[X(P.min),y0,X(P.min),y1],TH.ink,1.4,[3,3]);
+  return {X:X,Y:Y,L:L,R:R,pts:s.pts};
+}
+function line(ctx,g,pts,acc,c,wd){ ctx.strokeStyle=c; ctx.lineWidth=wd||2.2; ctx.lineJoin='round'; ctx.lineCap='round';
+  ctx.beginPath(); let prev=null;
+  pts.forEach(p=>{ const x=g.X(p.m),y=g.Y(acc(p));
+    if(prev===null||p.m-prev>10) ctx.moveTo(x,y); else ctx.lineTo(x,y); prev=p.m; }); ctx.stroke(); }
+function endDot(ctx,g,pts,acc,c,text){
+  if(!pts.length) return; const p=pts[pts.length-1];
+  ctx.fillStyle=c; ctx.beginPath(); ctx.arc(g.X(p.m),g.Y(acc(p)),3.5,0,7); ctx.fill();
+  lbl(ctx,text,g.X(p.m)+8,g.Y(acc(p)),c,10,'left');
+}
+function drawChA(){
+  const cv=document.getElementById('chA'), F=fit(cv,2.35), ctx=F.ctx, H=F.h;
+  ctx.fillStyle=TH.panel; ctx.fillRect(0,0,F.w,H);
+  const s=buildSeries(); if(!s.pts.length){ lbl(ctx,'Bu gün ayna hiç güneş görmüyor',F.w/2,H/2,TH['ink-3'],11,'center'); return; }
+  const pa=s.pts.map(p=>p.pan), ta=s.pts.map(p=>p.tilt);
+  const A=nice(Math.min.apply(null,pa),Math.max.apply(null,pa),4);
+  const B=nice(Math.min.apply(null,ta),Math.max.apply(null,ta),3);
+  const top=18, gap=34, hh=(H-top-34-gap)/2;
+  const g1=panel(F,top,top+hh,A.lo,A.hi,A.ticks,v=>v.toFixed(0)+'°',false);
+  lbl(ctx,'PAN · yatay dönüş',g1.L,top-8,TH.s1,10,'left');
+  line(ctx,g1,s.pts,p=>p.pan,TH.s1);
+  const e=evalAt('bisektor',P.min);
+  endDot(ctx,g1,s.pts,p=>p.pan,TH.s1,'PAN');
+  if(e.ok){ ctx.fillStyle=TH.s1; ctx.beginPath(); ctx.arc(g1.X(P.min),g1.Y(e.pan),4.5,0,7); ctx.fill(); }
+  const y2=top+hh+gap;
+  const g2=panel(F,y2,y2+hh,B.lo,B.hi,B.ticks,v=>v.toFixed(0)+'°',true);
+  lbl(ctx,'TILT · düşey eğim',g2.L,y2-8,TH.s2,10,'left');
+  line(ctx,g2,s.pts,p=>p.tilt,TH.s2);
+  endDot(ctx,g2,s.pts,p=>p.tilt,TH.s2,'TILT');
+  if(e.ok){ ctx.fillStyle=TH.s2; ctx.beginPath(); ctx.arc(g2.X(P.min),g2.Y(e.tilt),4.5,0,7); ctx.fill(); }
+  lbl(ctx,'gri şerit = aynanın güneş görmediği saatler',F.w-62,H-6,TH['ink-3'],9,'right',400);
+}
+function drawChB(){
+  const cv=document.getElementById('chB'), F=fit(cv,4.4), ctx=F.ctx, H=F.h;
+  ctx.fillStyle=TH.panel; ctx.fillRect(0,0,F.w,H);
+  const s=buildSeries(); if(!s.pts.length) return;
+  const g=panel(F,18,H-30,0.4,1.0,[0.4,0.6,0.8,1.0],v=>'%'+Math.round(v*100),true);
+  ctx.save(); ctx.fillStyle=TH.sun; ctx.globalAlpha=.15; ctx.beginPath();
+  let started=false, prev=null;
+  s.pts.forEach(p=>{ const v=Math.max(p.cos,0.4), x=g.X(p.m), y=g.Y(v);
+    if(!started||p.m-prev>10){ if(started)ctx.lineTo(g.X(prev),g.Y(0.4)); ctx.moveTo(x,g.Y(0.4)); ctx.lineTo(x,y); started=true; }
+    else ctx.lineTo(x,y); prev=p.m; });
+  if(started)ctx.lineTo(g.X(prev),g.Y(0.4));
+  ctx.closePath(); ctx.fill(); ctx.restore();
+  line(ctx,g,s.pts,p=>Math.max(p.cos,0.4),TH.sun);
+  const e=evalAt('bisektor',P.min);
+  if(e.ok){ const v=Math.max(Math.cos(e.inc*D2R),0.4);
+    ctx.fillStyle=TH.sun; ctx.beginPath(); ctx.arc(g.X(P.min),g.Y(v),4.5,0,7); ctx.fill();
+    lbl(ctx,'%'+(100*Math.cos(e.inc*D2R)).toFixed(0),g.X(P.min)+8,g.Y(v)-11,TH.sun,10.5,'left'); }
+  const mx=s.pts.reduce((a,b)=>b.cos>a.cos?b:a);
+  if(Math.abs(g.X(mx.m)-g.X(P.min))>72)
+    lbl(ctx,'tepe %'+(100*mx.cos).toFixed(0),g.X(mx.m),g.Y(Math.max(mx.cos,0.4))-12,TH['ink-2'],9.5,'center',400);
+}
+
+/* ===================== TABLOLAR ===================== */
+function modeStats(){
+  const out=[];
+  MODES.forEach(m=>{
+    let hit=0,n=0,sum=0;
+    for(let mm=240;mm<=1260;mm+=10){ const e=evalAt(m.id,mm); if(!e.ok)continue;
+      n++; if(e.inWin)hit++; sum+=(e.err===null?12:Math.min(e.err,12)); }
+    out.push({m:m,pct:n?100*hit/n:0,avg:n?sum/n:0,n:n});
+  });
+  return out;
+}
+const MODE_NOTE={
+ bisektor:'Aynanın normali güneş ile pencere arasındaki açıyı tam ortalar. Tek doğru yöntem — ve zaten “heliostat”ın tanımı bu.',
+ tekeksen:'Tek motor, sabit hızda, eğik bir eksen etrafında. Gün içinde tek başına yeter; eksen açısı ve hızı mevsimde bir kez ayarlanmalı. Klasik saat mekanizmalı heliostatın mantığı.',
+ ldr:'Hesap doğru, ama LDR gürültüsü lekeyi sürekli oynatır. Ana kontrol değil, ince ayar olarak kullanın — bulut geçtiğinde referansını kaybeder.',
+ panonly:'Sadece yatay dönüş. Leke doğru sütunda kalır ama güneş yükseldikçe yukarı tırmanır; pencereyi öğlen dışında ıskalar.',
+ sabit:'Motor yok. Gün içinde leke cephede metrelerce yol alır; günde yalnızca birkaç dakika pencereye denk gelir.',
+ gunes:'Klasik hata: ayna güneşe bakarsa ışığı güneşe geri yollar. Güneş paneli için doğru, heliostat için tamamen yanlış.'
+};
+function renderModeTable(){
+  const st=modeStats(), tb=document.querySelector('#modeTable tbody'); tb.innerHTML='';
+  st.forEach(r=>{
+    const good=r.pct>95, mid=r.pct>30;
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td><span class="swatch" style="background:var('+r.m.c+')"></span>'+r.m.short+'</td>'+
+      '<td class="mono" style="font-size:12px;color:var(--ink-2)">'+r.m.mot+'</td>'+
+      '<td class="num">%'+r.pct.toFixed(0)+'</td>'+
+      '<td class="num">'+(r.avg>=12?'—':r.avg.toFixed(2)+' m')+'</td>'+
+      '<td><span class="verdict '+(good?'y':(mid?'m':'n'))+'">'+(good?'ÇALIŞIR':(mid?'KISMEN':'ÇALIŞMAZ'))+'</span></td>';
+    tb.appendChild(tr);
+  });
+  const cards=document.getElementById('modeCards'); cards.innerHTML='';
+  MODES.forEach(m=>{
+    const d=document.createElement('div'); d.className='card';
+    d.innerHTML='<div class="eyebrow" style="color:var('+m.c+')">'+m.short+'</div><h3>'+m.name+'</h3><p>'+MODE_NOTE[m.id]+'</p>';
+    cards.appendChild(d);
+  });
+  const extra=document.createElement('div'); extra.className='card';
+  extra.innerHTML='<div class="eyebrow">BONUS</div><h3>Hedefe hizalı montaj</h3><p>Birincil ekseni doğrudan pencereye bakan bir montaj. Optik olarak bisektörle <b>birebir aynı</b> sonucu verir, farkı mekaniktedir: büyük heliostatlarda tercih edilir. Bu geometride avantajı yok — alt-azimut montajda PAN yalnızca 59°, TILT 14° hareket ediyor.</p>';
+  cards.appendChild(extra);
+}
+function renderSeasonTable(){
+  const tb=document.querySelector('#seasonTable tbody'); tb.innerHTML='';
+  const days=[[355,'21 Aralık'],[21,'21 Ocak'],[52,'21 Şubat'],[80,'21 Mart'],[111,'21 Nisan'],[141,'21 Mayıs'],[172,'21 Haziran']];
+  const save=P.doy;
+  days.forEach(dd=>{
+    P.doy=dd[0]; cache.key='';
+    let first=null,last=null,n=0,sc=0,pk=0,p0=999,p1=-999,t0=999,t1=-999,noonAlt=0;
+    for(let m=240;m<=1260;m+=10){
+      const e=evalAt('bisektor',m);
+      const s2=sunState(m/60); if(s2.alt>noonAlt)noonAlt=s2.alt;
+      if(!e.ok)continue;
+      if(first===null)first=m; last=m; n++;
+      const c=Math.cos(e.inc*D2R); sc+=c; if(e.pw>pk)pk=e.pw;
+      p0=Math.min(p0,e.pan); p1=Math.max(p1,e.pan); t0=Math.min(t0,e.tilt); t1=Math.max(t1,e.tilt);
+    }
+    const fm=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td>'+dd[1]+'</td><td class="num">'+noonAlt.toFixed(1)+'°</td>'+
+      '<td class="num">'+(n?fm(first)+' – '+fm(last):'—')+'</td>'+
+      '<td class="num">'+(n?(n*10/60).toFixed(1)+' sa':'—')+'</td>'+
+      '<td class="num">'+(n?'%'+(100*sc/n).toFixed(1):'—')+'</td>'+
+      '<td class="num">'+(n?Math.round(pk)+' W':'—')+'</td>'+
+      '<td class="num">'+(n?p0.toFixed(0)+'–'+p1.toFixed(0)+'°':'—')+'</td>'+
+      '<td class="num">'+(n?t0.toFixed(0)+'–'+t1.toFixed(0)+'°':'—')+'</td>';
+    tb.appendChild(tr);
+  });
+  P.doy=save; cache.key='';
+}
+
+/* ===================== GÖSTERGELER ===================== */
+function fmtTime(m){ return String(Math.floor(m/60)).padStart(2,'0')+':'+String(Math.round(m)%60).padStart(2,'0'); }
+function setG(id,v,cls){ const el=document.getElementById(id); el.innerHTML=v; if(cls!==undefined)el.className='v '+cls; }
+function renderGauges(){
+  const ev=evalAt(P.mode,P.min), st=ev.st;
+  const u=x=>'<span class="u">'+x+'</span>';
+  setG('gAlt', st.alt>-1? st.alt.toFixed(1)+u('°'):'—','v sun');
+  setG('gAz',  st.alt>-1? st.az.toFixed(1)+u('°'):'—','v sun');
+  if(ev.ok){
+    setG('gPan', ev.pan.toFixed(2)+u('°'),'v');
+    setG('gTilt',ev.tilt.toFixed(2)+u('°'),'v');
+    setG('gInc', ev.inc.toFixed(1)+u('°'),'v');
+    setG('gCos', '%'+(100*Math.cos(ev.inc*D2R)).toFixed(1),'v');
+    setG('gPow', Math.round(ev.pw)+u(' W'),'v');
+    setG('gErr', ev.err===null?'—':(ev.err*100).toFixed(0)+u(' cm'),'v blue');
+  } else { ['gPan','gTilt','gInc','gCos','gPow','gErr'].forEach(i=>setG(i,'—','v')); }
+  const pill=document.getElementById('stPill'), note=document.getElementById('stNote');
+  if(st.status==='gece'){ pill.className='pill bad'; pill.textContent='GÜNEŞ YOK';
+    note.textContent='Ayna park konumunda bekler.'; }
+  else if(st.status==='duvar'){ pill.className='pill warn'; pill.textContent='GÜNEŞ DUVARIN ARKASINDA';
+    note.textContent='Güneş azimutu '+st.az.toFixed(0)+'° — duvarın kuzey yüzünü aydınlatıyor, ayna güneşi göremiyor. Yazın sabah ve akşam saatlerinde kaçınılmaz.'; }
+  else if(st.status==='golge'){ pill.className='pill warn'; pill.textContent='AYNA EVİN GÖLGESİNDE';
+    note.textContent='Ev, aynaya giden güneşi kesiyor. Aynayı yükseltmek ya da doğu–batı yönünde kaydırmak çözer.'; }
+  else if(ev.inWin){ pill.className='pill ok'; pill.textContent='IŞIK PENCEREDE';
+    note.textContent='Leke merkezi pencere ortasından '+(ev.err*100).toFixed(0)+' cm sapmış — açıklık içinde. Odaya giren güç '+Math.round(ev.pw)+' W.'; }
+  else { pill.className='pill bad'; pill.textContent='PENCEREYİ ISKALIYOR';
+    note.textContent=ev.hit? 'Leke cepheye düşüyor ama pencereden '+(ev.err*100).toFixed(0)+' cm uzakta.' : 'Yansıyan ışın cepheye hiç ulaşmıyor.'; }
+  const dd=doyToDate(P.doy,2026);
+  document.getElementById('lDate').textContent=dd.d+' '+AYLAR[dd.m-1];
+  document.getElementById('lTime').textContent=fmtTime(P.min);
+  const md=MODES.filter(m=>m.id===P.mode)[0];
+  document.getElementById('lMode').textContent=md?md.short:'';
+}
+
+/* ===================== KADRANLAR ===================== */
+function drawDial(id,val,lo,hi,c,ok){
+  const cv=document.getElementById(id); if(!cv) return; const ctx=cv.getContext('2d');
+  const S=80, r=30, cx=40, cy=42; ctx.clearRect(0,0,S,S);
+  const a0=Math.PI*0.75, a1=Math.PI*2.25;
+  ctx.lineWidth=5; ctx.lineCap='round'; ctx.strokeStyle=TH.inset; ctx.beginPath(); ctx.arc(cx,cy,r,a0,a1); ctx.stroke();
+  if(ok){ const t=(val-lo)/(hi-lo), a=a0+(a1-a0)*Math.max(0,Math.min(1,t));
+    ctx.strokeStyle=c; ctx.beginPath(); ctx.arc(cx,cy,r,a0,a); ctx.stroke();
+    ctx.strokeStyle=TH.ink; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(a)*(r-4),cy+Math.sin(a)*(r-4)); ctx.stroke();
+    ctx.fillStyle=TH.ink; ctx.beginPath(); ctx.arc(cx,cy,3,0,7); ctx.fill(); }
+  ctx.font='600 9px "IBM Plex Mono",monospace'; ctx.fillStyle=TH['ink-3']; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(lo+'°',cx-r+2,cy+r*0.62); ctx.fillText(hi+'°',cx+r-2,cy+r*0.62);
+}
+/* ===================== KAYDIRICI BANTLARI ===================== */
+let bandKey='';
+function updateBands(){
+  const key=cacheKey(); if(bandKey===key) return; bandKey=key;
+  const stops=[]; const n=(HMAX-HMIN)/10;
+  for(let i=0;i<=n;i++){ const m=HMIN+i*10, st=sunState(m/60);
+    const c= st.ok?TH.sun : (st.alt>0.5? TH['beam-soft'] : 'transparent');
+    const p0=(i/n*100).toFixed(2), p1=((i+1)/n*100).toFixed(2); stops.push(c+' '+p0+'% '+p1+'%'); }
+  const g='linear-gradient(90deg,'+stops.join(',')+')';
+  document.getElementById('bandMin').style.background=g;
+  document.getElementById('bandT').style.background=g;
+}
+let yearBandDone=false;
+function updateYearBand(){
+  const save=P.doy, stops=[]; let maxH=0; const hrs=[];
+  for(let d=1;d<=365;d+=5){ P.doy=d; let c=0; for(let m=240;m<=1260;m+=20){ if(sunState(m/60).ok)c++; } hrs.push([d,c/3]); maxH=Math.max(maxH,c/3); }
+  P.doy=save;
+  hrs.forEach((h,i)=>{ const t=h[1]/(maxH||1); const p0=(i/hrs.length*100).toFixed(2), p1=((i+1)/hrs.length*100).toFixed(2);
+    stops.push(mix(TH.inset,TH.sun,0.15+0.85*t)+' '+p0+'% '+p1+'%'); });
+  document.getElementById('bandDay').style.background='linear-gradient(90deg,'+stops.join(',')+')';
+}
+let yearKey='';
+
+/* ===================== RENDER ===================== */
+let geomKey='';
+function render(){
+  readTheme();
+  drawIso(); drawPlan(); drawSec(); drawFac(); drawCmp(); drawChA(); drawChB();
+  renderGauges(); renderModeTable(); updateBands();
+  const ev=evalAt(P.mode,P.min);
+  drawDial('dPan', ev.ok?ev.pan:0, 120, 245, TH.s1, ev.ok);
+  drawDial('dTilt', ev.ok?ev.tilt:0, -5, 45, TH.s2, ev.ok);
+  ['iMin','tMin'].forEach(i=>{ const el=document.getElementById(i); if(el&&+el.value!==P.min) el.value=P.min; });
+  const dEl=document.getElementById('iDay'); if(+dEl.value!==P.doy) dEl.value=P.doy;
+  document.getElementById('tTime').textContent=fmtTime(P.min);
+  document.getElementById('tDate').textContent=document.getElementById('lDate').textContent;
+  const gk=[P.D,P.mz,P.wz,P.hh,P.hw,P.mx,P.ms].join('|');
+  if(gk!==geomKey){ geomKey=gk; renderSeasonTable(); }
+  const yk=[P.D,P.mz,P.hh,P.hw,P.mx,isDark()].join('|');
+  if(yk!==yearKey){ yearKey=yk; updateYearBand(); }
+}
+let raf=null;
+function schedule(){ if(raf)return; raf=requestAnimationFrame(()=>{ raf=null; render(); }); }
+
+/* ===================== ARAYÜZ ===================== */
+const seg=document.getElementById('modeSeg');
+MODES.forEach(m=>{ const b=document.createElement('button'); b.type='button'; b.textContent=m.short;
+  b.setAttribute('aria-pressed', m.id===P.mode?'true':'false'); b.dataset.id=m.id;
+  b.addEventListener('click',()=>{ P.mode=m.id;
+    seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.id===m.id?'true':'false'));
+    schedule(); });
+  seg.appendChild(b); });
+
+function bind(id,key,fmt,el){ const i=document.getElementById(id), l=document.getElementById(el);
+  i.addEventListener('input',()=>{ P[key]=parseFloat(i.value); if(l)l.textContent=fmt(P[key]); schedule(); });
+  if(l)l.textContent=fmt(P[key]); }
+document.getElementById('iDay').addEventListener('input',e=>{ P.doy=parseInt(e.target.value,10); schedule(); });
+document.getElementById('iMin').addEventListener('input',e=>{ P.min=parseInt(e.target.value,10); schedule(); });
+bind('iD','D',v=>v.toFixed(1)+' m','lD');
+bind('iMZ','mz',v=>v.toFixed(2)+' m','lMZ');
+bind('iWZ','wz',v=>v.toFixed(2)+' m','lWZ');
+bind('iHH','hh',v=>v.toFixed(1)+' m','lHH');
+bind('iHW','hw',v=>v.toFixed(1)+' m','lHW');
+bind('iMS','ms',v=>v.toFixed(2)+' m','lMS');
+bind('iMX','mx',v=>v.toFixed(2)+' m','lMX');
+bind('iNS','ns',v=>v.toFixed(2)+'°','lNS');
+document.getElementById('dayPresets').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  P.doy=parseInt(b.dataset.doy,10); document.getElementById('iDay').value=P.doy; schedule(); });
+document.getElementById('btnNoon').addEventListener('click',()=>{
+  let best=780,bv=-99; for(let m=600;m<=900;m+=2){ const a=sunState(m/60).alt; if(a>bv){bv=a;best=m;} }
+  P.min=best; document.getElementById('iMin').value=best; schedule(); });
+
+let timer=null;
+const btnPlay=document.getElementById('btnPlay'), tPlay=document.getElementById('tPlay');
+function setPlayUI(on){ btnPlay.dataset.on=on?'1':'0'; btnPlay.textContent=on?'❚❚ Durdur':'▶ Günü oynat'; tPlay.dataset.on=on?'1':'0'; tPlay.textContent=on?'❚❚':'▶'; }
+function togglePlay(){
+  if(timer){ clearInterval(timer); timer=null; setPlayUI(false); return; }
+  setPlayUI(true);
+  timer=setInterval(()=>{ P.min+=4; if(P.min>1260)P.min=240; schedule(); },55);
+}
+btnPlay.addEventListener('click',togglePlay); tPlay.addEventListener('click',togglePlay);
+document.getElementById('tMin').addEventListener('input',e=>{ P.min=parseInt(e.target.value,10); schedule(); });
+const ctlEl=document.querySelector('.controls'), trEl=document.getElementById('transport');
+function updTransport(){ const r=ctlEl.getBoundingClientRect(); trEl.dataset.off=(r.bottom<0)?'0':'1'; }
+window.addEventListener('scroll',updTransport,{passive:true}); updTransport();
+
+document.getElementById('btnCopy').addEventListener('click',function(){
+  const t=document.getElementById('inoCode').textContent;
+  navigator.clipboard.writeText(t).then(()=>{ this.textContent='Kopyalandı'; setTimeout(()=>this.textContent='Kodu kopyala',1600); })
+   .catch(()=>{ this.textContent='Kopyalanamadı'; setTimeout(()=>this.textContent='Kodu kopyala',1600); });
+});
+
+let rto=null;
+window.addEventListener('resize',()=>{ clearTimeout(rto); rto=setTimeout(()=>{ seriesKey=''; cache.key=''; bandKey=''; render(); },120); });
+if(window.matchMedia){ const mq=window.matchMedia('(prefers-color-scheme: dark)');
+  if(mq.addEventListener) mq.addEventListener('change',()=>schedule()); }
+new MutationObserver(()=>{bandKey='';schedule();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+if(window.matchMedia){ const mq2=window.matchMedia('(prefers-color-scheme: dark)'); if(mq2.addEventListener) mq2.addEventListener('change',()=>{bandKey='';schedule();}); }
+
+document.fonts&&document.fonts.ready.then(()=>render());
+render();
+})();
+</script>
+</body></html>

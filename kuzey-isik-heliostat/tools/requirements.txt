@@ -1,0 +1,6 @@
+# noaa.py, heliostat.py ve modes.py sadece standart kutuphane kullanir.
+# Asagidakiler yalnizca single_axis.py ve float32_check.py icin gerekli:
+numpy>=1.24
+scipy>=1.10
+# Gunes konumunu bagimsiz bir referansa karsi dogrulamak isterseniz:
+# pvlib>=0.11
