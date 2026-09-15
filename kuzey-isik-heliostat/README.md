@@ -40,7 +40,9 @@ Simülasyon şunları veriyor:
   gerçek gölgeler, yansıyan ışık hüzmesi), **kuş bakışı vaziyet planı**, **düşey kesit**
   ve **kuzey cephesi** — dördü de aynı ana bağlı
 - **Şimdi** düğmesi: Türkiye saatiyle canlı takip (sayfa bu modda açılır); tarih ve saat
-  kaydırıcıları, günü hızlandırılmış oynatma
+  kaydırıcıları, günü hızlandırılmış oynatma (gece atlanır); grafiğe tıklayarak o saate gitme
+- **Bağlantı** düğmesi: seçili tarih, saat, yöntem ve geometriyi taşıyan paylaşılabilir adres
+  (örn. `index.html?g=355&t=540&m=gunes` — 21 Aralık 09:00, güneş takibi)
 - Anlık servo açıları (PAN / TILT), geliş açısı, kosinüs verimi, pencereye giren güç
 - Evin ve duvarın aynayı ne zaman gölgelediği
 - Işık lekesinin cephede tam olarak nereye düştüğü ve pencereyi tutturup tutturmadığı
