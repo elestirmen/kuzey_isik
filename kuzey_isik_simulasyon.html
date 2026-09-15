@@ -479,7 +479,7 @@ tbody td:first-child{white-space:nowrap}
   <dl class="specs">
     <dt>Enlem / Boylam</dt><dd>38.6317 / 34.9128</dd>
     <dt>Saat dilimi</dt><dd>UTC+3 (yaz saati yok)</dd>
-    <dt>Güneş konumu</dt><dd>NOAA · ±0.02°</dd>
+    <dt>Güneş konumu</dt><dd>NOAA · ±0.03°</dd>
     <dt>Referans</dt><dd>pvlib (NREL SPA) ile doğrulandı</dd>
     <dt>Kontrol</dt><dd>Açık döngü · DS3231 + 2 servo</dd>
   </dl>
@@ -963,7 +963,7 @@ void handleSerial(){
   <div class="cards">
     <div class="card"><div class="eyebrow">Hassasiyet</div><div class="big mono" style="color:var(--sun)">0.3°</div><p>Aynadaki her 1° hata ışını 2° saptırır; 10 m'de 35 cm kayma eder. 1.2 m genişliğinde bir pencere ve ~1.1 m'lik leke için toplam hata bütçeniz aşağı yukarı <b>0.3°</b>. Redüktörün sebebi bu.</p></div>
     <div class="card"><div class="eyebrow">Leke boyutu</div><div class="big mono" style="color:var(--sun)">1.09 m</div><p>Güneş nokta kaynak değil, 0.53°'lik bir disk. 10 m'de bu leke kenarına her yönde 9 cm ekler. 1 m'lik ayna pencerede 1.09 m'lik bir leke yapar — yani ayna ne kadar büyükse leke o kadar büyür, odaklanmaz.</p></div>
-    <div class="card"><div class="eyebrow">Güncelleme</div><div class="big mono" style="color:var(--sun)">60 sn</div><p>Ayna normali en fazla 11°/saat döner. Dakikada bir güncelleme lekeyi 4 cm'lik adımlarla ilerletir — göz bunu fark etmez. Daha sık güncellemek sadece servoyu yorar.</p></div>
+    <div class="card"><div class="eyebrow">Güncelleme</div><div class="big mono" style="color:var(--sun)">60 sn</div><p>Ayna normali 6.4–10.9°/saat arasında döner. Dakikada bir güncelleme lekeyi 4–6 cm'lik adımlarla ilerletir — göz bunu fark etmez. Daha sık güncellemek sadece servoyu yorar.</p></div>
     <div class="card"><div class="eyebrow">Rüzgâr</div><div class="big mono" style="color:var(--bad)">≈500 N</div><p>1 m² düz levha 100 km/sa rüzgârda yaklaşık 0.5 kPa basınç görür. Aynayı taşıyan konsol ve servo dişlisi bunu <em>statik</em> olarak karşılamalı; servo tutamazsa gece park konumuna alan bir mekanik kilit düşünün.</p></div>
   </div>
 
@@ -988,7 +988,7 @@ void handleSerial(){
 </div>
 
 <div class="foot">
-  <span>Güneş konumu: NOAA algoritması, pvlib (NREL SPA) ile 0.016° içinde doğrulandı · Ürgüp 38.6317° K, 34.9128° D, UTC+3</span>
+  <span>Güneş konumu: NOAA algoritması, tam yıl boyunca pvlib (NREL SPA) ile karşılaştırıldı — yükseltide ≤0.014°, azimutta ≤0.027° · Ürgüp 38.6317° K, 34.9128° D, UTC+3</span>
   <span class="mono">KÜN Geospatial AI &amp; UAV Lab</span>
 </div>
 </div>

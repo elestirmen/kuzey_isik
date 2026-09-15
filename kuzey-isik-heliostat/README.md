@@ -5,7 +5,11 @@ güneş ışığı taşıyan bir heliostat. **Ürgüp (Nevşehir)** için hesapl
 tarayıcıda çalışan interaktif bir simülasyon ve DS3231 + iki servo ile çalışan
 Arduino kodu.
 
-![Genel görünüm](docs/img/genel-gorunum.png)
+![Genel görünüm](docs/img/genel-gorunum.jpg)
+
+> Bu dosya projenin kısa tanıtımıdır. Kurulum, kalibrasyon, hata bütçesi, seri port
+> komutları ve sorun giderme dahil **tam belgelendirme deponun kökündeki**
+> [README](../README.md) **dosyasındadır.**
 
 Evin kuzey cephesi hiç doğrudan güneş görmez. Cepheden 10 m kuzeydeki bahçe duvarına
 konan bir ayna, gün boyunca dönerek güneşi sürekli aynı pencereye yansıtırsa bu
@@ -132,8 +136,9 @@ yazılım hatasında ışın komşunun penceresine ya da yola gitmemeli. 1 m² d
 
 ## Doğrulama
 
-Güneş konumu NOAA algoritmasıyla hesaplanıyor ve **pvlib (NREL SPA)** referansına
-karşı doğrulandı: yükseltide ≤ 0.016°, azimutta ≤ 0.007° sapma. Simülasyondaki
+Güneş konumu NOAA algoritmasıyla hesaplanıyor ve **pvlib (NREL SPA)** referansına karşı
+2026'nın tamamı boyunca 10 dakikalık adımlarla doğrulandı: yükseltide ≤ 0.014°, azimutta
+≤ 0.027° sapma — pencerede 2 mm. Simülasyondaki
 JavaScript ile `tools/` altındaki bağımsız Python hesabı, isabet oranlarında
 birebir aynı sonucu veriyor (%100 / %38 / %5 / %0).
 

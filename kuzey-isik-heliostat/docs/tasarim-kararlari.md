@@ -73,8 +73,11 @@ gereksiz bir risk.) Ölçüm `tools/float32_check.py` içinde.
 
 ## Doğrulama
 
-Güneş konumu NOAA algoritmasıyla hesaplanıyor; pvlib (NREL SPA) referansına karşı
-yükseltide ≤ 0.016°, azimutta ≤ 0.007° sapma ölçüldü. Simülasyondaki JavaScript ile
+Güneş konumu NOAA algoritmasıyla hesaplanıyor; pvlib (NREL SPA) referansına karşı 2026'nın
+tamamı 10 dakikalık adımlarla tarandı (güneş 3°'nin üstündeyken 25 170 an): yükseltide ort.
+0.003° / maks 0.014°, azimutta ort. 0.005° / maks 0.027° sapma. En büyük azimut sapması yaz
+öğlesinde, güneş 74°'ye çıktığında görülüyor — azimutun geometrik olarak en duyarsız olduğu an.
+Aynadaki karşılığı 0.013°, pencerede 2 mm. Simülasyondaki JavaScript ile
 `tools/` altındaki bağımsız Python hesabı isabet oranlarında birebir uyuştu
 (%100 / %38 / %5 / %0).
 
