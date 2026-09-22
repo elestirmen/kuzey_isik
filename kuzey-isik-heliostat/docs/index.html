@@ -10,11 +10,11 @@
   /* --- yüzeyler --- */
   --bg:#E4DFD6; --panel:#FCFBF8; --panel-2:#F3EFE8; --panel-3:#EBE5DB; --inset:#E8E1D6;
   --line:#D8D1C5; --line-2:#C3B9A8; --line-3:#AFA391;
-  --ink:#201B16; --ink-2:#5C5145; --ink-3:#7E735F; --ink-4:#A2957F;
+  --ink:#201B16; --ink-2:#5C5145; --ink-3:#6B604D; --ink-4:#887C67;
   /* --- anlam renkleri --- */
-  --sun:#C25D14; --sun-2:#E08A2A; --beam:#E9A83C; --beam-soft:rgba(233,168,60,.30);
+  --sun:#C25D14; --sun-2:#E08A2A; --sun-ink:#9C460B; --beam:#E9A83C; --beam-soft:rgba(233,168,60,.30);
   --shade:#35566F; --shade-2:#4E7595; --shade-soft:rgba(53,86,111,.14);
-  --ok:#28714A; --warn:#9E6C13; --bad:#A83326;
+  --ok:#28714A; --warn:#8A5D0F; --bad:#A83326;
   --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#c98500; --s5:#d2578a; --s6:#068040;
   /* --- çizim malzemeleri --- */
   --ground:#D7CFC2; --stone:#CCC2B0; --roof:#B6AB97; --sky:#EDE9E1;
@@ -32,8 +32,8 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#100E0C; --panel:#1E1B17; --panel-2:#26221D; --panel-3:#2E2924; --inset:#171411;
   --line:#37312A; --line-2:#4A4238; --line-3:#5D5447;
-  --ink:#F2EDE4; --ink-2:#B3A899; --ink-3:#847969; --ink-4:#645B4E;
-  --sun:#EDA845; --sun-2:#F6C368; --beam:#F4C065; --beam-soft:rgba(244,192,101,.26);
+  --ink:#F2EDE4; --ink-2:#B3A899; --ink-3:#948978; --ink-4:#7A705F;
+  --sun:#EDA845; --sun-2:#F6C368; --sun-ink:#EDA845; --beam:#F4C065; --beam-soft:rgba(244,192,101,.26);
   --shade:#86AECF; --shade-2:#A3C4DD; --shade-soft:rgba(134,174,207,.16);
   --ok:#5CBA89; --warn:#DFAA4A; --bad:#E67B6B;
   --s1:#4a93ea; --s2:#ef7040; --s3:#25b782; --s4:#d99a1e; --s5:#e0699a; --s6:#2fa163;
@@ -49,8 +49,8 @@
 :root[data-theme="dark"]{
   --bg:#100E0C; --panel:#1E1B17; --panel-2:#26221D; --panel-3:#2E2924; --inset:#171411;
   --line:#37312A; --line-2:#4A4238; --line-3:#5D5447;
-  --ink:#F2EDE4; --ink-2:#B3A899; --ink-3:#847969; --ink-4:#645B4E;
-  --sun:#EDA845; --sun-2:#F6C368; --beam:#F4C065; --beam-soft:rgba(244,192,101,.26);
+  --ink:#F2EDE4; --ink-2:#B3A899; --ink-3:#948978; --ink-4:#7A705F;
+  --sun:#EDA845; --sun-2:#F6C368; --sun-ink:#EDA845; --beam:#F4C065; --beam-soft:rgba(244,192,101,.26);
   --shade:#86AECF; --shade-2:#A3C4DD; --shade-soft:rgba(134,174,207,.16);
   --ok:#5CBA89; --warn:#DFAA4A; --bad:#E67B6B;
   --s1:#4a93ea; --s2:#ef7040; --s3:#25b782; --s4:#d99a1e; --s5:#e0699a; --s6:#2fa163;
@@ -97,15 +97,15 @@ b,strong{font-weight:600; color:var(--ink)}
 
 /* ---- başlık bloğu: pafta antedi ---- */
 .titleblock{position:relative; border-top:2.5px solid var(--ink); border-bottom:1px solid var(--line-2);
-  padding-block:20px 18px; display:flex; flex-wrap:wrap; gap:20px 32px; align-items:flex-end; justify-content:space-between}
+  padding-block:20px 13px; display:grid; grid-template-columns:auto minmax(0,1fr); gap:14px 48px; align-items:end}
 .titleblock::after{content:""; position:absolute; left:0; right:0; bottom:-4px; height:1px; background:var(--line)}
-.titleblock .lede{max-width:48ch; color:var(--ink-2); font-size:15.5px; margin-top:12px; text-wrap:pretty}
-.specs{display:grid; grid-template-columns:auto auto; gap:3px 18px; font-family:"IBM Plex Mono",monospace;
-  font-size:11.5px; color:var(--ink-2); font-variant-numeric:tabular-nums; align-content:end}
-.specs dt{color:var(--ink-3); position:relative; padding-right:10px}
-.specs dt::after{content:""; position:absolute; right:0; top:.72em; width:6px; border-top:1px dotted var(--line-2)}
+.titleblock .lede{grid-column:2; justify-self:end; max-width:64ch; color:var(--ink-2); font-size:15.5px; margin:0 0 3px; text-wrap:pretty}
+.specs{grid-column:1/-1; display:flex; flex-wrap:wrap; gap:4px 26px; margin:0; padding-top:11px; border-top:1px dashed var(--line);
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-2); font-variant-numeric:tabular-nums}
+.specs div{display:flex; gap:9px; align-items:baseline}
+.specs dt{color:var(--ink-3)}
 .specs dd{margin:0; color:var(--ink)}
-.tbcol{display:flex; flex-direction:column; align-items:flex-end; gap:14px}
+@media(max-width:880px){.titleblock{grid-template-columns:1fr; gap:12px} .titleblock .lede{grid-column:1; justify-self:start; max-width:62ch}}
 
 /* ---- tema kumandası ---- */
 .themetog{display:inline-flex; gap:2px; padding:3px; border:1px solid var(--line-2); border-radius:999px;
@@ -113,7 +113,7 @@ b,strong{font-weight:600; color:var(--ink)}
 .themetog button{width:30px; height:26px; border:none; border-radius:999px; background:transparent; cursor:pointer;
   color:var(--ink-3); font-size:13px; line-height:1; display:grid; place-items:center; transition:.15s}
 .themetog button:hover{color:var(--ink); background:color-mix(in srgb,var(--ink) 7%,transparent)}
-.themetog button[aria-pressed="true"]{background:var(--panel); color:var(--sun); box-shadow:var(--e1)}
+.themetog button[aria-pressed="true"]{background:var(--panel); color:var(--sun-ink); box-shadow:var(--e1)}
 
 /* ---- bölüm gezintisi ---- */
 .secnav{position:sticky; top:0; z-index:35; display:flex; align-items:center; gap:2px; overflow-x:auto; scrollbar-width:none;
@@ -126,16 +126,15 @@ b,strong{font-weight:600; color:var(--ink)}
 .secnav a span{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.08em; color:var(--ink-4)}
 .secnav a:hover{color:var(--ink); background:color-mix(in srgb,var(--ink) 6%,transparent)}
 .secnav a[aria-current]{color:var(--ink); background:color-mix(in srgb,var(--sun) 12%,transparent)}
-.secnav a[aria-current] span{color:var(--sun)}
-.kbdhint{color:var(--ink-4); font-size:9.5px; letter-spacing:.02em}
+.secnav a[aria-current] span{color:var(--sun-ink)}
 .firsthint{font-size:12.5px; color:var(--ink-2); background:color-mix(in srgb,var(--sun) 8%,transparent);
   border:1px solid color-mix(in srgb,var(--sun) 24%,transparent); border-radius:var(--r1); padding:8px 11px; margin-top:2px}
-.firsthint b{color:var(--sun)}
+.firsthint b{color:var(--sun-ink)}
 
 section{margin-top:56px; scroll-margin-top:62px}
 .sechead{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:6px; position:relative}
 .sechead::after{content:""; flex:1 1 40px; height:1px; background:linear-gradient(90deg,var(--line-2),transparent); align-self:center; margin-left:4px}
-.sechead .n{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--sun); letter-spacing:.12em; font-weight:600;
+.sechead .n{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--sun-ink); letter-spacing:.12em; font-weight:600;
   padding:2px 7px; border:1px solid color-mix(in srgb,var(--sun) 32%,transparent); border-radius:5px;
   background:color-mix(in srgb,var(--sun) 8%,transparent)}
 .sub{color:var(--ink-2); max-width:70ch; margin-top:10px; text-wrap:pretty}
@@ -163,7 +162,7 @@ canvas{display:block; width:100%; height:auto; max-width:100%}
 .g{background:var(--panel); padding:12px 13px 13px; position:relative}
 .g::before{content:""; position:absolute; left:0; right:0; top:0; height:2px; background:transparent}
 .g.hi::before{background:linear-gradient(90deg,var(--sun),color-mix(in srgb,var(--sun) 15%,transparent))}
-.g .k{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+.g .k{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
   color:var(--ink-3); white-space:nowrap}
 .g .v{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-size:22px; font-weight:600;
   margin-top:4px; letter-spacing:-.03em; line-height:1.15}
@@ -209,7 +208,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible,a:focus-visible{o
   padding:8px 16px; border-radius:var(--r1); border:1px solid var(--sun);
   background:linear-gradient(180deg,var(--sun-2),var(--sun)); color:#fff; cursor:pointer;
   box-shadow:0 1px 2px color-mix(in srgb,var(--sun) 35%,transparent), inset 0 1px 0 rgba(255,255,255,.25); transition:.15s}
-.play[data-on="1"]{background:transparent; color:var(--sun); box-shadow:none}
+.play[data-on="1"]{background:transparent; color:var(--sun-ink); box-shadow:none}
 details.params{margin-top:14px; border-top:1px solid var(--line); padding-top:13px}
 details.params summary{cursor:pointer; font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.09em;
   text-transform:uppercase; color:var(--ink-3); list-style:none; transition:color .15s}
@@ -268,7 +267,7 @@ pre{margin:0; overflow:auto; background:var(--inset); border:1px solid var(--lin
   -webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 26px),transparent);
   mask-image:linear-gradient(180deg,#000 calc(100% - 26px),transparent)}
 pre code{white-space:pre}
-.cmt{color:var(--ink-3)} .kw{color:var(--sun)} .str{color:var(--ok)} .num2{color:var(--shade)}
+.cmt{color:var(--ink-3)} .kw{color:var(--sun-ink)} .str{color:var(--ok)} .num2{color:var(--shade)}
 
 /* ---- notlar ---- */
 .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px; margin-top:18px}
@@ -357,8 +356,7 @@ ul.tight li::marker{color:var(--ink-3)}
 @media(max-width:620px){.v3d{aspect-ratio:1.3} .hint{display:none}
   .viewbar{left:8px; bottom:8px; right:8px; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; padding-right:12px; scroll-padding-inline:8px}
   .viewcard header .h{display:none}
-  .tbcol{align-items:flex-start; width:100%}
-  .titleblock{gap:16px}}
+  .specs{display:none}}
 
 /* ---- kaydırıcılar: bilgi taşıyan bant ---- */
 .rng{position:relative; height:28px}
@@ -375,10 +373,10 @@ ul.tight li::marker{color:var(--ink-3)}
 .rng input[type=range]::-moz-range-track{background:transparent; height:28px}
 .rng input[type=range]::-moz-range-thumb{width:15px; height:15px; border-radius:50%;
   background:var(--sun); border:2.5px solid var(--panel); box-shadow:0 1px 4px rgba(0,0,0,.30)}
-.ticks{display:flex; justify-content:space-between; font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.05em;
-  color:var(--ink-3); padding:0 6px; margin-top:-2px}
+.ticks{display:flex; justify-content:space-between; font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.05em;
+  color:var(--ink-3); padding:0 6px; margin-top:-1px}
 .ticks span{flex:1; text-align:center}
-.bandkey{display:flex; gap:15px; flex-wrap:wrap; font-family:"IBM Plex Mono",monospace; font-size:9.5px; color:var(--ink-3); margin-top:3px}
+.bandkey{display:flex; gap:6px 15px; flex-wrap:wrap; font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink-3); margin-top:3px}
 .bandkey i{display:inline-block; width:15px; height:7px; border-radius:3px; vertical-align:middle; margin-right:6px}
 
 /* ---- kadranlar ---- */
@@ -399,7 +397,7 @@ ul.tight li::marker{color:var(--ink-3)}
 .transport .tb{width:35px; height:35px; border-radius:50%; border:1px solid var(--sun);
   background:linear-gradient(180deg,var(--sun-2),var(--sun)); color:#fff; font-size:13px; cursor:pointer; flex:none;
   display:grid; place-items:center; box-shadow:0 1px 3px color-mix(in srgb,var(--sun) 40%,transparent), inset 0 1px 0 rgba(255,255,255,.25)}
-.transport .tb[data-on="1"]{background:transparent; color:var(--sun); box-shadow:none}
+.transport .tb[data-on="1"]{background:transparent; color:var(--sun-ink); box-shadow:none}
 @media(max-width:560px){.transport .hidemob{display:none}}
 @media(max-width:620px){
   .seg button,.live,.play,.copy{min-height:44px; padding-block:10px}
@@ -415,9 +413,16 @@ ul.tight li::marker{color:var(--ink-3)}
 
 /* ---- UX eklemeleri ---- */
 /* tema kumandası artık yapışkan gezintide: her an erişilebilir, başlık sadeleşir */
-.secnav .themetog{margin-left:auto; flex:none; position:sticky; right:16px;
+.secnav .themetog{margin-left:auto; flex:none; position:sticky; right:0;
   box-shadow:var(--edge), 0 0 0 5px color-mix(in srgb,var(--bg) 92%,transparent)}
 .secnav .themetog button{width:32px; height:28px}
+/* dar ekranda gezinti yana kayar: öğeler düğmenin altından yumuşakça kaybolsun, sağ kenarda görünmesin */
+@media(max-width:760px){
+  .secnav .themetog::before{content:""; position:absolute; right:100%; top:-10px; bottom:-10px; width:30px;
+    pointer-events:none; background:linear-gradient(90deg,transparent,var(--bg) 80%)}
+  .secnav .themetog::after{content:""; position:absolute; left:100%; top:-10px; bottom:-10px; width:18px;
+    pointer-events:none; background:var(--bg)}
+}
 /* 3B kamera düğmeleri dar ekranda tek satır, yana kayar */
 .viewbar::-webkit-scrollbar{display:none}
 .viewbar button{white-space:nowrap; flex:none}
@@ -427,9 +432,48 @@ ul.tight li::marker{color:var(--ink-3)}
   text-align:center; max-width:82%; padding:10px 14px; border-radius:var(--r2);
   background:color-mix(in srgb,var(--panel) 90%,transparent); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   border:1px solid color-mix(in srgb,var(--line-2) 70%,transparent); box-shadow:var(--e2)}
-.zoomhint b{color:var(--sun)}
+.zoomhint b{color:var(--sun-ink)}
 .zoomhint.show{opacity:1}
 .v3d.flat .zoomhint{display:none}
+/* ilk bölüm: başlığın hemen altında, simülasyon ilk ekrana sığsın */
+#sim{margin-top:28px}
+/* durum: rozet ve bağlantı aynı satırda, açıklama altta tam genişlik */
+.deck .status{display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:9px 10px}
+.deck .status .pill{grid-column:1; grid-row:1; justify-self:start}
+.deck .status .linkbtn{grid-column:3; grid-row:1; margin-left:0}
+.deck .status .note{grid-column:1/-1; grid-row:2}
+/* seçili yöntemin tek cümlelik açıklaması */
+.modenote{font-size:12.5px; line-height:1.5; color:var(--ink-2); min-height:37px; margin-top:1px; text-wrap:pretty}
+/* klavye kısayolları: düğme + açılır pano */
+.kbd{position:relative}
+.kbd summary{list-style:none; cursor:pointer; font-family:"IBM Plex Sans",sans-serif; font-size:12.5px; font-weight:500;
+  padding:7px 11px; border-radius:var(--r1); border:1px solid var(--line-2); color:var(--ink-2);
+  background:linear-gradient(180deg,var(--panel),var(--panel-2)); box-shadow:var(--edge); transition:.15s; user-select:none}
+.kbd summary::-webkit-details-marker{display:none}
+.kbd summary:hover,.kbd[open] summary{border-color:var(--ink-4); color:var(--ink); box-shadow:var(--e1),var(--edge)}
+.kbdpanel{position:absolute; z-index:30; right:0; top:calc(100% + 8px); width:max-content; max-width:min(330px,86vw);
+  background:var(--panel); border:1px solid var(--line-2); border-radius:var(--r2); box-shadow:var(--e3),var(--edge); padding:11px 14px 12px}
+.kbdpanel .eyebrow{margin-bottom:6px}
+.kbdpanel table{min-width:0; width:auto; font-size:12.5px}
+.kbdpanel td{padding:4px 0; border:none; vertical-align:top}
+.kbdpanel td:first-child{padding-right:16px; white-space:nowrap}
+.kbdpanel tbody tr:hover{background:none}
+kbd{font-family:"IBM Plex Mono",monospace; font-size:11px; line-height:1.4; padding:0 6px; border:1px solid var(--line-2);
+  border-bottom-width:2px; border-radius:5px; background:var(--panel-2); color:var(--ink); white-space:nowrap}
+/* geometri: değişiklik rozeti + varsayılana dönüş */
+.chg{display:inline-block; white-space:nowrap; margin-left:9px; font-size:10px; letter-spacing:.05em; text-transform:none; color:var(--sun-ink);
+  background:color-mix(in srgb,var(--sun) 12%,transparent); border:1px solid color-mix(in srgb,var(--sun) 32%,transparent);
+  padding:1px 8px; border-radius:999px; vertical-align:1px}
+.paramfoot{display:flex; justify-content:flex-end; margin-top:14px}
+.linkbtn[disabled]{opacity:.45; cursor:default; box-shadow:none; pointer-events:none}
+/* parametreler açıkken 3B görünüm kapalı hâldeki boyunu korur ve kaydırırken ekranda kalır */
+@media(min-width:881px){
+  .stage.params-open{align-items:start}
+  .stage.params-open .viewcard.hero{position:sticky; top:64px}
+  .stage.params-open .v3d:not(.flat){flex:none; height:var(--h3d,560px); min-height:0}
+}
+/* kod: tamamını göster */
+pre.full{max-height:none; -webkit-mask-image:none; mask-image:none}
 /* durum satırındaki bağlantı düğmesi */
 .linkbtn{margin-left:auto; display:inline-flex; align-items:center; gap:6px; font-family:"IBM Plex Sans",sans-serif; font-size:12px;
   font-weight:500; padding:5px 10px; border-radius:var(--r1); border:1px solid var(--line-2); background:var(--panel); color:var(--ink-2);
@@ -457,6 +501,10 @@ tbody td:first-child{white-space:nowrap}
   .secnav .themetog button{width:32px; height:30px}
   .gdef dl{grid-template-columns:1fr; gap:2px} .gdef dd{margin-bottom:9px} .gdef dd:last-child{margin-bottom:0}
   .linkbtn{min-height:40px}
+  .kbd summary{min-height:44px; padding-block:12px}
+  /* dar ekranda tema: yalnızca etkin simge görünür, dokununca sıradakine geçer */
+  .secnav .themetog{padding:2px}
+  .secnav .themetog button:not([aria-pressed="true"]){display:none}
 }
 @media print{
   body::before,.transport,.viewbar,.hint{display:none!important}
@@ -473,17 +521,14 @@ tbody td:first-child{white-space:nowrap}
   <div>
     <div class="eyebrow">Ürgüp · Nevşehir · 38.6317° K, 34.9128° D</div>
     <h1>Kuzey Işık Heliostatı</h1>
-    <p class="lede">Evin 10 m kuzeyindeki bahçe duvarına kurulan hareketli bir ayna, gün boyunca dönerek güneşi kuzey cephesindeki pencereye sabit tutuyor. Aşağıdaki simülasyon aynanın her an hangi açıda durması gerektiğini, ışığın cepheye tam olarak nereye düştüğünü ve farklı yönelim yöntemlerinin nerede çuvalladığını gösteriyor.</p>
   </div>
-  <div class="tbcol">
+  <p class="lede">Evin 10 m kuzeyindeki bahçe duvarına kurulan hareketli bir ayna, gün boyunca dönerek güneşi kuzey cephesindeki pencereye sabit tutuyor. Aşağıdaki simülasyon aynanın her an hangi açıda durması gerektiğini, ışığın cepheye tam olarak nereye düştüğünü ve farklı yönelim yöntemlerinin nerede çuvalladığını gösteriyor.</p>
   <dl class="specs">
-    <dt>Enlem / Boylam</dt><dd>38.6317 / 34.9128</dd>
-    <dt>Saat dilimi</dt><dd>UTC+3 (yaz saati yok)</dd>
-    <dt>Güneş konumu</dt><dd>NOAA · ±0.03°</dd>
-    <dt>Referans</dt><dd>pvlib (NREL SPA) ile doğrulandı</dd>
-    <dt>Kontrol</dt><dd>Açık döngü · DS3231 + 2 servo</dd>
+    <div><dt>Saat dilimi</dt><dd>UTC+3 · yaz saati yok</dd></div>
+    <div><dt>Güneş konumu</dt><dd>NOAA · ±0.03°</dd></div>
+    <div><dt>Referans</dt><dd>pvlib (NREL SPA) ile doğrulandı</dd></div>
+    <div><dt>Kontrol</dt><dd>Açık döngü · DS3231 + 2 servo</dd></div>
   </dl>
-  </div>
 </header>
 
 <nav class="secnav" aria-label="Bölümler">
@@ -502,7 +547,6 @@ tbody td:first-child{white-space:nowrap}
 
 <section id="sim">
   <div class="sechead"><span class="n">01</span><h2>Simülasyon</h2></div>
-  <p class="sub">Sayfa açıldığında Ürgüp'teki şu anki durumu gösterir. Tarihi ve saati değiştirin: ayna kendini yeniden yöneltir, ışık lekesi cephede yerini korur. <b>Yöntem</b> düğmeleriyle aynayı başka mantıklarla sürüp lekenin nereye kaçtığını izleyebilirsiniz.</p>
 
   <div class="stage">
   <div class="viewcard hero">
@@ -543,13 +587,27 @@ tbody td:first-child{white-space:nowrap}
           <button type="button" class="live" id="btnNow" aria-pressed="false"><i></i>Şimdi</button>
           <button type="button" class="play" id="btnPlay" data-on="0">▶ Günü oynat</button>
           <button type="button" id="btnNoon">Öğlen</button>
+          <details class="kbd" id="kbdHelp">
+            <summary aria-label="Klavye kısayolları" title="Klavye kısayolları (?)">⌨</summary>
+            <div class="kbdpanel">
+              <div class="eyebrow">Klavye kısayolları</div>
+              <table><tbody>
+                <tr><td><kbd>Boşluk</kbd></td><td>Günü oynat / durdur</td></tr>
+                <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>±10 dakika</td></tr>
+                <tr><td><kbd>⇧</kbd> + <kbd>←</kbd> <kbd>→</kbd></td><td>±1 saat</td></tr>
+                <tr><td><kbd>↑</kbd> <kbd>↓</kbd></td><td>±1 gün · <kbd>⇧</kbd> ile ±10 gün</td></tr>
+                <tr><td><kbd>N</kbd></td><td>Canlı saate dön</td></tr>
+                <tr><td><kbd>?</kbd></td><td>Bu listeyi aç / kapat</td></tr>
+              </tbody></table>
+            </div>
+          </details>
         </div>
-        <div class="bandkey kbdhint"><span>Boşluk: oynat/durdur · ←/→: ±10 dk · ⇧+←/→: ±1 sa · ↑/↓: gün</span></div>
         <div class="bandkey"><span><i style="background:var(--sun)"></i>ayna çalışır</span><span><i style="background:var(--beam-soft)"></i>güneş var, ayna göremiyor</span><span><i style="background:var(--inset);border:1px solid var(--line)"></i>gece</span></div>
       </div>
       <div class="ctl">
         <div class="lab"><span>Yönlendirme yöntemi</span><b id="lMode">—</b></div>
         <div class="seg sunlit" id="modeSeg"></div>
+        <p class="modenote" id="modeNote" aria-live="polite"></p>
       </div>
       <div class="status" role="status" aria-live="polite">
         <span class="pill ok" id="stPill">HESAPLANIYOR</span>
@@ -557,7 +615,7 @@ tbody td:first-child{white-space:nowrap}
         <button type="button" class="linkbtn" id="btnLink" title="Bu tarihi, saati, yöntemi ve geometriyi taşıyan bağlantıyı kopyala"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.6 9.4 9.4 6.6M7.2 4.6l1.5-1.5a2.5 2.5 0 0 1 3.6 3.6l-1.5 1.5M8.8 11.4l-1.5 1.5a2.5 2.5 0 0 1-3.6-3.6l1.5-1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Bağlantı</span></button>
       </div>
       <details class="params">
-        <summary>Geometri ve donanım parametreleri</summary>
+        <summary>Geometri ve donanım parametreleri<span class="chg" id="parChg" hidden></span></summary>
         <div class="row">
           <div class="ctl"><div class="lab"><span>Duvar mesafesi</span><b id="lD">10.0 m</b></div><input type="range" id="iD" min="4" max="20" step="0.5" value="10"></div>
           <div class="ctl"><div class="lab"><span>Ayna yüksekliği</span><b id="lMZ">2.20 m</b></div><input type="range" id="iMZ" min="0.5" max="5" step="0.05" value="2.2"></div>
@@ -569,24 +627,8 @@ tbody td:first-child{white-space:nowrap}
           <div class="ctl"><div class="lab"><span>Ayna doğu–batı kayıklığı</span><b id="lMX">0.00 m</b></div><input type="range" id="iMX" min="-6" max="6" step="0.1" value="0"></div>
           <div class="ctl"><div class="lab"><span>Servo açı hatası (RMS)</span><b id="lNS">0.20°</b></div><input type="range" id="iNS" min="0" max="2" step="0.05" value="0.2"></div>
         </div>
+              <div class="paramfoot"><button type="button" class="linkbtn" id="btnReset" disabled>Varsayılanlara dön</button></div>
       </details>
-    </div>
-  </div>
-
-  <div class="console">
-    <div class="viewcard">
-      <header><span class="t">Kuş bakışı · vaziyet planı</span><span class="h" id="planHint">1 m ızgara</span></header>
-      <canvas role="img" aria-label="Kuş bakışı vaziyet planı" id="plan" width="1180" height="900"></canvas>
-    </div>
-    <div class="side">
-      <div class="viewcard">
-        <header><span class="t">Düşey kesit · kuzey–güney</span><span class="h" id="secHint">geliş = yansıma</span></header>
-        <canvas role="img" aria-label="Kuzey-güney düşey kesit" id="sec" width="760" height="470"></canvas>
-      </div>
-      <div class="viewcard">
-        <header><span class="t">Kuzey cephesi · aynadan bakış</span><span class="h" id="facHint">ışık lekesi</span></header>
-        <canvas role="img" aria-label="Kuzey cephesi ve ışık lekesi" id="fac" width="760" height="470"></canvas>
-      </div>
     </div>
   </div>
 
@@ -611,6 +653,24 @@ tbody td:first-child{white-space:nowrap}
       <dt>Hedeften sapma</dt><dd>Lekenin merkezi ile pencere merkezi arasındaki mesafe. Pencere 1.2 × 1.4 m: sapma yarım pencereden küçükse leke içeride kalır.</dd>
     </dl>
   </details>
+
+  <div class="console">
+    <div class="viewcard">
+      <header><span class="t">Kuş bakışı · vaziyet planı</span><span class="h" id="planHint">1 m ızgara</span></header>
+      <canvas role="img" aria-label="Kuş bakışı vaziyet planı" id="plan" width="1180" height="900"></canvas>
+    </div>
+    <div class="side">
+      <div class="viewcard">
+        <header><span class="t">Düşey kesit · kuzey–güney</span><span class="h" id="secHint">geliş = yansıma</span></header>
+        <canvas role="img" aria-label="Kuzey-güney düşey kesit" id="sec" width="760" height="470"></canvas>
+      </div>
+      <div class="viewcard">
+        <header><span class="t">Kuzey cephesi · aynadan bakış</span><span class="h" id="facHint">ışık lekesi</span></header>
+        <canvas role="img" aria-label="Kuzey cephesi ve ışık lekesi" id="fac" width="760" height="470"></canvas>
+      </div>
+    </div>
+  </div>
+
 
 
 </section>
@@ -651,12 +711,12 @@ tbody td:first-child{white-space:nowrap}
 
 <section id="mevsim">
   <div class="sechead"><span class="n">04</span><h2>Yıl boyunca ne olur?</h2></div>
-  <p class="sub">Bisektör yöntemiyle, varsayılan geometride. Kışın tablo baştan sona yeşil — ki işin güzel yanı da bu: ışığa en çok ihtiyaç duyduğunuz mevsimde sistem en verimli çalışıyor. Yazın duvar öğleden önce ve sonra aynanın kendisini gölgeliyor, çünkü güneş kuzeydoğudan doğup kuzeybatıdan batıyor.</p>
+  <p class="sub">Bisektör yöntemiyle, yukarıda seçili geometride. Kışın tablo baştan sona yeşil — ki işin güzel yanı da bu: ışığa en çok ihtiyaç duyduğunuz mevsimde sistem en verimli çalışıyor. Yazın duvar öğleden önce ve sonra aynanın kendisini gölgeliyor, çünkü güneş kuzeydoğudan doğup kuzeybatıdan batıyor.</p>
   <div class="tablewrap"><table id="seasonTable">
     <thead><tr><th>Tarih</th><th class="num">Öğlen güneş yük.</th><th class="num">Ayna ışık alır</th><th class="num">Süre</th><th class="num">Ort. verim</th><th class="num">Tepe güç</th><th class="num">PAN aralığı</th><th class="num">TILT aralığı</th></tr></thead>
     <tbody></tbody>
   </table></div>
-  <p class="note" style="margin-top:10px">Güç değerleri açık gökyüzü (DNI 850 W/m², Ürgüp 1043 m rakımda gerçekçi) ve %90 yansıtmalı gümüş ayna varsayımıyla.</p>
+  <p class="note" style="margin-top:10px">Güç değerleri açık gökyüzü doğrudan ışınım modeliyle (öğlen: aralıkta ≈810, haziranda ≈1020 W/m²) ve %90 yansıtmalı gümüş ayna varsayımıyla. Camın geçirgenliği dahil değildir.</p>
 </section>
 
 <section id="arduino">
@@ -687,6 +747,7 @@ tbody td:first-child{white-space:nowrap}
   <div class="codehead" style="margin-top:22px">
     <span class="f">kuzey_isik_heliostat.ino</span>
     <div class="acts">
+      <button class="copy" id="btnExpand" type="button" aria-expanded="false">Tümünü göster</button>
       <button class="copy" id="btnDl" type="button" title="Arduino IDE'de açmak için dosya olarak indir">İndir .ino</button>
       <button class="copy" id="btnCopy" type="button">Kodu kopyala</button>
     </div>
@@ -1052,6 +1113,15 @@ const MODES=[
  {id:'gunes',    name:'Güneş takibi (n = s)', short:'GÜNEŞ TAKİBİ', c:'--s2', mot:'2 servo'}
 ];
 
+/* yöntem düğmesinin altında görünen tek cümle */
+const MODE_SHORT={
+ bisektor:'Ayna normali güneş ile pencere arasındaki açıyı tam ortalar — doğru yöntem.',
+ tekeksen:'Tek motor, eğik bir eksen etrafında sabit hızla döner; mevsimde bir ayar ister.',
+ ldr:'Hesap doğru, ama sensör gürültüsü lekeyi oynatır; yalnızca ince ayar için uygun.',
+ panonly:'Yalnızca yatay döner; güneş yükseldikçe leke pencerenin üstüne tırmanır.',
+ sabit:'Motor yok; leke gün boyunca cephede metrelerce yol alır.',
+ gunes:'Ayna güneşe bakar ve ışığı güneşe geri yollar — klasik hata.'
+};
 function M(){ return [P.mx, P.D, P.mz]; }
 function Wp(){ return [0,0,P.wz]; }
 function Tv(){ return V.unit(V.sub(Wp(),M())); }
@@ -3340,7 +3410,8 @@ function renderGauges(){
   const lD=document.getElementById('lDate'); if(lD.textContent!==ds) lD.textContent=ds;
   document.getElementById('lTime').innerHTML=fmtTime(P.min)+(live?'<span class="tag">CANLI</span>':'');
   const md=MODES.filter(m=>m.id===P.mode)[0];
-  document.getElementById('lMode').textContent=md?md.short:'';
+  document.getElementById('lMode').textContent=md?md.mot:'';
+  const mn=document.getElementById('modeNote'); if(mn&&md&&mn.textContent!==MODE_SHORT[md.id]) mn.textContent=MODE_SHORT[md.id];
   markSeason();
 }
 /* ===================== 3B SAHNE · three.js ===================== */
@@ -3479,13 +3550,13 @@ const S3=(function(){
   function paintSky(alt,s,dk){
     const x=skyTexCv.getContext('2d'), W=512, H=256;
     const day=Math.max(0,Math.min(1,(alt+6)/18)), warm=Math.exp(-Math.pow((alt-2)/8,2));
-    const night=dk?'#070a10':'#22304a', dusk=dk?'#3d2a2c':'#d7a079',
-          zen=dk?'#0e1a28':'#5d8cba', hor=dk?'#1b2632':'#cadfec';
+    const night=dk?'#070a10':'#22304a', dusk=dk?'#6a4838':'#d7a079',
+          zen=dk?'#2c4865':'#5d8cba', hor=dk?'#56697a':'#cadfec';
     const zenC=mix(mix(night,zen,day),dusk,warm*0.22), horC=mix(mix(night,hor,day),dusk,warm*0.70);
     const g=x.createLinearGradient(0,0,0,H*0.52);
     g.addColorStop(0,zenC); g.addColorStop(0.72,mix(zenC,horC,0.62)); g.addColorStop(1,horC);
     x.fillStyle=g; x.fillRect(0,0,W,Math.ceil(H*0.52));
-    const gnd=mix(dk?'#14110e':'#9a9384', horC, 0.30);
+    const gnd=mix(dk?'#4a4238':'#9a9384', horC, 0.30);
     const g2=x.createLinearGradient(0,H*0.5,0,H);
     g2.addColorStop(0,horC); g2.addColorStop(0.16,mix(horC,gnd,0.75)); g2.addColorStop(1,gnd);
     x.fillStyle=g2; x.fillRect(0,Math.floor(H*0.5),W,H-Math.floor(H*0.5));
@@ -3592,23 +3663,26 @@ const S3=(function(){
   });
 
   let grid;
+  /* Malzemeler fizikseldir: koyu arayüz temasında da öğle vakti öğle gibi görünmeli. Renkler iki temada da
+     açık paletten türetilir; koyu temada yalnızca hafifçe kısılır, gökyüzü ve sis daha loş tutulur. */
+  const LP={ground:'#D7CFC2',stone:'#CCC2B0',roof:'#B6AB97',panel:'#FCFBF8',ink:'#201B16',shade:'#35566F',tree:'#8a9b6e',trunk:'#7a6552'};
   function applyTheme(){
-    const dk=isDark();
-    M.ground.color.set(mix(mix(TH.ground,'#9c7c50',dk?0.14:0.26),TH.ink,dk?0.18:0.30));
-    M.stone.color.set(mix(TH.roof,TH.panel,dk?0.00:0.22));
-    M.stoneDark.color.set(mix(TH.stone,TH.ink,dk?0.06:0.12));
-    M.roof.color.set(mix(TH.roof,TH.ink,dk?0.08:0.18));
-    M.plinth.color.set(mix(TH.stone,TH.ink,dk?0.10:0.22));
-    M.glass.color.set(mix(TH.shade,TH.ink,dk?0.35:0.15));
-    M.frame.color.set(mix(TH.ink,TH.panel,dk?0.18:0.10));
-    M.leaf.color.set(mix(treeColor(),TH.ink,dk?0.30:0.56));
-    M.leaf2.color.set(mix(treeColor(),TH.ink,dk?0.46:0.70));
-    M.trunk.color.set(mix(trunkColor(),TH.ink,dk?0.15:0.35));
-    hemi.color.set(dk?0x51637a:0xb9d3ea); hemi.groundColor.set(dk?0x2a231c:0xa89676);
-    if(grid){ gridMat.uniforms.uC.value.set(dk?0xcfe0ee:0xffffff); gridMat.uniforms.uA.value=dk?0.14:0.26; }
-    M.lawn.color.set(mix(mix(TH.ground,'#7d8a5c',dk?0.20:0.26),TH.ink,dk?0.20:0.22));
-    M.paving.color.set(mix(TH.stone,TH.ink,dk?0.14:0.26));
-    M.contact.opacity=dk?0.42:0.34;
+    const dk=isDark(), k=c=>dk?mix(c,'#17130f',0.14):c;
+    M.ground.color.set(k(mix(mix(LP.ground,'#9c7c50',0.26),LP.ink,0.30)));
+    M.stone.color.set(k(mix(LP.roof,LP.panel,0.22)));
+    M.stoneDark.color.set(k(mix(LP.stone,LP.ink,0.12)));
+    M.roof.color.set(k(mix(LP.roof,LP.ink,0.18)));
+    M.plinth.color.set(k(mix(LP.stone,LP.ink,0.22)));
+    M.glass.color.set(k(mix(LP.shade,LP.ink,0.15)));
+    M.frame.color.set(k(mix(LP.ink,LP.panel,0.10)));
+    M.leaf.color.set(k(mix(LP.tree,LP.ink,0.56)));
+    M.leaf2.color.set(k(mix(LP.tree,LP.ink,0.70)));
+    M.trunk.color.set(k(mix(LP.trunk,LP.ink,0.35)));
+    hemi.color.set(dk?0x93a4b8:0xb9d3ea); hemi.groundColor.set(dk?0x6f604d:0xa89676);
+    if(grid){ gridMat.uniforms.uC.value.set(dk?0xcfe0ee:0xffffff); gridMat.uniforms.uA.value=dk?0.16:0.26; }
+    M.lawn.color.set(k(mix(mix(LP.ground,'#7d8a5c',0.26),LP.ink,0.22)));
+    M.paving.color.set(k(mix(LP.stone,LP.ink,0.26)));
+    M.contact.opacity=dk?0.40:0.34;
     dirty=true;
   }
 
@@ -3818,7 +3892,7 @@ const S3=(function(){
     updateEnv(st.alt,st.s,dk);
     skyDome.material.color.setScalar(1);
     /* sis: ufuk rengiyle aynı tonda, derinlik hissi */
-    const night=dk?'#070a10':'#22304a', hor=dk?'#1d2833':'#e2ecf1', dusk=dk?'#3d2a2c':'#d7a079';
+    const night=dk?'#070a10':'#22304a', hor=dk?'#566877':'#e2ecf1', dusk=dk?'#6a4838':'#d7a079';
     scene.fog.color.set(mix(mix(mix(night,hor,day),dusk,warm*0.6),TH.ink,dk?0.10:0.16));
     scene.fog.near=48; scene.fog.far=165;
     hemi.intensity=(dk?.09:.085)+.11*day;
@@ -4041,7 +4115,7 @@ function render(){
   if(gk!==geomKey){ geomKey=gk; renderSeasonTable(); }
   const yk=[P.D,P.mz,P.hh,P.hw,P.mx,isDark()].join('|');
   if(yk!==yearKey){ yearKey=yk; updateYearBand(); }
-  syncUrl();
+  syncUrl(); updParamState();
 }
 /* canvas'lar için güncel metinsel özet — ekran okuyucu bunu okur */
 function describeCanvases(ev){
@@ -4063,7 +4137,7 @@ function schedule(){ if(raf)return; raf=requestAnimationFrame(()=>{ raf=null; re
 
 /* ===================== ARAYÜZ ===================== */
 const seg=document.getElementById('modeSeg');
-MODES.forEach(m=>{ const b=document.createElement('button'); b.type='button'; b.textContent=m.short;
+MODES.forEach(m=>{ const b=document.createElement('button'); b.type='button'; b.textContent=m.short; b.title=m.name;
   b.setAttribute('aria-pressed', m.id===P.mode?'true':'false'); b.dataset.id=m.id;
   b.addEventListener('click',()=>{ P.mode=m.id;
     seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.id===m.id?'true':'false'));
@@ -4108,7 +4182,12 @@ document.getElementById('btnNoon').addEventListener('click',()=>{
     btns.forEach(b=>b.setAttribute('aria-pressed', b.dataset.themeSet===p?'true':'false'));
     try{ localStorage.setItem('ki-tema',p); }catch(e){}
   }
-  btns.forEach(b=>b.addEventListener('click',()=>apply(b.dataset.themeSet)));
+  const dar=window.matchMedia?window.matchMedia('(max-width:620px)'):null, SIRA=['auto','light','dark'];
+  btns.forEach(b=>b.addEventListener('click',()=>{
+    if(dar&&dar.matches&&b.dataset.themeSet===pref){          // tek görünen simge: sıradakine geç
+      apply(SIRA[(SIRA.indexOf(pref)+1)%SIRA.length]);
+      const nb=[...btns].find(x=>x.dataset.themeSet===pref); if(nb) nb.focus(); return; }
+    apply(b.dataset.themeSet); }));
   apply(pref);
 })();
 
@@ -4130,16 +4209,23 @@ document.getElementById('btnNoon').addEventListener('click',()=>{
   function kaydir(dk){ if(live)setLive(false); P.min=(P.min+dk+1440)%1440; schedule(); }
   function gun(d){ if(live)setLive(false); P.doy=((P.doy-1+d)+365)%365+1;
     const el=document.getElementById('iDay'); if(el)el.value=P.doy; schedule(); }
+  const etkilesimli=e=>{ const t=e.target;
+    return !!(t&&t.closest&&t.closest('button,summary,a[href],[role="button"],[tabindex]:not([tabindex="-1"])')); };
+  const kbd=document.getElementById('kbdHelp');
+  if(kbd){ document.addEventListener('click',e=>{ if(kbd.open&&!kbd.contains(e.target)) kbd.open=false; }); }
   document.addEventListener('keydown',e=>{
     if(e.ctrlKey||e.metaKey||e.altKey) return;
-    if(e.key===' '&&!yaziAlani(e)){ e.preventDefault(); togglePlay(); return; }
-    if(yaziAlani(e)&&e.target.type!=='range') return;
+    if(e.key==='Escape'&&kbd&&kbd.open){ kbd.open=false; kbd.querySelector('summary').focus(); return; }
+    if(e.key===' '){ if(yaziAlani(e)||etkilesimli(e)) return;      // düğme ve satırlar Boşluk'u kendisi işler
+      e.preventDefault(); togglePlay(); return; }
+    if(e.key==='?'&&!yaziAlani(e)){ e.preventDefault(); if(kbd) kbd.open=!kbd.open; return; }
+    if(yaziAlani(e)) return;                                    // kaydırıcılar dahil: ok tuşları kendi değerini değiştirsin
     switch(e.key){
       case 'ArrowLeft':  e.preventDefault(); kaydir(e.shiftKey?-60:-10); break;
       case 'ArrowRight': e.preventDefault(); kaydir(e.shiftKey? 60: 10); break;
-      case 'ArrowUp':    if(e.target.type==='range')return; e.preventDefault(); gun(e.shiftKey?10:1); break;
-      case 'ArrowDown':  if(e.target.type==='range')return; e.preventDefault(); gun(e.shiftKey?-10:-1); break;
-      case 'n': case 'N': if(!yaziAlani(e)) setLive(!live); break;
+      case 'ArrowUp':    e.preventDefault(); gun(e.shiftKey?10:1); break;
+      case 'ArrowDown':  e.preventDefault(); gun(e.shiftKey?-10:-1); break;
+      case 'n': case 'N': setLive(!live); break;
     }
   });
 })();
@@ -4221,6 +4307,39 @@ function applyUrlState(){
   if(q.has('t')){ const t=parseInt(q.get('t'),10); if(t>=0&&t<=1439){ P.min=t; timed=true; } }
   return {timed:timed};
 }
+function updParamState(){
+  const n=URLKEYS.filter(k=>Math.abs(P[k[1]]-k[2])>1e-9).length;
+  const b=document.getElementById('parChg'), r=document.getElementById('btnReset');
+  if(b){ b.hidden=n===0; const t=n+' değişiklik'; if(b.textContent!==t) b.textContent=t; }
+  if(r) r.disabled=n===0;
+}
+(function sahneBoyu(){
+  const det=document.querySelector('details.params'), st=document.querySelector('.stage'), v=document.getElementById('iso3d');
+  if(!det||!st||!v) return;
+  const olc=()=>{ if(!det.open){ const h=v.getBoundingClientRect().height; if(h>0) st.style.setProperty('--h3d',Math.round(h)+'px'); } };
+  if(window.ResizeObserver) new ResizeObserver(olc).observe(v); olc();
+  det.addEventListener('toggle',()=>st.classList.toggle('params-open',det.open));
+})();
+document.getElementById('btnReset').addEventListener('click',()=>{
+  URLKEYS.forEach(k=>{ const el=document.getElementById(URLINPUT[k[1]]);
+    if(el){ el.value=k[2]; el.dispatchEvent(new Event('input',{bubbles:true})); } else P[k[1]]=k[2]; });
+});
+/* Arduino kodu: yorum, metin, anahtar sözcük ve sayı renkleri. Kopyala/indir textContent kullandığı için çıktı değişmez. */
+(function kodRenk(){
+  const el=document.getElementById('inoCode'); if(!el||el.children.length) return;
+  const src=el.textContent, esc=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const re=/(\/\*[\s\S]*?\*\/|\/\/[^\n]*)|("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])')|(#\s*include\b|\b(?:const|static|inline|struct|return|if|else|while|for|switch|case|break|true|false|void|bool|char|int|long|float|double|unsigned|uint8_t|uint32_t|String)\b)|(\b\d+(?:\.\d+)?(?:[eE][-+]?\d+)?[fFuUlL]*\b)/g;
+  let out='', last=0, m;
+  while((m=re.exec(src))){ out+=esc(src.slice(last,m.index));
+    out+='<span class="'+(m[1]?'cmt':m[2]?'str':m[3]?'kw':'num2')+'">'+esc(m[0])+'</span>'; last=re.lastIndex; }
+  el.innerHTML=out+esc(src.slice(last));
+  if(el.textContent!==src) el.textContent=src;                 // güvence: metin birebir aynı kalmalı
+})();
+document.getElementById('btnExpand').addEventListener('click',function(){
+  const pre=document.getElementById('inoCode').parentElement, on=pre.classList.toggle('full');
+  this.textContent=on?'Kısalt':'Tümünü göster'; this.setAttribute('aria-expanded',on?'true':'false');
+  if(!on) this.scrollIntoView({block:'nearest'});
+});
 document.getElementById('btnLink').addEventListener('click',function(){
   const lab=this.querySelector('span');
   const u=location.href.split(/[?#]/)[0]+stateQuery(true);

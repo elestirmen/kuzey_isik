@@ -119,12 +119,17 @@ WebGL yoksa 3B sahne kendiliğinden 2B izometrik çizime döner.
 - **Şimdi** düğmesiyle Türkiye saatine kilitli canlı takip (sayfa bu modda açılır; gece
   açıldıysa kendiliğinden o günün güneş öğlesine geçip nedenini söyler)
 - Anlık servo açıları (PAN / TILT), geliş açısı, kosinüs verimi, pencereye giren güç,
-  hedeften sapma — her birinin ne anlama geldiği panonun altındaki sözlükte
+  hedeften sapma — kumandaların hemen altındaki panoda; her birinin ne anlama geldiği
+  panonun altındaki sözlükte
 - Evin ve duvarın aynayı ne zaman gölgelediği
 - Işık lekesinin cephede tam olarak nereye düştüğü, pencereyi tutturup tutturmadığı
-- Altı farklı yönlendirme yöntemini yan yana karşılaştırma
+- Altı farklı yönlendirme yöntemini yan yana karşılaştırma; seçili yöntemin ne yaptığı
+  düğmelerin altında tek cümleyle yazar
 - Geometriyi değiştirebileceğiniz kaydırıcılar: duvar mesafesi, ayna ve pencere yüksekliği,
-  ev boyutları, ayna kenarı, doğu–batı kayıklığı, servo açı hatası
+  ev boyutları, ayna kenarı, doğu–batı kayıklığı, servo açı hatası. Kaç değeri
+  değiştirdiğiniz panonun başlığında görünür, **Varsayılanlara dön** hepsini geri alır.
+  Pano açıkken 3B görünüm ekranda kalır, kaydırıcıyı oynatırken sahneyi izleyebilirsiniz.
+- Renklendirilmiş Arduino kodu; kopyalama, `.ino` olarak indirme ve tamamını açma
 
 ### Kumandalar
 
@@ -136,7 +141,12 @@ WebGL yoksa 3B sahne kendiliğinden 2B izometrik çizime döner.
 | `↑` / `↓` | ±1 gün |
 | `Shift` + `↑` / `↓` | ±10 gün |
 | `N` | Canlı saate dön |
+| `?` | Kısayol listesini aç / kapat (saat kumandalarındaki ⌨ düğmesi de açar) |
 | Grafikte tıklama | Simülasyonu o saate al |
+
+Bir kaydırıcı seçiliyken ok tuşları o kaydırıcının kendi değerini değiştirir; bir düğme
+seçiliyken `Boşluk` o düğmeye basar. Kısayollar yalnızca sayfanın boş bir yerindeyken
+geçerlidir.
 
 3B sahnede: sürükle döndürür, sağ tuşla sürükle kaydırır, çift tık kamerayı sıfırlar.
 Tekerlek yakınlaştırır ama **önce sahneye tıklamış olmanız** ya da `Ctrl` basılı tutmanız
@@ -223,8 +233,8 @@ Sistem **kışın en verimli** — ışığa en çok o zaman ihtiyaç duyulur. G
 geliş açısı küçülür, kosinüs verimi %93'e çıkar. Yazın duvarın kendisi sabah ve akşam aynayı
 gölgeler, çünkü güneş kuzeydoğudan doğup kuzeybatıdan batar.
 
-Güç değerleri açık gökyüzü doğrudan ışınım modeliyle ve %90 yansıtmalı 1 m² gümüş ayna
-varsayımıyla hesaplanır. **Camın geçirgenliği dahil değildir**; tek cam için odaya giren güç
+Güç değerleri açık gökyüzü doğrudan ışınım modeliyle (öğlen: aralıkta ≈810, haziranda
+≈1020 W/m²) ve %90 yansıtmalı 1 m² gümüş ayna varsayımıyla hesaplanır. **Camın geçirgenliği dahil değildir**; tek cam için odaya giren güç
 yaklaşık %85'i kadardır.
 
 ## 8. Hata bütçesi: neden redüktör şart?
